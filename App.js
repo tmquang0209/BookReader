@@ -13,6 +13,7 @@ import BottomTabNav from "./src/components/bottomTabNav";
 
 //load screen
 import GetStarted from "./src/screen/GetStarted";
+import Signup from "./src/screen/Signup";
 
 const Stack = createStackNavigator();
 
@@ -44,14 +45,18 @@ export default function App() {
                                 name="GetStarted"
                                 component={GetStarted}
                             />
+                            <Stack.Screen name="Signup" component={Signup} />
                         </Stack.Group>
                         <Stack.Screen
                             name="bottomTab"
                             component={BottomTabNav}
+                            options={{
+                                headerShown: false,
+                            }}
                         />
                     </Stack.Navigator>
                 </NavigationContainer>
-                <StatusBar />
+                <StatusBar animated barStyle={"light-content"} />
             </SafeAreaProvider>
         </Provider>
     );

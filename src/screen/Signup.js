@@ -1,51 +1,60 @@
 import { useEffect, useState } from "react";
 import {
-    Keyboard,
-    TouchableWithoutFeedback,
     View,
     Text,
+    Alert,
+    Keyboard,
     SafeAreaView,
+    TouchableWithoutFeedback,
     Image,
     TouchableOpacity,
-    Alert,
     ScrollView,
 } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import { connect } from "react-redux";
-import { loginUser } from "../store/actions/authActions";
 import styles from "../components/styles";
-import { girlReadingBook, googleLogo } from "../constants/images";
+import { girlReadingBook } from "../constants/images";
 import { accentGreen, gray2, gray4, gray5, white } from "../constants/colors";
+import { signupAccount } from "../store/actions/authActions";
 
-const GetStarted = (props) => {
-    const { user, err, loginUser, navigation } = props;
+const Signup = (props) => {
+    const { user, err, signupAccount, navigation } = props;
 
     const [loading, setLoading] = useState(false);
-    const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
+    const [hidden, setHidden] = useState(true);
+
+    const [fullName, setFullName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [rePassword, setRePassword] = useState("");
 
     const onSubmitPress = async () => {
-        setLoading((prev) => !prev);
+        const userData = {
+            fullName,
+            email,
+            password,
+            rePassword,
+        };
+        console.log(userData);
         try {
-            await loginUser({ email, password });
-        } catch (error) {
-            console.log("Error", error.message);
+            setLoading((prev) => !prev);
+            await signupAccount(userData);
+            setLoading((prev) => !prev);
+        } catch (err) {
+            console.error(err);
         }
-        setLoading((prev) => !prev);
     };
 
-    const onSignupPress = () => {
-        navigation.navigate("Signup");
+    const onLoginPress = () => {
+        navigation.navigate("GetStarted");
     };
 
     const renderErr = () => {
         err && Alert.alert("Error", err);
     };
-
     useEffect(() => {
         renderErr();
-        console.log("err message:", err);
-        if (user.email) navigation.replace("bottomTab");
+        if (user.email) navigation.navigate("SelectGenres");
     }, [user, err]);
 
     return (
@@ -66,36 +75,28 @@ const GetStarted = (props) => {
                                 alignSelf: "center",
                             }}
                         />
-                        <View>
-                            <Text
-                                style={{
-                                    fontFamily: "Cera-Pro-Bold",
-                                    color: white,
-                                    fontSize: 25,
-                                }}
-                            >
-                                Wander Through Pages
-                            </Text>
-                            <Text
-                                style={{
-                                    alignSelf: "center",
-                                    fontSize: 25,
-                                    fontFamily: "Cera-Pro-Bold",
-                                    color: white,
-                                }}
-                            >
-                                of{" "}
-                                <Text style={{ color: accentGreen }}>
-                                    Endless Wonder
-                                </Text>
-                            </Text>
-                        </View>
+                    </View>
+                    <View
+                        style={{
+                            marginTop: 20,
+                            marginLeft: 20,
+                        }}
+                    >
+                        <Text
+                            style={{
+                                color: white,
+                                fontFamily: "SVN-Gotham-Bold",
+                                fontSize: 28,
+                            }}
+                        >
+                            Sign up
+                        </Text>
                     </View>
                     <View
                         style={{
                             flex: 1,
                             backgroundColor: gray5,
-                            marginTop: 50,
+                            marginTop: 10,
                             marginLeft: 20,
                             marginRight: 20,
                             padding: 16,
@@ -103,23 +104,109 @@ const GetStarted = (props) => {
                             marginBottom: 10,
                         }}
                     >
+                        <View
+                            style={{
+                                marginBottom: 20,
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    color: white,
+                                    fontSize: 14,
+                                    fontFamily: "SVN-Gotham-Book",
+                                }}
+                            >
+                                Looks like you don't have an account.
+                            </Text>
+                            <Text
+                                style={{
+                                    color: white,
+                                    fontSize: 14,
+                                    fontFamily: "SVN-Gotham-Book",
+                                }}
+                            >
+                                Let's create a new account for you.
+                            </Text>
+                        </View>
                         <TextInput
-                            placeholder="Email"
-                            onChangeText={(text) => setEmail(text)}
-                            keyboardType="email-address"
+                            placeholder="Full name"
+                            value={fullName}
+                            onChangeText={(text) => setFullName(text)}
                             style={{
                                 borderRadius: 8,
                             }}
                         />
                         <TextInput
-                            placeholder="Password"
-                            onChangeText={(text) => setPassword(text)}
-                            secureTextEntry
+                            placeholder="Email"
+                            value={email}
+                            onChangeText={(text) => setEmail(text)}
+                            keyboardType="email-address"
                             style={{
                                 marginTop: 10,
                                 borderRadius: 8,
                             }}
                         />
+                        <TextInput
+                            placeholder="Password"
+                            value={password}
+                            onChangeText={(text) => setPassword(text)}
+                            right={
+                                <TextInput.Icon
+                                    icon={hidden ? "eye" : "eye-off"}
+                                    onPress={() => {
+                                        setHidden((prev) => !prev);
+                                        Keyboard.dismiss();
+                                    }}
+                                />
+                            }
+                            secureTextEntry={hidden}
+                            style={{
+                                marginTop: 10,
+                                borderRadius: 8,
+                            }}
+                        />
+                        <TextInput
+                            placeholder="Re-password"
+                            value={rePassword}
+                            onChangeText={(text) => setRePassword(text)}
+                            right={
+                                <TextInput.Icon
+                                    icon={hidden ? "eye" : "eye-off"}
+                                    onPress={() => {
+                                        setHidden((prev) => !prev);
+                                        Keyboard.dismiss();
+                                    }}
+                                />
+                            }
+                            secureTextEntry={hidden}
+                            style={{
+                                marginTop: 10,
+                                borderRadius: 8,
+                            }}
+                        />
+                        <Text
+                            style={{
+                                marginTop: 16,
+                                color: white,
+                                fontSize: 14,
+                            }}
+                        >
+                            By selecting Create Account below, I agree to{" "}
+                            <Text
+                                style={{ color: accentGreen, fontWeight: 800 }}
+                            >
+                                Terms of Service
+                            </Text>{" "}
+                            &{" "}
+                            <Text
+                                style={{
+                                    color: accentGreen,
+                                    fontWeight: 800,
+                                }}
+                            >
+                                Privacy Policy
+                            </Text>
+                        </Text>
                         <Button
                             mode="contained-tonal"
                             onPress={() => onSubmitPress()}
@@ -138,25 +225,9 @@ const GetStarted = (props) => {
                                     fontFamily: "SVN-Gotham-Bold",
                                 }}
                             >
-                                Login
+                                Create account
                             </Text>
                         </Button>
-                        <TouchableOpacity
-                            style={{
-                                alignItems: "center",
-                            }}
-                        >
-                            <Text
-                                style={{
-                                    color: accentGreen,
-                                    fontFamily: "SVN-Gotham-Bold",
-                                    fontSize: 14,
-                                    fontWeight: "700",
-                                }}
-                            >
-                                Forgot password?
-                            </Text>
-                        </TouchableOpacity>
                         <View
                             style={{
                                 flexDirection: "row",
@@ -189,46 +260,6 @@ const GetStarted = (props) => {
                                 }}
                             />
                         </View>
-                        <View>
-                            <TouchableOpacity
-                                activeOpacity={0.5}
-                                style={{
-                                    backgroundColor: white,
-                                    flexDirection: "row",
-                                    paddingLeft: 16,
-                                    paddingRight: 16,
-                                    paddingTop: 14,
-                                    paddingBottom: 14,
-                                    borderRadius: 8,
-                                    marginBottom: 32,
-                                }}
-                            >
-                                <Image
-                                    style={{
-                                        marginRight: 8,
-                                        width: 23,
-                                        height: 23,
-                                    }}
-                                    source={googleLogo}
-                                />
-                                <View
-                                    style={{
-                                        flex: 1,
-                                        alignItems: "center",
-                                    }}
-                                >
-                                    <Text
-                                        style={{
-                                            fontFamily: "SVN-Gotham-Bold",
-                                            fontWeight: 700,
-                                            alignSelf: "center",
-                                        }}
-                                    >
-                                        Login with google
-                                    </Text>
-                                </View>
-                            </TouchableOpacity>
-                        </View>
                         <View
                             style={{
                                 justifyContent: "center",
@@ -245,16 +276,16 @@ const GetStarted = (props) => {
                                     fontSize: 14,
                                 }}
                             >
-                                Don't have an account?{" "}
+                                Already have an account?{" "}
                             </Text>
-                            <TouchableOpacity onPress={() => onSignupPress()}>
+                            <TouchableOpacity onPress={() => onLoginPress()}>
                                 <Text
                                     style={{
                                         color: accentGreen,
                                         fontFamily: "SVN-Gotham-Bold",
                                     }}
                                 >
-                                    Sign up
+                                    Log in
                                 </Text>
                             </TouchableOpacity>
                         </View>
@@ -272,4 +303,4 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps, { loginUser })(GetStarted);
+export default connect(mapStateToProps, { signupAccount })(Signup);
