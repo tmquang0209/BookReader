@@ -1,4 +1,3 @@
-import axios from "axios";
 import {
     LOGIN_SUCCESS,
     LOGIN_FAIL,
@@ -6,8 +5,18 @@ import {
     SIGNUP_PROCESS,
     SIGNUP_FAIL,
     SIGNUP_SUCCESS,
+    EMPTY_AUTH,
 } from "../actionTypes";
 import { login, register } from "../../API/authUser";
+
+export const emptyAuth = () => {
+    return async (dispatch) => {
+        dispatch({
+            type: EMPTY_AUTH,
+            payload: { err: "" },
+        });
+    };
+};
 
 export const loginUser = (userData) => {
     return async (dispatch) => {
@@ -52,11 +61,11 @@ export const signupAccount = (userData) => {
             if (response.success) {
                 dispatch(signupSuccess(response.userData));
             } else {
-                dispatch(signupFail(response.result.error));
+                dispatch(signupFail(response.error));
             }
         } catch (err) {
             console.error(err);
-            signupFail(err.message);
+            signupFail(err.response.data.error);
         }
     };
 };

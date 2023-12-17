@@ -10,15 +10,16 @@ import {
     Alert,
     ScrollView,
 } from "react-native";
-import { Button, TextInput } from "react-native-paper";
+import { TextInput } from "react-native-paper";
 import { connect } from "react-redux";
-import { loginUser } from "../store/actions/authActions";
+import { loginUser, emptyAuth } from "../store/actions/authActions";
 import styles from "../components/styles";
 import { girlReadingBook, googleLogo } from "../constants/images";
-import { accentGreen, gray2, gray4, gray5, white } from "../constants/colors";
+import { accentGreen, gray2, gray4, white } from "../constants/colors";
+import Button from "../components/button";
 
 const GetStarted = (props) => {
-    const { user, err, loginUser, navigation } = props;
+    const { loggedIn, err, loginUser, navigation, emptyAuth } = props;
 
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState();
@@ -34,19 +35,36 @@ const GetStarted = (props) => {
         setLoading((prev) => !prev);
     };
 
-    const onSignupPress = () => {
+    const onSignupPress = async () => {
+        await emptyAuth();
         navigation.navigate("Signup");
     };
 
+    const emptyErr = async () => {
+        await emptyAuth();
+    };
+
     const renderErr = () => {
-        err && Alert.alert("Error", err);
+        if (err) {
+            Alert.alert("Error", err, [
+                {
+                    text: "OK",
+                    onPress: () => {
+                        emptyErr();
+                    },
+                },
+            ]);
+            setTimeout(() => {
+                emptyAuth();
+            }, 1000);
+        }
     };
 
     useEffect(() => {
+        emptyErr();
         renderErr();
-        console.log("err message:", err);
-        if (user.email) navigation.replace("bottomTab");
-    }, [user, err]);
+        if (loggedIn) navigation.replace("bottomTab");
+    }, [loggedIn, err]);
 
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -91,18 +109,7 @@ const GetStarted = (props) => {
                             </Text>
                         </View>
                     </View>
-                    <View
-                        style={{
-                            flex: 1,
-                            backgroundColor: gray5,
-                            marginTop: 50,
-                            marginLeft: 20,
-                            marginRight: 20,
-                            padding: 16,
-                            borderRadius: 12,
-                            marginBottom: 10,
-                        }}
-                    >
+                    <View style={styles.containerForm}>
                         <TextInput
                             placeholder="Email"
                             onChangeText={(text) => setEmail(text)}
@@ -121,26 +128,10 @@ const GetStarted = (props) => {
                             }}
                         />
                         <Button
-                            mode="contained-tonal"
-                            onPress={() => onSubmitPress()}
-                            style={{
-                                marginTop: 16,
-                                marginBottom: 16,
-                                backgroundColor: accentGreen,
-                                borderRadius: 8,
-                            }}
+                            children="Login"
+                            onPress={onSubmitPress}
                             loading={loading}
-                            disabled={loading}
-                        >
-                            <Text
-                                style={{
-                                    color: gray4,
-                                    fontFamily: "SVN-Gotham-Bold",
-                                }}
-                            >
-                                Login
-                            </Text>
-                        </Button>
+                        />
                         <TouchableOpacity
                             style={{
                                 alignItems: "center",
@@ -267,9 +258,9 @@ const GetStarted = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        user: state.auth.user,
         err: state.auth.err,
+        loggedIn: state.auth.loggedIn,
     };
 };
 
-export default connect(mapStateToProps, { loginUser })(GetStarted);
+export default connect(mapStateToProps, { loginUser, emptyAuth })(GetStarted);

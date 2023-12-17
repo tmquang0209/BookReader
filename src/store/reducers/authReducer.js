@@ -2,6 +2,7 @@ import {
     LOGIN_FAIL,
     LOGIN_PROCESS,
     LOGIN_SUCCESS,
+    EMPTY_AUTH,
     SIGNUP_FAIL,
     SIGNUP_PROCESS,
     SIGNUP_SUCCESS,
@@ -16,6 +17,8 @@ const initialState = {
 export const authReducer = (state = initialState, action) => {
     console.log(action);
     switch (action.type) {
+        case EMPTY_AUTH:
+            return initialState;
         case LOGIN_PROCESS:
         case SIGNUP_PROCESS:
             return {

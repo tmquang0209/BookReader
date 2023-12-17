@@ -1,4 +1,5 @@
 // Action types
+export const EMPTY_AUTH = "EMPTY_AUTH";
 export const LOGIN_USER = "LOGIN_USER";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAIL = "LOGIN_FAIL";
