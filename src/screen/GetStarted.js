@@ -61,10 +61,9 @@ const GetStarted = (props) => {
     };
 
     useEffect(() => {
-        emptyErr();
         renderErr();
         if (loggedIn) navigation.replace("bottomTab");
-    }, [loggedIn, err]);
+    }, [err]);
 
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>

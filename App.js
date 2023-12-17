@@ -14,6 +14,7 @@ import BottomTabNav from "./src/components/bottomTabNav";
 //load screen
 import GetStarted from "./src/screen/GetStarted";
 import Signup from "./src/screen/Signup";
+import SelectGenres from "./src/screen/SelectGenres";
 
 const Stack = createStackNavigator();
 
@@ -35,24 +36,23 @@ export default function App() {
         <Provider store={store}>
             <SafeAreaProvider>
                 <NavigationContainer>
-                    <Stack.Navigator>
-                        <Stack.Group
-                            screenOptions={{
-                                headerShown: false,
-                            }}
-                        >
-                            <Stack.Screen
-                                name="GetStarted"
-                                component={GetStarted}
-                            />
-                            <Stack.Screen name="Signup" component={Signup} />
-                        </Stack.Group>
+                    <Stack.Navigator
+                        screenOptions={{
+                            headerShown: false,
+                        }}
+                    >
+                        <Stack.Screen
+                            name="GetStarted"
+                            component={GetStarted}
+                        />
+                        <Stack.Screen name="Signup" component={Signup} />
+                        <Stack.Screen
+                            name="SelectGenres"
+                            component={SelectGenres}
+                        />
                         <Stack.Screen
                             name="bottomTab"
                             component={BottomTabNav}
-                            options={{
-                                headerShown: false,
-                            }}
                         />
                     </Stack.Navigator>
                 </NavigationContainer>

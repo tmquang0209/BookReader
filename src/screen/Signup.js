@@ -39,6 +39,9 @@ const Signup = (props) => {
         try {
             setLoading((prev) => !prev);
             await signupAccount(userData);
+            if (loggedIn) {
+                navigation.replace("SelectGenres");
+            }
             setLoading((prev) => !prev);
         } catch (err) {
             console.error(err);
@@ -65,11 +68,16 @@ const Signup = (props) => {
             ]);
         }
     };
+
     useEffect(() => {
-        emptyErr();
+        console.log("useEffect triggered");
         renderErr();
-        if (user.email) navigation.navigate("SelectGenres");
-    }, [loggedIn, err]);
+        console.log(user);
+        if (user.email) {
+            console.log("Navigating to SelectGenres");
+            navigation.replace("SelectGenres");
+        }
+    }, [user, err]);
 
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>

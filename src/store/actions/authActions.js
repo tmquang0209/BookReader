@@ -59,7 +59,7 @@ export const signupAccount = (userData) => {
             const response = await register(userData);
             console.log("response", response);
             if (response.success) {
-                dispatch(signupSuccess(response.userData));
+                dispatch(signupSuccess(response.userData[0]));
             } else {
                 dispatch(signupFail(response.error));
             }
@@ -82,5 +82,5 @@ const signupFail = (message) => ({
 
 const signupSuccess = (userData) => ({
     type: SIGNUP_SUCCESS,
-    payload: { user: userData, loggedIn: true },
+    payload: { user: userData, loggedIn: false },
 });
