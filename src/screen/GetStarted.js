@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { Keyboard, TouchableWithoutFeedback, View, Text, SafeAreaView, TouchableOpacity, Alert, ScrollView } from "react-native";
 import { TextInput } from "react-native-paper";
 import { connect } from "react-redux";
-import { loginUser, emptyAuth } from "../store/actions/authActions";
+
+import { loginUser, emptyAuth, autoLogin } from "../store/actions/authActions";
 import styles from "../components/styles";
 import { accentGreen, white } from "../constants/colors";
 import Button from "../components/button";
@@ -11,7 +12,7 @@ import GoogleButton from "../components/googleButton";
 import LineOr from "../components/lineOr";
 
 const GetStarted = (props) => {
-    const { loggedIn, err, loginUser, navigation, emptyAuth } = props;
+    const { loggedIn, err, loginUser, navigation, emptyAuth, autoLogin } = props;
 
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState();
@@ -58,9 +59,10 @@ const GetStarted = (props) => {
     };
 
     useEffect(() => {
+        autoLogin();
         renderErr();
         if (loggedIn) navigation.replace("bottomTab");
-    }, [err]);
+    }, [err, loggedIn]);
 
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -152,4 +154,4 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps, { loginUser, emptyAuth })(GetStarted);
+export default connect(mapStateToProps, { loginUser, emptyAuth, autoLogin })(GetStarted);

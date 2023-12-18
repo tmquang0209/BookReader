@@ -1,4 +1,4 @@
-import { LOGIN_FAIL, LOGIN_PROCESS, LOGIN_SUCCESS, EMPTY_AUTH, SIGNUP_FAIL, SIGNUP_PROCESS, SIGNUP_SUCCESS } from "../actionTypes";
+import { LOGIN_FAIL, LOGIN_PROCESS, LOGIN_SUCCESS, EMPTY_AUTH, AUTO_LOGIN, SIGNUP_FAIL, SIGNUP_PROCESS, SIGNUP_SUCCESS } from "../actionTypes";
 
 const initialState = {
     user: {},
@@ -11,6 +11,12 @@ export const authReducer = (state = initialState, action) => {
     switch (action.type) {
         case EMPTY_AUTH:
             return initialState;
+        case AUTO_LOGIN:
+            return {
+                ...state,
+                user: action.payload.user,
+                loggedIn: action.payload.loggedIn,
+            };
         case LOGIN_PROCESS:
         case SIGNUP_PROCESS:
             return {

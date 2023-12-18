@@ -1,5 +1,6 @@
 // Action types
 export const EMPTY_AUTH = "EMPTY_AUTH";
+export const AUTO_LOGIN = "AUTO_LOGIN";
 
 export const LOGIN_PROCESS = "LOGIN_PROCESS";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";

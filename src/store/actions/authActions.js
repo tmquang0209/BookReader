@@ -1,5 +1,6 @@
-import { LOGIN_SUCCESS, LOGIN_FAIL, LOGIN_PROCESS, SIGNUP_PROCESS, SIGNUP_FAIL, SIGNUP_SUCCESS, EMPTY_AUTH } from "../actionTypes";
+import { LOGIN_SUCCESS, LOGIN_FAIL, LOGIN_PROCESS, SIGNUP_PROCESS, SIGNUP_FAIL, SIGNUP_SUCCESS, EMPTY_AUTH, AUTO_LOGIN } from "../actionTypes";
 import { login, register } from "../../API/authUser";
+import { getAuthStorage, setAuthStorage } from "../../components/localStorage";
 
 export const emptyAuth = () => {
     return async (dispatch) => {
@@ -7,6 +8,13 @@ export const emptyAuth = () => {
             type: EMPTY_AUTH,
             payload: { err: "" },
         });
+    };
+};
+
+export const autoLogin = () => {
+    return async (dispatch) => {
+        const data = await getAuthStorage();
+        if (data) dispatch({ type: AUTO_LOGIN, payload: { user: data, loggedIn: true } });
     };
 };
 
@@ -18,6 +26,7 @@ export const loginUser = (userData) => {
 
             if (response.success) {
                 dispatch(loginSuccess(response.userData));
+                setAuthStorage(response.userData);
             } else {
                 dispatch(loginFail(response.error));
             }
