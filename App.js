@@ -15,6 +15,9 @@ import BottomTabNav from "./src/components/bottomTabNav";
 import GetStarted from "./src/screen/GetStarted";
 import Signup from "./src/screen/Signup";
 import SelectGenres from "./src/screen/SelectGenres";
+import ForgotPassword from "./src/screen/ForgotPassword";
+import VerifyCode from "./src/screen/VerifyCode";
+import SetPassword from "./src/screen/SetPassword";
 
 const Stack = createStackNavigator();
 
@@ -41,19 +44,15 @@ export default function App() {
                             headerShown: false,
                         }}
                     >
-                        <Stack.Screen
-                            name="GetStarted"
-                            component={GetStarted}
-                        />
-                        <Stack.Screen name="Signup" component={Signup} />
-                        <Stack.Screen
-                            name="SelectGenres"
-                            component={SelectGenres}
-                        />
-                        <Stack.Screen
-                            name="bottomTab"
-                            component={BottomTabNav}
-                        />
+                        <Stack.Group>
+                            <Stack.Screen name="GetStarted" component={GetStarted} />
+                            <Stack.Screen name="Signup" component={Signup} />
+                            <Stack.Screen name="SelectGenres" component={SelectGenres} />
+                            <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+                            <Stack.Screen name="VerifyCode" component={VerifyCode} />
+                            <Stack.Screen name="SetPassword" component={SetPassword} />
+                        </Stack.Group>
+                        <Stack.Screen name="bottomTab" component={BottomTabNav} />
                     </Stack.Navigator>
                 </NavigationContainer>
                 <StatusBar animated barStyle={"light-content"} />

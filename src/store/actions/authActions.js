@@ -1,12 +1,4 @@
-import {
-    LOGIN_SUCCESS,
-    LOGIN_FAIL,
-    LOGIN_PROCESS,
-    SIGNUP_PROCESS,
-    SIGNUP_FAIL,
-    SIGNUP_SUCCESS,
-    EMPTY_AUTH,
-} from "../actionTypes";
+import { LOGIN_SUCCESS, LOGIN_FAIL, LOGIN_PROCESS, SIGNUP_PROCESS, SIGNUP_FAIL, SIGNUP_SUCCESS, EMPTY_AUTH } from "../actionTypes";
 import { login, register } from "../../API/authUser";
 
 export const emptyAuth = () => {

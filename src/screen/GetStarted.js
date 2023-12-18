@@ -1,22 +1,14 @@
 import { useEffect, useState } from "react";
-import {
-    Keyboard,
-    TouchableWithoutFeedback,
-    View,
-    Text,
-    SafeAreaView,
-    Image,
-    TouchableOpacity,
-    Alert,
-    ScrollView,
-} from "react-native";
+import { Keyboard, TouchableWithoutFeedback, View, Text, SafeAreaView, TouchableOpacity, Alert, ScrollView } from "react-native";
 import { TextInput } from "react-native-paper";
 import { connect } from "react-redux";
 import { loginUser, emptyAuth } from "../store/actions/authActions";
 import styles from "../components/styles";
-import { girlReadingBook, googleLogo } from "../constants/images";
-import { accentGreen, gray2, gray4, white } from "../constants/colors";
+import { accentGreen, white } from "../constants/colors";
 import Button from "../components/button";
+import { LogoWithText } from "../components/logo";
+import GoogleButton from "../components/googleButton";
+import LineOr from "../components/lineOr";
 
 const GetStarted = (props) => {
     const { loggedIn, err, loginUser, navigation, emptyAuth } = props;
@@ -33,6 +25,11 @@ const GetStarted = (props) => {
             console.log("Error", error.message);
         }
         setLoading((prev) => !prev);
+    };
+
+    const onForgotPasswordPress = async () => {
+        await emptyAuth();
+        navigation.navigate("ForgotPassword");
     };
 
     const onSignupPress = async () => {
@@ -69,46 +66,8 @@ const GetStarted = (props) => {
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <ScrollView>
                 <SafeAreaView style={styles.container}>
-                    <View
-                        style={{
-                            marginTop: 50,
-                            alignItems: "center",
-                        }}
-                    >
-                        <Image
-                            source={girlReadingBook}
-                            style={{
-                                width: 250,
-                                height: 180,
-                                alignSelf: "center",
-                            }}
-                        />
-                        <View>
-                            <Text
-                                style={{
-                                    fontFamily: "Cera-Pro-Bold",
-                                    color: white,
-                                    fontSize: 25,
-                                }}
-                            >
-                                Wander Through Pages
-                            </Text>
-                            <Text
-                                style={{
-                                    alignSelf: "center",
-                                    fontSize: 25,
-                                    fontFamily: "Cera-Pro-Bold",
-                                    color: white,
-                                }}
-                            >
-                                of{" "}
-                                <Text style={{ color: accentGreen }}>
-                                    Endless Wonder
-                                </Text>
-                            </Text>
-                        </View>
-                    </View>
-                    <View style={styles.containerForm}>
+                    <LogoWithText />
+                    <View style={[styles.containerForm, { marginTop: 50 }]}>
                         <TextInput
                             placeholder="Email"
                             onChangeText={(text) => setEmail(text)}
@@ -126,15 +85,12 @@ const GetStarted = (props) => {
                                 borderRadius: 8,
                             }}
                         />
-                        <Button
-                            children="Login"
-                            onPress={onSubmitPress}
-                            loading={loading}
-                        />
+                        <Button children="Login" onPress={onSubmitPress} loading={loading} />
                         <TouchableOpacity
                             style={{
                                 alignItems: "center",
                             }}
+                            onPress={() => onForgotPasswordPress()}
                         >
                             <Text
                                 style={{
@@ -147,77 +103,11 @@ const GetStarted = (props) => {
                                 Forgot password?
                             </Text>
                         </TouchableOpacity>
-                        <View
-                            style={{
-                                flexDirection: "row",
-                                alignItems: "center",
-                                marginTop: 32,
-                                marginBottom: 32,
-                            }}
-                        >
-                            <View
-                                style={{
-                                    flex: 1,
-                                    height: 2,
-                                    backgroundColor: gray4,
-                                }}
-                            />
-                            <Text
-                                style={{
-                                    marginLeft: 16,
-                                    marginRight: 16,
-                                    color: gray2,
-                                }}
-                            >
-                                Or
-                            </Text>
-                            <View
-                                style={{
-                                    flex: 1,
-                                    height: 2,
-                                    backgroundColor: gray4,
-                                }}
-                            />
-                        </View>
+
+                        <LineOr />
+
                         <View>
-                            <TouchableOpacity
-                                activeOpacity={0.5}
-                                style={{
-                                    backgroundColor: white,
-                                    flexDirection: "row",
-                                    paddingLeft: 16,
-                                    paddingRight: 16,
-                                    paddingTop: 14,
-                                    paddingBottom: 14,
-                                    borderRadius: 8,
-                                    marginBottom: 32,
-                                }}
-                            >
-                                <Image
-                                    style={{
-                                        marginRight: 8,
-                                        width: 23,
-                                        height: 23,
-                                    }}
-                                    source={googleLogo}
-                                />
-                                <View
-                                    style={{
-                                        flex: 1,
-                                        alignItems: "center",
-                                    }}
-                                >
-                                    <Text
-                                        style={{
-                                            fontFamily: "SVN-Gotham-Bold",
-                                            fontWeight: 700,
-                                            alignSelf: "center",
-                                        }}
-                                    >
-                                        Login with google
-                                    </Text>
-                                </View>
-                            </TouchableOpacity>
+                            <GoogleButton />
                         </View>
                         <View
                             style={{

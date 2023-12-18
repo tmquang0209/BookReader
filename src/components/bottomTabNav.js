@@ -4,16 +4,16 @@ import Login from "../screen/GetStarted";
 
 const Tab = createMaterialBottomTabNavigator();
 
-const Feed = () => {};
+const Home = () => {};
 const Notifications = () => {};
 const Profile = () => {};
 
 export default function BottomTabNav() {
     return (
-        <Tab.Navigator initialRouteName="Feed" activeColor="#e91e63">
+        <Tab.Navigator initialRouteName="Home" activeColor="#e91e63">
             <Tab.Screen
-                name="Feed"
-                component={Feed}
+                name="Home"
+                component={Home}
                 options={{
                     tabBarLabel: "Home",
                     tabBarIcon: ({ color }) => (

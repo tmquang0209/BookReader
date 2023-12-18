@@ -41,8 +41,8 @@ export const SelectGenres = (props) => {
             //save to db
             const favCatIds = data.filter((item) => item.active === true).map((item) => item.idCategory);
             const result = await saveToDB(user.idUser, favCatIds);
+
             //navigate to home
-            console.log(result.success);
             if (result.success) navigation.navigate("bottomTab");
         }
         //else => notice

@@ -1,15 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-    View,
-    Text,
-    Alert,
-    Keyboard,
-    SafeAreaView,
-    TouchableWithoutFeedback,
-    Image,
-    TouchableOpacity,
-    ScrollView,
-} from "react-native";
+import { View, Text, Alert, Keyboard, SafeAreaView, TouchableWithoutFeedback, Image, TouchableOpacity, ScrollView } from "react-native";
 import { TextInput } from "react-native-paper";
 import Button from "../components/button";
 import { connect } from "react-redux";
@@ -17,6 +7,8 @@ import styles from "../components/styles";
 import { girlReadingBook } from "../constants/images";
 import { accentGreen, gray2, gray4, white } from "../constants/colors";
 import { signupAccount, emptyAuth } from "../store/actions/authActions";
+import { LogoWithoutText } from "../components/logo";
+import Title from "../components/title";
 
 const Signup = (props) => {
     const { loggedIn, user, err, signupAccount, navigation, emptyAuth } = props;
@@ -70,11 +62,8 @@ const Signup = (props) => {
     };
 
     useEffect(() => {
-        console.log("useEffect triggered");
         renderErr();
-        console.log(user);
         if (user.email) {
-            console.log("Navigating to SelectGenres");
             navigation.replace("SelectGenres");
         }
     }, [user, err]);
@@ -83,38 +72,16 @@ const Signup = (props) => {
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <ScrollView>
                 <SafeAreaView style={styles.container}>
-                    <View
-                        style={{
-                            marginTop: 50,
-                            alignItems: "center",
-                        }}
-                    >
-                        <Image
-                            source={girlReadingBook}
-                            style={{
-                                width: 250,
-                                height: 180,
-                                alignSelf: "center",
-                            }}
-                        />
-                    </View>
+                    <LogoWithoutText />
                     <View
                         style={{
                             marginTop: 20,
                             marginLeft: 20,
                         }}
                     >
-                        <Text
-                            style={{
-                                color: white,
-                                fontFamily: "SVN-Gotham-Bold",
-                                fontSize: 28,
-                            }}
-                        >
-                            Sign up
-                        </Text>
+                        <Title name="Sign up" />
                     </View>
-                    <View style={styles.containerForm}>
+                    <View style={[styles.containerForm, { marginTop: 10 }]}>
                         <View
                             style={{
                                 marginBottom: 20,
@@ -202,13 +169,7 @@ const Signup = (props) => {
                                 fontSize: 14,
                             }}
                         >
-                            By selecting Create Account below, I agree to{" "}
-                            <Text
-                                style={{ color: accentGreen, fontWeight: 800 }}
-                            >
-                                Terms of Service
-                            </Text>{" "}
-                            &{" "}
+                            By selecting Create Account below, I agree to <Text style={{ color: accentGreen, fontWeight: 800 }}>Terms of Service</Text> &{" "}
                             <Text
                                 style={{
                                     color: accentGreen,
@@ -218,11 +179,7 @@ const Signup = (props) => {
                                 Privacy Policy
                             </Text>
                         </Text>
-                        <Button
-                            children={"Create account"}
-                            onPress={onSubmitPress}
-                            loading={loading}
-                        />
+                        <Button children={"Create account"} onPress={onSubmitPress} loading={loading} />
                         <View
                             style={{
                                 flexDirection: "row",
