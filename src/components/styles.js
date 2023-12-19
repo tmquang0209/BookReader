@@ -25,9 +25,9 @@ export default styles = StyleSheet.create({
     },
 
     backContainer: {
-        position: "absolute",
         margin: 10,
-        justifyContent: "center",
+        // justifyContent: "center",
+        alignItems: "flex-start",
     },
 
     backButton: {
@@ -44,5 +44,55 @@ export default styles = StyleSheet.create({
         justifyContent: "center",
         fontSize: 16,
         fontFamily: "SVN-Gotham-Book",
+    },
+
+    itemBox: {
+        margin: 10,
+        gap: 16,
+    },
+
+    headerContainer: {
+        flex: 1,
+        flexDirection: "row",
+        alignItems: "center",
+    },
+
+    headerItem: {
+        flex: 1,
+        color: white,
+        fontSize: 20,
+        fontFamily: "SVN-Gotham-Bold",
+    },
+
+    showAllContainer: {
+        alignItems: "center",
+        alignContent: "center",
+        flexDirection: "column",
+        justifyContent: "space-between",
+    },
+
+    showAllText: {
+        color: accentGreen,
+        fontFamily: "SVN-Gotham-Bold",
+        fontSize: 12,
+        alignSelf: "center",
+        justifyContent: "center",
+    },
+
+    imageItemHome: {
+        width: 128,
+        height: 184,
+    },
+
+    itemBookName: {
+        color: white,
+        fontFamily: "SVN-Gotham-Bold",
+        fontSize: 12,
+    },
+
+    itemBookAuthor: {
+        color: white,
+        fontSize: 10,
+        fontFamily: "SVN-Gotham-Light",
     },
 });

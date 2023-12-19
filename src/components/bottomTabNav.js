@@ -1,42 +1,69 @@
-import { createMaterialBottomTabNavigator } from "react-native-paper/react-navigation";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import Login from "../screen/GetStarted";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { FontAwesome5 } from "@expo/vector-icons";
 
-const Tab = createMaterialBottomTabNavigator();
+import Home from "../screen/Home";
+import Search from "../screen/Search";
+import Library from "../screen/Library";
+import Challenge from "../screen/Challenge";
+import Profile from "../screen/Profile";
 
-const Home = () => {};
-const Notifications = () => {};
-const Profile = () => {};
+import { ChallengeIcon, HomeIcon, LibraryIcon, SearchIcon } from "../constants/images";
+import { accentGreen, gray1 } from "../constants/colors";
+
+const Tab = createBottomTabNavigator();
 
 export default function BottomTabNav() {
     return (
-        <Tab.Navigator initialRouteName="Home" activeColor="#e91e63">
+        <Tab.Navigator
+            initialRouteName="Home"
+            barStyle={{
+                backgroundColor: "#1E1E1E",
+            }}
+            screenOptions={{
+                headerShown: false,
+                tabBarActiveTintColor: accentGreen,
+                tabBarInactiveTintColor: gray1,
+                tabBarStyle: {
+                    height: 75,
+                    // paddingHorizontal: 5,
+                    paddingTop: 0,
+                    backgroundColor: "#1E1E1E",
+                    borderTopWidth: 0,
+                    paddingBottom: 20,
+                    position: "absolute",
+                },
+            }}
+        >
             <Tab.Screen
                 name="Home"
                 component={Home}
                 options={{
                     tabBarLabel: "Home",
-                    tabBarIcon: ({ color }) => (
-                        <MaterialCommunityIcons
-                            name="home"
-                            color={color}
-                            size={26}
-                        />
-                    ),
+                    tabBarIcon: ({ color }) => <HomeIcon color={color} />,
                 }}
             />
             <Tab.Screen
-                name="Notifications"
-                component={Notifications}
+                name="Search"
+                component={Search}
                 options={{
-                    tabBarLabel: "Updates",
-                    tabBarIcon: ({ color }) => (
-                        <MaterialCommunityIcons
-                            name="bell"
-                            color={color}
-                            size={26}
-                        />
-                    ),
+                    tabBarLabel: "Explore",
+                    tabBarIcon: ({ color }) => <SearchIcon color={color} />,
+                }}
+            />
+            <Tab.Screen
+                name="Library"
+                component={Library}
+                options={{
+                    tabBarLabel: "Library",
+                    tabBarIcon: ({ color }) => <LibraryIcon color={color} />,
+                }}
+            />
+            <Tab.Screen
+                name="Challenge"
+                component={Challenge}
+                options={{
+                    tabBarLabel: "Challenge",
+                    tabBarIcon: ({ color }) => <ChallengeIcon color={color} />,
                 }}
             />
             <Tab.Screen
@@ -44,13 +71,7 @@ export default function BottomTabNav() {
                 component={Profile}
                 options={{
                     tabBarLabel: "Profile",
-                    tabBarIcon: ({ color }) => (
-                        <MaterialCommunityIcons
-                            name="account"
-                            color={color}
-                            size={26}
-                        />
-                    ),
+                    tabBarIcon: ({ color }) => <FontAwesome5 name="user-circle" size={24} color={color} />,
                 }}
             />
         </Tab.Navigator>
