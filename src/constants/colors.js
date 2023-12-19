@@ -9,3 +9,4 @@ export const gray3 = "#626666";
 export const gray4 = "#313333";
 export const gray5 = "#31333380";
 export const black = "#181A1A";
+export const BGShade = "#232538";
