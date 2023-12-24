@@ -66,7 +66,7 @@ const GetStarted = (props) => {
 
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-            <ScrollView>
+            <ScrollView style={styles.container}>
                 <SafeAreaView style={styles.container}>
                     <LogoWithText />
                     <View style={[styles.containerForm, { marginTop: 50 }]}>
