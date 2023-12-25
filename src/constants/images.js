@@ -2,6 +2,8 @@ import { Svg, Path, Circle, G, Defs, ClipPath, Rect } from "react-native-svg";
 export const girlReadingBook = require("../../assets/girl-and-book.png");
 export const googleLogo = require("../../assets/google.png");
 export const noInternet = require("../../assets/no-internet.png");
+export const demoDetail = require("../../assets/demo.png");
+
 export const HomeIcon = ({ color }) => (
     <Svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none">
         <Path

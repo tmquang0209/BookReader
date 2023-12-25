@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { accentGreen, black, gray5, white } from "../constants/colors";
+import { accentGreen, black, gray4, gray5, white, BGShade } from "../constants/colors";
 
 export default styles = StyleSheet.create({
     container: {
@@ -24,9 +24,21 @@ export default styles = StyleSheet.create({
         borderRadius: 8,
     },
 
+    fixedButton: {
+        position: "absolute",
+        top: 10,
+        left: 10,
+        width: 50,
+        height: 50,
+        backgroundColor: "rgba(52, 52, 52, 0.4)",
+        borderRadius: 90,
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 1,
+    },
+
     backContainer: {
         margin: 10,
-        // justifyContent: "center",
         alignItems: "flex-start",
     },
 
@@ -93,6 +105,142 @@ export default styles = StyleSheet.create({
     itemBookAuthor: {
         color: white,
         fontSize: 10,
+        fontFamily: "SVN-Gotham-Light",
+    },
+
+    backgroundImage: {
+        width: "100%",
+        height: 350,
+        justifyContent: "flex-end",
+    },
+
+    bookImage: {
+        height: 220,
+        width: 150,
+        alignSelf: "center",
+    },
+
+    bookTitle: {
+        color: white,
+        fontFamily: "SVN-Gotham-Bold",
+        fontSize: 20,
+    },
+
+    authorName: {
+        color: white,
+        fontFamily: "SVN-Gotham-Book",
+        fontSize: 14,
+    },
+
+    infoContainer: {
+        backgroundColor: BGShade,
+        flex: 1,
+        flexDirection: "row",
+        marginTop: 13,
+        marginBottom: 23,
+        borderRadius: 8,
+    },
+
+    infoBox: {
+        flex: 1,
+        marginTop: 8,
+        marginBottom: 8,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        borderRightWidth: 1,
+        borderRightColor: white,
+    },
+
+    infoIcon: {
+        color: white,
+    },
+
+    aboutTitle: {
+        color: white,
+        fontFamily: "SVN-Gotham-Bold",
+        fontSize: 16,
+    },
+
+    aboutText: {
+        color: white,
+        fontFamily: "SVN-Gotham-Light",
+        fontSize: 14,
+    },
+
+    genreButton: {
+        backgroundColor: gray4,
+        margin: 5,
+        alignSelf: "flex-start",
+        borderRadius: 8,
+    },
+
+    genreText: {
+        padding: 10,
+        color: white,
+    },
+
+    chapterTitle: {
+        color: white,
+        fontFamily: "SVN-Gotham-Bold",
+        fontSize: 20,
+        marginTop: 20,
+    },
+
+    chapterItem: {
+        flex: 1,
+        flexDirection: "row",
+        marginTop: 24,
+    },
+
+    chapterNumber: {
+        color: white,
+        flex: 1,
+        fontFamily: "SVN-Gotham-Light",
+        fontSize: 16,
+    },
+
+    chapterName: {
+        color: white,
+        flex: 5,
+        fontFamily: "SVN-Gotham-Bold",
+        fontSize: 16,
+    },
+
+    playIcon: {
+        flex: 1,
+    },
+
+    authorContainer: {
+        backgroundColor: BGShade,
+        flex: 1,
+        flexDirection: "row",
+        padding: 12,
+        marginTop: 30,
+        borderRadius: 12,
+    },
+
+    avatar: {
+        // Add any avatar styles here
+    },
+
+    authorInfoContainer: {
+        flex: 1,
+        marginLeft: 10,
+    },
+    authorNameText: {
+        color: white,
+        fontFamily: "SVN-Gotham-Bold",
+        fontSize: 16,
+    },
+    authorDateText: {
+        color: white,
+        fontFamily: "SVN-Gotham-Light",
+        fontSize: 12,
+    },
+    authorDescriptionText: {
+        color: white,
+        marginTop: 8,
         fontFamily: "SVN-Gotham-Light",
     },
 });

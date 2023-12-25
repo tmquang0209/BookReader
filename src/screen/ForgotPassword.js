@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaView, Text, View, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Alert, KeyboardAvoidingView, Platform } from "react-native";
 import styles from "../components/styles";
 import { LogoWithText } from "../components/logo";
-import Title from "../components/title";
+import { Title } from "../components/title";
 import { white, accentGreen, black } from "../constants/colors";
 import { TextInput } from "react-native-paper";
 import Button from "../components/button";

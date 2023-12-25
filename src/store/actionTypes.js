@@ -1,4 +1,4 @@
-// Action types
+// Action types for user
 export const EMPTY_AUTH = "EMPTY_AUTH";
 export const AUTO_LOGIN = "AUTO_LOGIN";
 
@@ -21,3 +21,12 @@ export const VERIFY_CODE_FAIL = "VERIFY_CODE_FAIL";
 export const SET_PASSWORD_PROCESS = "SET_PASSWORD_PROCESS";
 export const SET_PASSWORD_SUCCESS = "SET_PASSWORD_SUCCESS";
 export const SET_PASSWORD_FAIL = "SET_PASSWORD_FAIL";
+
+//action type for category
+export const GET_CATEGORY = "GET_CATEGORY";
+export const GET_CATEGORY_FAIL = "GET_CATEGORY_FAIL";
+export const GET_CATEGORY_SUCCESS = "GET_CATEGORY_SUCCESS";
+
+export const GET_FAVORITES_CAT = "GET_FAVORITES_CAT";
+export const GET_FAVORITES_CAT_FAIL = "GET_FAVORITES_CAT_FAIL";
+export const GET_FAVORITES_CAT_SUCCESS = "GET_FAVORITES_CAT_SUCCESS";

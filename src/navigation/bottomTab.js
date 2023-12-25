@@ -12,7 +12,7 @@ import { accentGreen, gray1 } from "../constants/colors";
 
 const Tab = createBottomTabNavigator();
 
-export default function BottomTabNav() {
+export default function BottomTab() {
     return (
         <Tab.Navigator
             initialRouteName="Home"
