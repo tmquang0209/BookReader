@@ -7,6 +7,7 @@ import { TextInput } from "react-native-paper";
 import { getCatList } from "../store/actions/categoryAction";
 import { search } from "../API/book";
 import { useNavigation } from "@react-navigation/native";
+import { TitleWithinUnderLine } from "../components/title";
 
 const Search = (props) => {
     const { categories, getCatList } = props;
@@ -31,10 +32,7 @@ const Search = (props) => {
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <SafeAreaView style={[styles.container, { padding: 10 }]}>
-                <View style={{ alignSelf: "flex-start" }}>
-                    <Text style={{ fontSize: 24, fontFamily: "SVN-Gotham-Bold", color: white }}>Explore</Text>
-                    <View style={{ borderWidth: 1, borderColor: accentGreen }}></View>
-                </View>
+                <TitleWithinUnderLine title={"Explore"}/>
                 <View
                     style={{
                         marginTop: 16,
