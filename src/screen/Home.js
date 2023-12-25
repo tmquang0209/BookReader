@@ -79,7 +79,7 @@ const HomeView = (props) => {
                 }}
             >
                 <LastBookRead />
-                <ForYou list={forYouList.filter((item, index) => index <= 10)} />
+                <ForYou list={forYouList} />
             </View>
         </ScrollView>
     );

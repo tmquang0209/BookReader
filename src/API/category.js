@@ -25,7 +25,6 @@ export const getFavCategory = async (userId) => {
 
 export const addFavCat = async ({ userId, favCatIds }) => {
     try {
-        console.log("add", { idUser: userId, favCatIds });
         const response = await axios.post(`${API_URI}/api/addFavCategory`, { idUser: userId, favCatIds });
         const responseData = response.data;
         return responseData;

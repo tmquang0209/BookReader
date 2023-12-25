@@ -50,7 +50,6 @@ const Search = (props) => {
                         textColor={white}
                         activeUnderlineColor={accentGreen}
                         placeholderTextColor={gray2}
-                        theme={{ colors: { primary: "green", underlineColor: "transparent" } }}
                         onSubmitEditing={() => onSearchSubmit()}
                         value={keyword}
                         onChangeText={(text) => setKeyword(text)}
@@ -82,6 +81,7 @@ const Search = (props) => {
                                         borderRadius: 8,
                                     }}
                                     activeOpacity={0.5}
+                                    onPress={() => navigation.navigate("BookList", { topicId: item.idCategory })}
                                 >
                                     <Text
                                         style={{
