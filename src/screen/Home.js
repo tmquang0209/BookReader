@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, ScrollView, Text, View } from "react-native";
+import { Dimensions, Image, SafeAreaView, ScrollView, Text, View } from "react-native";
 import { useNetInfo } from "@react-native-community/netinfo";
 import styles from "../components/styles";
 import { NoInternet } from "./NoInternet";
@@ -7,10 +7,10 @@ import { white } from "../constants/colors";
 import { Avatar } from "react-native-paper";
 import { connect } from "react-redux";
 
-
 import { getInterestBook } from "../API/book";
 import { ForYou } from "../components/recommend";
 import { LastBookRead } from "../components/lastRead";
+import { banner } from "../constants/images";
 
 const Banner = () => {};
 
@@ -78,6 +78,16 @@ const HomeView = (props) => {
                     flex: 1,
                 }}
             >
+                <Image
+                    style={{
+                        width: Dimensions.get("screen").width - 15,
+                        height: 200,
+                        margin: 5,
+                        borderRadius: 10,
+                        alignSelf: "center",
+                    }}
+                    source={banner}
+                />
                 <LastBookRead />
                 <ForYou list={forYouList} />
             </View>

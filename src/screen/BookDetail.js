@@ -1,10 +1,10 @@
 import React from "react";
-import { Image, ImageBackground, ScrollView, View, Text, TouchableOpacity, SafeAreaView } from "react-native";
+import { Image, ImageBackground, ScrollView, View, Text, TouchableOpacity, SafeAreaView, Dimensions } from "react-native";
 import { Feather, FontAwesome } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { Avatar } from "react-native-paper";
 import styles from "../components/styles";
-import { white } from "../constants/colors";
+import { accentGreen, black, white } from "../constants/colors";
 import { BackButton } from "../components/header";
 import { CategoryTypeItem } from "../components/categoryType";
 
@@ -16,8 +16,8 @@ const CategoryList = ({ subjects }) => (
     </View>
 );
 
-const AuthorDetail = ({ authors }) => {
-    const nameDigit = authors.name[0];
+const AuthorDetail = ({ author }) => {
+    const nameDigit = author.name ? author.name[0] : "A";
 
     return (
         <View style={styles.authorContainer}>
@@ -28,9 +28,9 @@ const AuthorDetail = ({ authors }) => {
                     marginLeft: 10,
                 }}
             >
-                <Text style={styles.authorName}>{authors.name}</Text>
+                <Text style={styles.authorName}>{author.name}</Text>
                 <Text style={styles.authorDateText}>
-                    {authors.birth_year}-{authors.death_year}
+                    {author.birth_year}-{author.death_year}
                 </Text>
                 <Text style={styles.authorDescriptionText}>...</Text>
             </View>
@@ -46,7 +46,7 @@ const BookDetail = (props) => {
             <View style={styles.fixedButton}>
                 <BackButton styleText={{ color: white }} />
             </View>
-            <ScrollView>
+            <ScrollView style={{ marginBottom: 10 }}>
                 <ImageBackground source={{ uri: bookData?.formats?.image }} resizeMode="cover" blurRadius={2} style={[styles.backgroundImage, { position: "relative" }]}>
                     <LinearGradient colors={["#18191900", "#18191999", "#181919"]}>
                         <Image
@@ -62,7 +62,7 @@ const BookDetail = (props) => {
                 <View style={{ margin: 10 }}>
                     <View>
                         <View>
-                            <Text style={styles.bookTitle}>{bookData?.title}</Text>
+                            <Text style={[styles.bookTitle, { width: Dimensions.get("screen").width - 30 }]}>{bookData?.title}</Text>
                             <FontAwesome name="bookmark-o" size={24} color={white} style={{ position: "absolute", right: 0 }} />
                         </View>
                         <Text style={[styles.authorName]}>{bookData?.author[0]?.name}</Text>
@@ -82,21 +82,34 @@ const BookDetail = (props) => {
                         <Text style={styles.aboutText}>Updating...</Text>
                         <CategoryList subjects={bookData?.subjects} />
                     </View>
-                    <View>
-                        <View>
-                            <Text style={styles.chapterTitle}>4 Chapters</Text>
-                        </View>
-                        <View style={{ flex: 1 }}>
-                            <View style={styles.chapterItem}>
-                                <Text style={styles.chapterNumber}>01</Text>
-                                <Text style={styles.chapterName}>Chapter 1</Text>
-                                <Feather name="play-circle" size={30} color={white} style={{ flex: 1 }} />
-                            </View>
-                        </View>
-                    </View>
-                    <AuthorDetail authors={bookData?.author[0]} />
+                    <AuthorDetail author={bookData?.author[0]} />
                 </View>
             </ScrollView>
+            <View
+                style={{
+                    alignItems: "center",
+                }}
+            >
+                <TouchableOpacity
+                    style={{
+                        backgroundColor: accentGreen,
+                        padding: 10,
+                        alignItems: "center",
+                        padding: 10,
+                        borderRadius: 10,
+                        bottom: 10,
+                        width: "90%",
+                    }}
+                >
+                    <Text
+                        style={{
+                            color: black,
+                        }}
+                    >
+                        Read now
+                    </Text>
+                </TouchableOpacity>
+            </View>
         </SafeAreaView>
     );
 };
