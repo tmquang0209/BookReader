@@ -29,13 +29,20 @@ const ForYouItem = ({ item }) => {
 };
 
 const ForYouList = ({ list }) => (
-    <FlatList showsHorizontalScrollIndicator={false} horizontal data={list} keyExtractor={(item) => item.id.toString()} renderItem={({ item }) => <ForYouItem item={item} />} />
+    <FlatList
+        showsHorizontalScrollIndicator={false}
+        horizontal
+        data={list}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => <ForYouItem item={item} />}
+        ListFooterComponent={<View style={{ height: 200 }} />}
+    />
 );
 
 export const ForYou = ({ list }) => {
     const navigation = useNavigation();
 
-    const reducedList = list.filter((item, index) => index <= 10);
+    const reducedList = list ? list.filter((item, index) => index <= 10) : [];
     return (
         <View style={styles.itemBox}>
             <View style={styles.headerContainer}>

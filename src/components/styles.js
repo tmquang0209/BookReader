@@ -61,6 +61,7 @@ export default styles = StyleSheet.create({
     itemBox: {
         margin: 10,
         gap: 16,
+        flex: 1,
     },
 
     headerContainer: {

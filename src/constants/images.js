@@ -1,4 +1,6 @@
 import { Svg, Path, Circle, G, Defs, ClipPath, Rect } from "react-native-svg";
+
+export const banner = require("../../assets/banner.png");
 export const girlReadingBook = require("../../assets/girl-and-book.png");
 export const googleLogo = require("../../assets/google.png");
 export const noInternet = require("../../assets/no-internet.png");
