@@ -1,4 +1,4 @@
-import { LOGIN_FAIL, LOGIN_PROCESS, LOGIN_SUCCESS, EMPTY_AUTH, AUTO_LOGIN, SIGNUP_FAIL, SIGNUP_PROCESS, SIGNUP_SUCCESS } from "../actionTypes";
+import { LOGIN_FAIL, LOGIN_PROCESS, LOGIN_SUCCESS, EMPTY_AUTH, AUTO_LOGIN, SIGNUP_FAIL, SIGNUP_PROCESS, SIGNUP_SUCCESS, LOGOUT, UPDATE_INFO } from "../actionTypes";
 
 const initialState = {
     user: {},
@@ -35,6 +35,19 @@ export const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...action.payload,
+            };
+
+        case LOGOUT:
+            return {
+                ...state,
+                user: action.payload.user,
+                loggedIn: action.payload.loggedIn,
+            };
+
+        case UPDATE_INFO:
+            return {
+                ...state,
+                user: action.payload.userData,
             };
         default:
             return state;

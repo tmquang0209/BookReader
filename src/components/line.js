@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import { gray4, gray2 } from "../constants/colors";
 
-export default LineOr = () => {
+export const LineOr = () => {
     return (
         <View
             style={{
@@ -34,6 +34,27 @@ export default LineOr = () => {
                     backgroundColor: gray4,
                 }}
             />
+        </View>
+    );
+};
+
+export const Line = () => {
+    return (
+        <View
+            style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginTop: 20,
+                marginBottom: 32,
+            }}
+        >
+            <View
+                style={{
+                    flex: 1,
+                    height: 2,
+                    backgroundColor: gray4,
+                }}
+            ></View>
         </View>
     );
 };

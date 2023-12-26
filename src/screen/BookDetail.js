@@ -7,6 +7,8 @@ import styles from "../components/styles";
 import { accentGreen, black, white } from "../constants/colors";
 import { BackButton } from "../components/header";
 import { CategoryTypeItem } from "../components/categoryType";
+import { useNavigation } from "@react-navigation/native";
+import Button from "../components/button";
 
 const CategoryList = ({ subjects }) => (
     <View style={{ flex: 1, flexDirection: "row", flexWrap: "wrap" }}>
@@ -40,6 +42,7 @@ const AuthorDetail = ({ author }) => {
 
 const BookDetail = (props) => {
     const { bookData } = props.route.params;
+    const navigation = useNavigation();
 
     return (
         <SafeAreaView style={styles.container}>
@@ -90,25 +93,7 @@ const BookDetail = (props) => {
                     alignItems: "center",
                 }}
             >
-                <TouchableOpacity
-                    style={{
-                        backgroundColor: accentGreen,
-                        padding: 10,
-                        alignItems: "center",
-                        padding: 10,
-                        borderRadius: 10,
-                        bottom: 10,
-                        width: "90%",
-                    }}
-                >
-                    <Text
-                        style={{
-                            color: black,
-                        }}
-                    >
-                        Read now
-                    </Text>
-                </TouchableOpacity>
+                <Button children={"Reading now"} style={{ width: "90%" }} onPress={() => navigation.navigate("Reading", { file: bookData.formats.epub })} />
             </View>
         </SafeAreaView>
     );

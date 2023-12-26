@@ -54,3 +54,14 @@ export const resetPassword = async (email, otp, newPassword, reNewPassword) => {
         return err.response.data;
     }
 };
+
+export const updateInfoUser = async (userData) => {
+    try {
+        const response = await axios.post(`${API_URI}/api/updateInfoUser`, { ...userData });
+        const responseData = response.data;
+        return responseData
+    } catch (err) {
+        console.error(err);
+        return err.response.data;
+    }
+};

@@ -14,6 +14,8 @@ import VerifyCode from "../screen/VerifyCode";
 import SetPassword from "../screen/SetPassword";
 import BookDetail from "../screen/BookDetail";
 import BookList from "../screen/BookList";
+import Reading from "../screen/Reading";
+import ProfileDetails from "../screen/ProfileDetails";
 
 const StackNav = (props) => {
     const { loggedIn, autoLogin } = props;
@@ -48,6 +50,8 @@ const StackNav = (props) => {
                     <Stack.Screen name="bottomTab" component={BottomTab} />
                     <Stack.Screen name="BookDetail" component={BookDetail} />
                     <Stack.Screen name="BookList" component={BookList} />
+                    <Stack.Screen name="Reading" component={Reading} />
+                    <Stack.Screen name="ProfileDetails" component={ProfileDetails} />
                 </Stack.Group>
             )}
         </Stack.Navigator>

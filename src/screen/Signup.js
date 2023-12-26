@@ -4,7 +4,6 @@ import { TextInput } from "react-native-paper";
 import Button from "../components/button";
 import { connect } from "react-redux";
 import styles from "../components/styles";
-import { girlReadingBook } from "../constants/images";
 import { accentGreen, gray2, gray4, white } from "../constants/colors";
 import { signupAccount, emptyAuth } from "../store/actions/authActions";
 import { LogoWithoutText } from "../components/logo";

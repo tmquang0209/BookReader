@@ -4,6 +4,8 @@ export const banner = require("../../assets/banner.png");
 export const girlReadingBook = require("../../assets/girl-and-book.png");
 export const googleLogo = require("../../assets/google.png");
 export const noInternet = require("../../assets/no-internet.png");
+export const userIcon = require("../../assets/user.png");
+export const logoutIcon = require("../../assets/logout.png");
 export const demoDetail = require("../../assets/demo.png");
 
 export const HomeIcon = ({ color }) => (
