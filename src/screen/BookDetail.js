@@ -68,7 +68,7 @@ const BookDetail = (props) => {
                             <Text style={[styles.bookTitle, { width: Dimensions.get("screen").width - 30 }]}>{bookData?.title}</Text>
                             <FontAwesome name="bookmark-o" size={24} color={white} style={{ position: "absolute", right: 0 }} />
                         </View>
-                        <Text style={[styles.authorName]}>{bookData?.author[0]?.name}</Text>
+                        <Text style={[styles.authorName]}>{bookData?.authors[0]?.name}</Text>
                         <View style={styles.infoContainer}>
                             <View style={styles.infoBox}>
                                 <Feather name="clock" size={24} color={white} />
@@ -85,7 +85,7 @@ const BookDetail = (props) => {
                         <Text style={styles.aboutText}>Updating...</Text>
                         <CategoryList subjects={bookData?.subjects} />
                     </View>
-                    <AuthorDetail author={bookData?.author[0]} />
+                    <AuthorDetail author={bookData?.authors[0]} />
                 </View>
             </ScrollView>
             <View
