@@ -93,7 +93,7 @@ const BookDetail = (props) => {
                     alignItems: "center",
                 }}
             >
-                <Button children={"Reading now"} style={{ width: "90%" }} onPress={() => navigation.navigate("Reading", { file: bookData.formats.epub })} />
+                <Button children={"Reading now"} style={{ width: "90%" }} onPress={() => navigation.navigate("Reading", { bookId: bookData.id, file: bookData.formats.epub })} />
             </View>
         </SafeAreaView>
     );
