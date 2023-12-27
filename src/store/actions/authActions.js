@@ -14,7 +14,8 @@ export const emptyAuth = () => {
 export const autoLogin = () => {
     return async (dispatch) => {
         const data = await getAuthStorage();
-        if (data) dispatch({ type: AUTO_LOGIN, payload: { user: data, loggedIn: true } });
+        if (data) dispatch({ type: AUTO_LOGIN, payload: { user: data, loggedIn: true, localStorageCheck: "2" } });
+        else dispatch({ type: AUTO_LOGIN, payload: { localStorageCheck: "1" } });
     };
 };
 

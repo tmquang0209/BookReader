@@ -1,6 +1,7 @@
 import { TouchableOpacity, View, Image, Text } from "react-native";
 import styles from "./styles";
 import { useNavigation } from "@react-navigation/native";
+import * as Animatable from "react-native-animatable";
 
 export const ListItem = ({ item }) => {
     const navigation = useNavigation();
@@ -45,29 +46,30 @@ export const GridItem = ({ bookData }) => {
     };
 
     return (
-        <TouchableOpacity
-            style={{
-                margin: 5,
-                width: "50%",
-            }}
-            activeOpacity={0.5}
-            onPress={() => onItemPress()}
-        >
-            <Image
+        <Animatable.View animation={"bounceIn"} style={{ width: "50%" }}>
+            <TouchableOpacity
                 style={{
-                    width: "100%",
-                    height: 250,
+                    margin: 5,
                 }}
-                source={{
-                    uri: bookData.formats.image,
-                }}
-            />
-            <Text style={[styles.bookTitle, { fontSize: 13 }]} numberOfLines={1} ellipsizeMode="tail">
-                {bookData.title}
-            </Text>
-            <Text style={[styles.itemBookAuthor, { fontSize: 13 }]} numberOfLines={1} ellipsizeMode="tail">
-                {bookData.authors[0].name}
-            </Text>
-        </TouchableOpacity>
+                activeOpacity={0.5}
+                onPress={() => onItemPress()}
+            >
+                <Image
+                    style={{
+                        width: "100%",
+                        height: 250,
+                    }}
+                    source={{
+                        uri: bookData.formats.image,
+                    }}
+                />
+                <Text style={[styles.bookTitle, { fontSize: 13 }]} numberOfLines={1} ellipsizeMode="tail">
+                    {bookData.title}
+                </Text>
+                <Text style={[styles.itemBookAuthor, { fontSize: 13 }]} numberOfLines={1} ellipsizeMode="tail">
+                    {bookData.authors[0].name}
+                </Text>
+            </TouchableOpacity>
+        </Animatable.View>
     );
 };

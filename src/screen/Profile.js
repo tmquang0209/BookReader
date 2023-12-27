@@ -64,8 +64,8 @@ const Profile = (props) => {
                         <Avatar.Text label="A" style={{ borderRadius: 90 }} />
                     </View>
                     <View style={{ marginLeft: 20, flex: 3 }}>
-                        <Text style={{ fontFamily: "SVN-Gotham-Bold", fontSize: 15, color: white }}>{user.fullName}</Text>
-                        <Text style={{ fontFamily: "SVN-Gotham-Light", fontSize: 13, color: white }}>{user.email}</Text>
+                        <Text style={{ fontFamily: "SVN-Gotham-Bold", fontSize: 15, color: white }}>{user?.fullName}</Text>
+                        <Text style={{ fontFamily: "SVN-Gotham-Light", fontSize: 13, color: white }}>{user?.email}</Text>
 
                         <TouchableOpacity style={{ alignItems: "center", width: "40%", flexDirection: "row" }}>
                             <MaterialCommunityIcons name="crown-outline" size={24} color={accentGreen} />

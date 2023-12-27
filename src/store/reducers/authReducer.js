@@ -1,8 +1,13 @@
 import { LOGIN_FAIL, LOGIN_PROCESS, LOGIN_SUCCESS, EMPTY_AUTH, AUTO_LOGIN, SIGNUP_FAIL, SIGNUP_PROCESS, SIGNUP_SUCCESS, LOGOUT, UPDATE_INFO } from "../actionTypes";
 
+//0: unchecked
+//1: check false
+//2: check true
+
 const initialState = {
     user: {},
     loggedIn: false,
+    localStorageCheck: "0",
     err: "",
 };
 
@@ -14,8 +19,9 @@ export const authReducer = (state = initialState, action) => {
         case AUTO_LOGIN:
             return {
                 ...state,
-                user: action.payload.user,
-                loggedIn: action.payload.loggedIn,
+                user: action.payload?.user,
+                loggedIn: action.payload?.loggedIn,
+                localStorageCheck: action.payload.localStorageCheck,
             };
         case LOGIN_PROCESS:
         case SIGNUP_PROCESS:

@@ -8,6 +8,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { GridItem } from "../components/listItem";
 import { getBookListByStatus, getSavedBook } from "../API/library";
 import { completed, inProcess, savedBook } from "../constants/text";
+import * as Animatable from "react-native-animatable";
 
 const Library = (props) => {
     const { user } = props;
@@ -48,25 +49,27 @@ const Library = (props) => {
                     keyExtractor={(item) => item.key}
                     renderItem={({ item }) => {
                         return (
-                            <TouchableOpacity
-                                activeOpacity={0.5}
-                                style={{
-                                    padding: 10,
-                                    borderRadius: 90,
-                                    borderWidth: 1,
-                                    borderColor: gray3,
-                                    marginTop: 20,
-                                    marginRight: 10,
-                                    backgroundColor: item.active ? accentGreen : null,
-                                    flexDirection: "row",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                }}
-                                onPress={() => onTabPress(item.key)}
-                            >
-                                <FontAwesome5 name={item.icon} size={24} color={item.active ? black : white} />
-                                <Text style={{ marginLeft: 5, color: item.active ? black : white }}>{item.name}</Text>
-                            </TouchableOpacity>
+                            <Animatable.View animation={"bounce"} duration={1000} delay={item.key * 200}>
+                                <TouchableOpacity
+                                    activeOpacity={0.5}
+                                    style={{
+                                        padding: 10,
+                                        borderRadius: 90,
+                                        borderWidth: 1,
+                                        borderColor: gray3,
+                                        marginTop: 20,
+                                        marginRight: 10,
+                                        backgroundColor: item.active ? accentGreen : null,
+                                        flexDirection: "row",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                    }}
+                                    onPress={() => onTabPress(item.key)}
+                                >
+                                    <FontAwesome5 name={item.icon} size={24} color={item.active ? black : white} />
+                                    <Text style={{ marginLeft: 5, color: item.active ? black : white }}>{item.name}</Text>
+                                </TouchableOpacity>
+                            </Animatable.View>
                         );
                     }}
                 />
