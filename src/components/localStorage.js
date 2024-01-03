@@ -8,3 +8,7 @@ export const getAuthStorage = async () => {
 export const setAuthStorage = async (authData) => {
     AsyncStorage.setItem("auth", JSON.stringify(authData));
 };
+
+export const removeAuthStorage = async () => {
+    AsyncStorage.removeItem("auth");
+};

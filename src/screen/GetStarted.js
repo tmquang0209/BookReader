@@ -9,7 +9,7 @@ import { accentGreen, white } from "../constants/colors";
 import Button from "../components/button";
 import { LogoWithText } from "../components/logo";
 import GoogleButton from "../components/googleButton";
-import LineOr from "../components/lineOr";
+import { LineOr } from "../components/line";
 
 const GetStarted = (props) => {
     const { loggedIn, err, loginUser, navigation, emptyAuth, autoLogin } = props;

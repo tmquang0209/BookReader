@@ -22,6 +22,10 @@ export const SET_PASSWORD_PROCESS = "SET_PASSWORD_PROCESS";
 export const SET_PASSWORD_SUCCESS = "SET_PASSWORD_SUCCESS";
 export const SET_PASSWORD_FAIL = "SET_PASSWORD_FAIL";
 
+export const LOGOUT = "LOGOUT";
+
+export const UPDATE_INFO = "UPDATE_INFO";
+
 //action type for category
 export const GET_CATEGORY = "GET_CATEGORY";
 export const GET_CATEGORY_FAIL = "GET_CATEGORY_FAIL";

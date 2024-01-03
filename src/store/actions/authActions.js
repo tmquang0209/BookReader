@@ -1,6 +1,6 @@
-import { LOGIN_SUCCESS, LOGIN_FAIL, LOGIN_PROCESS, SIGNUP_PROCESS, SIGNUP_FAIL, SIGNUP_SUCCESS, EMPTY_AUTH, AUTO_LOGIN } from "../actionTypes";
-import { login, register } from "../../API/authUser";
-import { getAuthStorage, setAuthStorage } from "../../components/localStorage";
+import { LOGIN_SUCCESS, LOGIN_FAIL, LOGIN_PROCESS, SIGNUP_PROCESS, SIGNUP_FAIL, SIGNUP_SUCCESS, EMPTY_AUTH, AUTO_LOGIN, LOGOUT, UPDATE_INFO } from "../actionTypes";
+import { login, register, updateInfoUser } from "../../API/authUser";
+import { getAuthStorage, removeAuthStorage, setAuthStorage } from "../../components/localStorage";
 
 export const emptyAuth = () => {
     return async (dispatch) => {
@@ -14,7 +14,8 @@ export const emptyAuth = () => {
 export const autoLogin = () => {
     return async (dispatch) => {
         const data = await getAuthStorage();
-        if (data) dispatch({ type: AUTO_LOGIN, payload: { user: data, loggedIn: true } });
+        if (data) dispatch({ type: AUTO_LOGIN, payload: { user: data, loggedIn: true, localStorageCheck: "2" } });
+        else dispatch({ type: AUTO_LOGIN, payload: { localStorageCheck: "1" } });
     };
 };
 
@@ -58,7 +59,6 @@ export const signupAccount = (userData) => {
         try {
             dispatch(signupProcess());
             const response = await register(userData);
-            console.log("response", response);
             if (response.success) {
                 dispatch(signupSuccess(response.userData[0]));
             } else {
@@ -85,3 +85,28 @@ const signupSuccess = (userData) => ({
     type: SIGNUP_SUCCESS,
     payload: { user: userData, loggedIn: false },
 });
+
+export const logoutUser = () => {
+    return async (dispatch) => {
+        try {
+            await removeAuthStorage();
+            dispatch({
+                type: LOGOUT,
+                payload: { user: {}, loggedIn: false },
+            });
+        } catch (err) {
+            console.error(err);
+        }
+    };
+};
+
+export const updateInfo = (info) => {
+    return async (dispatch) => {
+        try {
+            setAuthStorage(info);
+            dispatch({ type: UPDATE_INFO, payload: { userData: info } });
+        } catch (err) {
+            console.error(err);
+        }
+    };
+};
