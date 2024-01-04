@@ -7,17 +7,19 @@ import { Provider } from "react-redux";
 import store from "./src/store";
 
 import StackNav from "./src/navigation/stack";
+import { PaperProvider } from "react-native-paper";
 
 export default function App() {
-
     return (
         <Provider store={store}>
-            <SafeAreaProvider>
-                <NavigationContainer>
-                    <StackNav />
-                </NavigationContainer>
-                <StatusBar animated barStyle={"light-content"} />
-            </SafeAreaProvider>
+            <PaperProvider>
+                <SafeAreaProvider>
+                    <NavigationContainer>
+                        <StackNav />
+                    </NavigationContainer>
+                    <StatusBar animated barStyle={"light-content"} />
+                </SafeAreaProvider>
+            </PaperProvider>
         </Provider>
     );
 }

@@ -21,7 +21,7 @@ const Search = (props) => {
         const response = await search(keyword);
         navigation.navigate("BookList", { bookList: response });
     };
-
+    //print hello world
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <SafeAreaView style={styles.container}>
@@ -99,3 +99,22 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {})(Search);
+
+function KeywordInput({ gray2, white, accentGreen, onSearchSubmit, keyword, text, setKeyword }) {
+    return (
+        <TextInput
+            left={<TextInput.Icon icon={"magnify"} color={gray2} />}
+            placeholder="Title, author or keyword"
+            style={{
+                backgroundColor: gray4,
+                borderRadius: 8,
+            }}
+            textColor={white}
+            activeUnderlineColor={accentGreen}
+            placeholderTextColor={gray2}
+            onSubmitEditing={() => onSearchSubmit()}
+            value={keyword}
+            onChangeText={(text) => setKeyword(text)}
+        />
+    );
+}

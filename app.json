@@ -5,6 +5,7 @@
         "version": "1.0.0",
         "orientation": "portrait",
         "icon": "./assets/icon.png",
+        "sdkVersion": "49.0.0",
         "userInterfaceStyle": "automatic",
         "splash": {
             "image": "./assets/Splash_Screens.png",
@@ -16,16 +17,6 @@
             "supportsTablet": true
         },
         "android": {
-            "adaptiveIcon": {
-                "foregroundImage": "./assets/adaptive-icon.png",
-                "backgroundColor": "#ffffff"
-            },
-            "permissions": [
-                "android.permission.READ_EXTERNAL_STORAGE",
-                "android.permission.WRITE_EXTERNAL_STORAGE",
-                "android.permission.DOWNLOAD_WITHOUT_NOTIFICATION",
-                "android.permission.ACCESS_NETWORK_STATE"
-            ],
             "package": "com.bookreader",
             "versionCode": 1
         },

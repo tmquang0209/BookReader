@@ -7,7 +7,7 @@ import { Line } from "../components/line";
 import { TitleWithinUnderLine } from "../components/title";
 import { Avatar } from "react-native-paper";
 import { accentGreen, white } from "../constants/colors";
-import { logoutIcon, userIcon } from "../constants/images";
+import { dictionaryIcon, logoutIcon, userIcon } from "../constants/images";
 import { logoutUser } from "../store/actions/authActions";
 import { useNavigation } from "@react-navigation/native";
 
@@ -45,6 +45,10 @@ const Profile = (props) => {
         navigation.navigate("ProfileDetails");
     };
 
+    const onDictionary = () => {
+        navigation.navigate("Dictionary");
+    };
+
     const onLogoutPress = () => {
         logoutUser();
     };
@@ -74,8 +78,13 @@ const Profile = (props) => {
                     </View>
                 </View>
                 <Line />
-                <View>
+                <View
+                    style={{
+                        gap: 20,
+                    }}
+                >
                     <MenuItem iconLeft={userIcon} title={"Profile details"} iconRight={"arrow-right"} onPress={onProfileDetail} />
+                    <MenuItem iconLeft={dictionaryIcon} title={"Your dictionary"} iconRight={"arrow-right"} onPress={onDictionary}/>
                     <Line />
                     <MenuItem iconLeft={logoutIcon} title={"Logout"} onPress={onLogoutPress} />
                 </View>

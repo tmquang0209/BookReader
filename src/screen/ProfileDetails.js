@@ -12,6 +12,7 @@ import DatePicker from "../components/datePicker";
 import { BackButton } from "../components/header";
 import { updateInfo } from "../store/actions/authActions";
 import { updateInfoUser } from "../API/authUser";
+import { fullDate } from "../components/date";
 
 const ProfileDetails = (props) => {
     const { user, updateInfo } = props;
@@ -81,14 +82,7 @@ const ProfileDetails = (props) => {
                             <Text style={{ color: white, fontFamily: "SVN-Gotham-Light" }}>Date of Birth</Text>
 
                             <Pressable onPress={onShow} style={{ backgroundColor: gray5, marginTop: 5, width: "100%" }} textColor={white}>
-                                <Text style={{ color: white, padding: 15, fontSize: 15 }}>
-                                    {info.birthDay.toLocaleString("vi-VN", {
-                                        year: "numeric",
-                                        month: "2-digit",
-                                        day: "2-digit",
-                                        timeZone: "asia/ho_chi_minh",
-                                    })}
-                                </Text>
+                                <Text style={{ color: white, padding: 15, fontSize: 15 }}>{fullDate(info.birthDay)}</Text>
                             </Pressable>
                         </View>
                         <Button children={"Submit"} onPress={onSubmitPress} />

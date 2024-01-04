@@ -19,6 +19,10 @@ import BookDetail from "../screen/BookDetail";
 import BookList from "../screen/BookList";
 import Reading from "../screen/Reading";
 import ProfileDetails from "../screen/ProfileDetails";
+import CreateChallenge from "../screen/CreateChallenge";
+import UpdateChallenge from "../screen/UpdateChallenge";
+import Dictionary from "../screen/Dictionary";
+import WordDetail from "../screen/WordDetail";
 
 const StackNav = (props) => {
     const { loggedIn, autoLogin, getCatList, localStorageCheck, categories } = props;
@@ -77,6 +81,10 @@ const StackNav = (props) => {
                     <Stack.Screen name="BookList" component={BookList} />
                     <Stack.Screen name="Reading" component={Reading} />
                     <Stack.Screen name="ProfileDetails" component={ProfileDetails} />
+                    <Stack.Screen name="Dictionary" component={Dictionary} />
+                    <Stack.Screen name="CreateChallenge" component={CreateChallenge} />
+                    <Stack.Screen name="UpdateChallenge" component={UpdateChallenge} />
+                    <Stack.Screen name="WordDetail" component={WordDetail} />
                 </Stack.Group>
             )}
         </Stack.Navigator>
