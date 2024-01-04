@@ -44,8 +44,8 @@ export const Line = () => {
             style={{
                 flexDirection: "row",
                 alignItems: "center",
-                marginTop: 20,
-                marginBottom: 32,
+                marginTop: 10,
+                marginBottom: 20,
             }}
         >
             <View
