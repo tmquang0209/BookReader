@@ -7,6 +7,8 @@ export const noInternet = require("../../assets/no-internet.png");
 export const userIcon = require("../../assets/user.png");
 export const logoutIcon = require("../../assets/logout.png");
 export const demoDetail = require("../../assets/demo.png");
+export const dictionaryIcon = require("../../assets/dictionary.png");
+export const cartoonLearningEnglish = require("../../assets/cartoon-learning-english.png");
 
 export const HomeIcon = ({ color }) => (
     <Svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none">
