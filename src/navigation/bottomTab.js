@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { FontAwesome5 } from "@expo/vector-icons";
-
+import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
 import Home from "../screen/Home";
 import Search from "../screen/Search";
 import Library from "../screen/Library";
@@ -25,7 +25,6 @@ export default function BottomTab() {
                 tabBarInactiveTintColor: gray1,
                 tabBarStyle: {
                     height: 75,
-                    // paddingHorizontal: 5,
                     paddingTop: 0,
                     backgroundColor: "#1E1E1E",
                     borderTopWidth: 0,
@@ -71,7 +70,7 @@ export default function BottomTab() {
                 component={Profile}
                 options={{
                     tabBarLabel: "Profile",
-                    tabBarIcon: ({ color }) => <FontAwesome5 name="user-circle" size={24} color={color} />,
+                    tabBarIcon: ({ color }) => <FontAwesome5Icon name="user-circle" size={24} color={color} />,
                 }}
             />
         </Tab.Navigator>
