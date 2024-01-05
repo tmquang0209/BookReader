@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { View, Platform, Text, TouchableOpacity } from "react-native";
-import { black, white } from "../constants/colors";
+import { black, white } from "../../constants/colors";
 
 const DatePickerAndroid = ({ date, mode, onChange, minimumDate, maximumDate }) => {
     return (

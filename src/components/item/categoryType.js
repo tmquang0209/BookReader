@@ -1,5 +1,6 @@
 import { TouchableOpacity, Text } from "react-native";
-import { accentGreen, black, gray4, white } from "../constants/colors";
+import { accentGreen, black, gray4, white } from "../../constants/colors";
+
 export const CategoryTypeItem = ({ id, title, active, onPress, style }) => (
     <TouchableOpacity
         id={id}

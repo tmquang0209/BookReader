@@ -1,6 +1,6 @@
 import { Pressable, View, Text } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import { accentGreen, gray1, gray4 } from "../constants/colors";
+import { accentGreen, gray1, gray4 } from "../../constants/colors";
 
 export const ActiveItem = ({ id, name, onPress }) => (
     <Pressable onPress={() => onPress(id)}>

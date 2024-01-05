@@ -1,5 +1,5 @@
-import { StyleSheet } from "react-native";
-import { accentGreen, black, gray4, gray5, white, BGShade } from "../constants/colors";
+import { Dimensions, StyleSheet } from "react-native";
+import { accentGreen, black, gray4, gray5, white, BGShade } from "../../constants/colors";
 
 export default styles = StyleSheet.create({
     container: {
@@ -243,5 +243,48 @@ export default styles = StyleSheet.create({
         color: white,
         marginTop: 8,
         fontFamily: "SVN-Gotham-Light",
+    },
+
+    fullNameText: {
+        fontSize: 24,
+        color: white,
+        fontFamily: "SVN-Gotham-Bold",
+    },
+
+    flexView1: {
+        flex: 1,
+    },
+
+    textNormal: {
+        color: white,
+        fontSize: 12,
+    },
+
+    headerContainer: {
+        flexDirection: "row",
+        margin: 10,
+        alignItems: "center",
+    },
+
+    bannerImage: {
+        width: Dimensions.get("screen").width - 15,
+        height: 200,
+        margin: 5,
+        borderRadius: 10,
+        alignSelf: "center",
+    },
+
+    lastReadImg: {
+        width: 100,
+        height: 140,
+        marginLeft: 16,
+        marginTop: 9,
+    },
+
+    lastViewContainer: {
+        height: 150,
+        backgroundColor: "rgba(255, 255, 255, 0.12)",
+        flex: 1,
+        flexDirection: "row",
     },
 });

@@ -1,14 +1,16 @@
+import { useEffect, useState } from "react";
 import { FlatList, SafeAreaView, View, Text, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
-import styles from "../components/styles";
-import { TitleWithinUnderLine } from "../components/title";
-import { useEffect, useState } from "react";
-import { accentGreen, black, gray3, white } from "../constants/colors";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { GridItem } from "../components/listItem";
-import { getBookListByStatus, getSavedBook } from "../API/library";
-import { completed, inProcess, savedBook } from "../constants/text";
 import * as Animatable from "react-native-animatable";
+
+import { getBookListByStatus } from "../API/library";
+
+import styles from "../components/common/styles";
+import { TitleWithinUnderLine } from "../components/header";
+import { accentGreen, black, gray3, white } from "../constants/colors";
+import { GridItem } from "../components/item/itemView";
+import { completed, inProcess, savedBook } from "../constants/text";
 
 const Library = (props) => {
     const { user } = props;

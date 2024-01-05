@@ -1,5 +1,5 @@
 import { Button, Divider, Modal, Portal } from "react-native-paper";
-import { accentGreen, black, gray3, gray5, white } from "../constants/colors";
+import { accentGreen, black, gray3, gray5, white } from "../../constants/colors";
 import { View } from "react-native-animatable";
 import { Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -25,6 +25,7 @@ export const DictionaryModal = ({ user, wordDetail, visible, hideModal, onDelete
     return (
         <Portal>
             <Modal
+                key={wordDetail?.word}
                 visible={visible}
                 onDismiss={hideModal}
                 contentContainerStyle={{

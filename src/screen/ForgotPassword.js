@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, Text, View, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Alert, KeyboardAvoidingView, Platform } from "react-native";
-import styles from "../components/styles";
+import styles from "../components/common/styles";
 import { LogoWithText } from "../components/logo";
-import { Title } from "../components/title";
+import { Title } from "../components/header";
 import { white, accentGreen, black } from "../constants/colors";
 import { TextInput } from "react-native-paper";
 import Button from "../components/button";

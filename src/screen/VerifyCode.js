@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import { SafeAreaView, Text, View, TouchableOpacity, TouchableWithoutFeedback, Alert } from "react-native";
-import styles from "../components/styles";
-import { LogoWithText } from "../components/logo";
-import { Title } from "../components/title";
-import { white, accentGreen } from "../constants/colors";
-import { TextInput } from "react-native-paper";
-import Button from "../components/button";
-import { BackButton } from "../components/header";
 import { Ionicons } from "@expo/vector-icons";
+import { TextInput } from "react-native-paper";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
 import { fetchForgotPassword, fetchVerifyCode } from "../API/authUser";
+
+import styles from "../components/common/styles";
+import { LogoWithText } from "../components/logo";
+import { Title, BackButton } from "../components/header";
+import { white, accentGreen } from "../constants/colors";
+import Button from "../components/button";
 
 const VerifyCode = ({ navigation, route }) => {
     const { email } = route.params;
