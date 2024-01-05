@@ -74,7 +74,7 @@ const BookList = (props) => {
                     onChangeText={(text) => setKeyword(text)}
                     onSubmitEditing={() => onSubmitSearch()}
                 />
-                <ScrollView horizontal>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                     {catList.map((item, index) => (
                         <CategoryTypeItem
                             title={item.name}
