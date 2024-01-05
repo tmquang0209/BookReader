@@ -1,5 +1,5 @@
 import { TouchableOpacity, View, Image, Text } from "react-native";
-import styles from "./styles";
+import styles from "../common/styles";
 import { useNavigation } from "@react-navigation/native";
 import * as Animatable from "react-native-animatable";
 

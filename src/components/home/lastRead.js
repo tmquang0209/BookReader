@@ -1,21 +1,16 @@
 import { View, Text, Image } from "react-native";
 import { Button } from "react-native-paper";
-import styles from "./styles";
+import styles from "../common/styles";
 import * as Progress from "react-native-progress";
-import { white, accentGreen, BGShade } from "../constants/colors";
+import { white, accentGreen, BGShade } from "../../constants/colors";
 
 export const LastBookRead = () => {
     return (
         <View style={styles.itemBox}>
             <Text style={styles.headerItem}>Last book read</Text>
-            <View style={{ height: 150, backgroundColor: "rgba(255, 255, 255, 0.12)", flex: 1, flexDirection: "row" }}>
+            <View style={styles.lastViewContainer}>
                 <Image
-                    style={{
-                        width: 100,
-                        height: 140,
-                        marginLeft: 16,
-                        marginTop: 9,
-                    }}
+                    style={styles.lastReadImg}
                     source={{
                         uri: "https://www.gutenberg.org/cache/epub/46/images/bookcover.jpg",
                     }}
@@ -51,8 +46,9 @@ export const LastBookRead = () => {
                                 borderRadius: 4,
                                 backgroundColor: accentGreen,
                             }}
+                            labelStyle={{ fontSize: 13, fontFamily: "SVN-Gotham-Bold", color: { BGShade } }}
                         >
-                            <Text style={{ fontSize: 13, fontFamily: "SVN-Gotham-Bold", color: { BGShade } }}>Continue reading</Text>
+                            Continue reading
                         </Button>
                     </View>
                 </View>

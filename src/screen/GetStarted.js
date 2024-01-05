@@ -4,12 +4,11 @@ import { TextInput } from "react-native-paper";
 import { connect } from "react-redux";
 
 import { loginUser, emptyAuth, autoLogin } from "../store/actions/authActions";
-import styles from "../components/styles";
+import styles from "../components/common/styles";
 import { accentGreen, white } from "../constants/colors";
-import Button from "../components/button";
 import { LogoWithText } from "../components/logo";
-import GoogleButton from "../components/googleButton";
-import { LineOr } from "../components/line";
+import { GoogleButton, Button } from "../components/button";
+import { LineOr } from "../components/common/line";
 
 const GetStarted = (props) => {
     const { loggedIn, err, loginUser, navigation, emptyAuth, autoLogin } = props;

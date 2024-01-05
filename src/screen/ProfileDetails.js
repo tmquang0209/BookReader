@@ -3,16 +3,15 @@ import { SafeAreaView, View, Text, TouchableWithoutFeedback, Keyboard, Pressable
 import { connect } from "react-redux";
 import { Avatar, TextInput } from "react-native-paper";
 
-import styles from "../components/styles";
-import { Title } from "../components/title";
-import { Line } from "../components/line";
-import { gray5, white } from "../constants/colors";
-import Button from "../components/button";
-import DatePicker from "../components/datePicker";
-import { BackButton } from "../components/header";
-import { updateInfo } from "../store/actions/authActions";
 import { updateInfoUser } from "../API/authUser";
-import { fullDate } from "../components/date";
+
+import styles from "../components/common/styles";
+import { BackButton, Title } from "../components/header";
+import { Line } from "../components/common/line";
+import { gray5, white } from "../constants/colors";
+import { Button } from "../components/button";
+import { updateInfo } from "../store/actions/authActions";
+import { fullDate, DatePicker } from "../components/date";
 
 const ProfileDetails = (props) => {
     const { user, updateInfo } = props;
@@ -88,7 +87,7 @@ const ProfileDetails = (props) => {
                         <Button children={"Submit"} onPress={onSubmitPress} />
                     </View>
                 </View>
-                {show && <DatePicker value={info.birthDay} mode={"date"} onChange={onChange} onShow={onShow} />}
+                {show && <DatePicker value={info.birthDay} mode={"date"} onChange={onChange} onShow={onShow} minimumDate={new Date(1950, 1, 1)} maximumDate={new Date(2010, 1, 1)} />}
             </SafeAreaView>
         </TouchableWithoutFeedback>
     );

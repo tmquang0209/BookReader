@@ -2,13 +2,14 @@ import React from "react";
 import { Image, ImageBackground, ScrollView, View, Text, TouchableOpacity, SafeAreaView, Dimensions } from "react-native";
 import { Feather, FontAwesome } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { Avatar } from "react-native-paper";
-import styles from "../components/styles";
-import { accentGreen, black, white } from "../constants/colors";
-import { BackButton } from "../components/header";
-import { CategoryTypeItem } from "../components/categoryType";
 import { useNavigation } from "@react-navigation/native";
-import Button from "../components/button";
+import { Avatar } from "react-native-paper";
+
+import styles from "../components/common/styles";
+import { white } from "../constants/colors";
+import { BackButton } from "../components/header";
+import { CategoryTypeItem } from "../components/item/categoryType";
+import { Button } from "../components/button";
 
 const CategoryList = ({ subjects }) => (
     <View style={{ flex: 1, flexDirection: "row", flexWrap: "wrap" }}>

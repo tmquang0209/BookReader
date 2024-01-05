@@ -1,15 +1,15 @@
 import { SafeAreaView, View, Text, TouchableOpacity, Image } from "react-native";
 import { connect } from "react-redux";
 import { MaterialCommunityIcons, SimpleLineIcons } from "@expo/vector-icons";
-
-import styles from "../components/styles";
-import { Line } from "../components/line";
-import { TitleWithinUnderLine } from "../components/title";
 import { Avatar } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
+
+import styles from "../components/common/styles";
+import { Line } from "../components/common/line";
+import { TitleWithinUnderLine } from "../components/header";
 import { accentGreen, white } from "../constants/colors";
 import { dictionaryIcon, logoutIcon, userIcon } from "../constants/images";
 import { logoutUser } from "../store/actions/authActions";
-import { useNavigation } from "@react-navigation/native";
 
 const MenuItem = ({ iconLeft, title, iconRight, onPress }) => {
     return (

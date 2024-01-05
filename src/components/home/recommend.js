@@ -1,7 +1,8 @@
-import { View, Text, FlatList, Image, TouchableOpacity } from "react-native";
-import styles from "./styles";
-import { NextIcon } from "../constants/images";
 import { useNavigation } from "@react-navigation/native";
+import { View, Text, FlatList, Image, TouchableOpacity } from "react-native";
+
+import styles from "../common/styles";
+import { NextIcon } from "../../constants/images";
 
 const ForYouItem = ({ item }) => {
     const navigation = useNavigation();

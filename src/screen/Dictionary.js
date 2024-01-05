@@ -1,12 +1,11 @@
-import { FlatList, Image, SafeAreaView, Text, Touchable, TouchableOpacity, View } from "react-native";
+import { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import { FlatList, Image, SafeAreaView, Text, Touchable, TouchableOpacity, View } from "react-native";
 
-import styles from "../components/styles";
-import { BackButton } from "../components/header";
-import { Title } from "../components/title";
+import styles from "../components/common/styles";
+import { BackButton, Title } from "../components/header";
 import { cartoonLearningEnglish } from "../constants/images";
 import { gray3, white } from "../constants/colors";
-import { useEffect, useState } from "react";
 import { deleteWord, getWordList } from "../API/dictionary";
 import { DictionaryModal } from "../components/modal";
 

@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Dimensions, Image, SafeAreaView, ScrollView, Text, View } from "react-native";
+import { Image, SafeAreaView, ScrollView, View } from "react-native";
 import { useNetInfo } from "@react-native-community/netinfo";
-import styles from "../components/styles";
-import { NoInternet } from "./NoInternet";
+import styles from "../components/common/styles";
+import { NoInternet } from "../components/internet";
 import { white } from "../constants/colors";
 import { Avatar } from "react-native-paper";
 import { connect } from "react-redux";
 
 import { getInterestBook } from "../API/book";
-import { ForYou } from "../components/recommend";
-import { LastBookRead } from "../components/lastRead";
+import { ForYou } from "../components/home/recommend";
+import { LastBookRead } from "../components/home/lastRead";
 import { banner } from "../constants/images";
-
-const Banner = () => {};
+import { GreetingWithFullName } from "../components/home/greeting";
 
 const HomeView = (props) => {
     const { user } = props;
@@ -32,36 +31,8 @@ const HomeView = (props) => {
 
     return (
         <ScrollView style={{ flex: 1 }}>
-            <View
-                style={{
-                    flexDirection: "row",
-                    margin: 10,
-                    alignItems: "center",
-                }}
-            >
-                <View
-                    style={{
-                        flex: 1,
-                    }}
-                >
-                    <Text
-                        style={{
-                            color: white,
-                            fontSize: 12,
-                        }}
-                    >
-                        Good morning,
-                    </Text>
-                    <Text
-                        style={{
-                            fontSize: 24,
-                            color: white,
-                            fontFamily: "SVN-Gotham-Bold",
-                        }}
-                    >
-                        {user?.fullName}
-                    </Text>
-                </View>
+            <View style={styles.headerContainer}>
+                <GreetingWithFullName fullName={user?.fullName} />
                 <View>
                     <Avatar.Text
                         label={letterName}
@@ -73,21 +44,8 @@ const HomeView = (props) => {
                     />
                 </View>
             </View>
-            <View
-                style={{
-                    flex: 1,
-                }}
-            >
-                <Image
-                    style={{
-                        width: Dimensions.get("screen").width - 15,
-                        height: 200,
-                        margin: 5,
-                        borderRadius: 10,
-                        alignSelf: "center",
-                    }}
-                    source={banner}
-                />
+            <View style={styles.flexView1}>
+                <Image style={styles.bannerImage} source={banner} />
                 <LastBookRead />
                 <ForYou list={forYouList} />
             </View>

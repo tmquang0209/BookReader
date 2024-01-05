@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { Keyboard, SafeAreaView, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import { connect } from "react-redux";
-import styles from "../components/styles";
+import styles from "../components/common/styles";
 import { accentGreen, gray2, gray4, white } from "../constants/colors";
 import { TextInput } from "react-native-paper";
 
 import { search } from "../API/book";
 import { useNavigation } from "@react-navigation/native";
-import { TitleWithinUnderLine } from "../components/title";
+import { TitleWithinUnderLine } from "../components/header";
 
 const Search = (props) => {
     const { categories, getCatList } = props;

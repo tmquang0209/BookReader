@@ -1,6 +1,6 @@
 import { Pressable, SafeAreaView, ScrollView, Text, View } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import styles from "../components/styles";
+import styles from "../components/common/styles";
 import { white } from "../constants/colors";
 import { Audio } from "expo-av";
 

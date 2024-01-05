@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import { gray4, gray2 } from "../constants/colors";
+import { gray4, gray2 } from "../../constants/colors";
 
 export const LineOr = () => {
     return (

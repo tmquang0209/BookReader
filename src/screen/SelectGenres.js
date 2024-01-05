@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Alert, SafeAreaView, View, Text, ImageBackground } from "react-native";
 import { connect } from "react-redux";
-import styles from "../components/styles";
+import styles from "../components/common/styles";
 import { accentGreen, gray1, gray4, white } from "../constants/colors";
 import { girlReadingBook } from "../constants/images";
 
 import { Button } from "react-native-paper";
-import { ActiveItem, UnActiveItem } from "../components/genresItem";
+import { ActiveItem, UnActiveItem } from "../components/item/genresItem";
 import { addFavCat, getCategory } from "../API/category";
 
 const ListItemView = ({ dataItem, onPressItem }) =>
