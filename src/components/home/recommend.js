@@ -48,13 +48,12 @@ export const ForYou = ({ list }) => {
         <>
             <View style={styles.headerContainer}>
                 <Text style={styles.headerItem}>For you</Text>
-                <View style={styles.showAllContainer}>
-                    <TouchableOpacity onPress={() => navigation.navigate("BookList", { bookList: list })}>
-                        <Text style={styles.showAllText}>
-                            Show all <NextIcon />
-                        </Text>
+                <>
+                    <TouchableOpacity onPress={() => navigation.navigate("BookList", { bookList: list })} style={styles.showAllContainer}>
+                        <Text style={styles.showAllText}>Show all</Text>
+                        <NextIcon />
                     </TouchableOpacity>
-                </View>
+                </>
             </View>
             <View style={styles.itemBox}>
                 <View>
@@ -72,13 +71,12 @@ export const Trending = ({ list }) => {
         <>
             <View style={styles.headerContainer}>
                 <Text style={styles.headerItem}>Trending</Text>
-                <View style={styles.showAllContainer}>
-                    <TouchableOpacity onPress={() => navigation.navigate("BookList", { bookList: list })}>
-                        <Text style={styles.showAllText}>
-                            Show all <NextIcon />
-                        </Text>
+                <>
+                    <TouchableOpacity onPress={() => navigation.navigate("BookList", { bookList: list })} style={styles.showAllContainer}>
+                        <Text style={styles.showAllText}>Show all</Text>
+                        <NextIcon />
                     </TouchableOpacity>
-                </View>
+                </>
             </View>
             <View style={styles.itemBox}>
                 <View>

@@ -71,7 +71,7 @@ export default styles = StyleSheet.create({
     headerItem: {
         // marginBottom: 10,
         marginLeft: 8,
-        flex: 1,        
+        flex: 1,
         color: white,
         fontSize: 20,
         fontFamily: "SVN-Gotham-Bold",
@@ -81,14 +81,15 @@ export default styles = StyleSheet.create({
         marginRight: 10,
         alignItems: "center",
         alignContent: "center",
-        flexDirection: "column",
+        flexDirection: "row",
+        columnGap: 5,
         justifyContent: "space-between",
     },
 
     showAllText: {
         color: accentGreen,
         fontFamily: "SVN-Gotham-Bold",
-        fontSize: 12,
+        fontSize: 16,
         alignSelf: "center",
         justifyContent: "center",
     },
@@ -294,6 +295,6 @@ export default styles = StyleSheet.create({
         flex: 1,
         flexDirection: "row",
         marginRight: 16,
-        borderRadius: 8
+        borderRadius: 8,
     },
 });
