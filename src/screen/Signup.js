@@ -3,7 +3,7 @@ import { View, Text, Alert, Keyboard, SafeAreaView, TouchableWithoutFeedback, Im
 import { TextInput } from "react-native-paper";
 import { connect } from "react-redux";
 
-import Button from "../components/button";
+import { Button } from "../components/button";
 import styles from "../components/common/styles";
 import { accentGreen, gray2, gray4, white } from "../constants/colors";
 import { signupAccount, emptyAuth } from "../store/actions/authActions";
@@ -63,7 +63,7 @@ const Signup = (props) => {
 
     useEffect(() => {
         renderErr();
-        if (user.email) {
+        if (user?.email) {
             navigation.replace("SelectGenres");
         }
         console.log("signup",user);

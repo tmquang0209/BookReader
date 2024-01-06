@@ -45,10 +45,10 @@ export const LastBookRead = ({ user }) => {
                         </ImageBackground>
 
                         <View style={{ marginLeft: 15, marginTop: 16, flex: 1 }}>
-                            <Text style={styles.itemBookName}>The Bee</Text>
-                            <Text style={styles.itemBookAuthor}>Paul Murray</Text>
+                            <Text style={styles.itemBookName}>{data?.title}</Text>
+                            <Text style={styles.itemBookAuthor}>{data?.authors && data?.authors[0] && data?.authors[0]?.name}</Text>
                             <View style={{ flexDirection: "row", alignItems: "center", height: 15, marginTop: 8 }}>
-                                <View>
+                                {/* <View>
                                     <Progress.Bar
                                         progress={0.3}
                                         style={{
@@ -66,7 +66,7 @@ export const LastBookRead = ({ user }) => {
                                     }}
                                 >
                                     24/520
-                                </Text>
+                                </Text> */}
                             </View>
                             <View style={{ marginRight: 10, marginTop: 16 }}>
                                 <Button
