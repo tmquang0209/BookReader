@@ -23,7 +23,7 @@ const ItemView = ({ item }) => {
                 <Text style={styles.itemBookName} ellipsizeMode="tail" numberOfLines={1}>
                     {item.title}
                 </Text>
-                <Text style={styles.itemBookAuthor}>{item.authors?.name}</Text>
+                <Text style={styles.itemBookAuthor}>{item.authors[0]?.name}</Text>
             </View>
         </TouchableOpacity>
     );
@@ -45,7 +45,7 @@ export const ForYou = ({ list }) => {
 
     const reducedList = list ? list.filter((item, index) => index <= 10) : [];
     return (
-        <View style={styles.itemBox}>
+        <>
             <View style={styles.headerContainer}>
                 <Text style={styles.headerItem}>For you</Text>
                 <View style={styles.showAllContainer}>
@@ -56,10 +56,12 @@ export const ForYou = ({ list }) => {
                     </TouchableOpacity>
                 </View>
             </View>
-            <View>
-                <ListItem list={reducedList} />
+            <View style={styles.itemBox}>
+                <View>
+                    <ListItem list={reducedList} />
+                </View>
             </View>
-        </View>
+        </>
     );
 };
 
@@ -67,7 +69,7 @@ export const Trending = ({ list }) => {
     const navigation = useNavigation();
     const reducedList = list ? list.filter((item, index) => index <= 10) : [];
     return (
-        <View style={styles.itemBox}>
+        <>
             <View style={styles.headerContainer}>
                 <Text style={styles.headerItem}>Trending</Text>
                 <View style={styles.showAllContainer}>
@@ -78,9 +80,11 @@ export const Trending = ({ list }) => {
                     </TouchableOpacity>
                 </View>
             </View>
-            <View>
-                <ListItem list={reducedList} />
+            <View style={styles.itemBox}>
+                <View>
+                    <ListItem list={reducedList} />
+                </View>
             </View>
-        </View>
+        </>
     );
 };
