@@ -30,12 +30,11 @@ export const LastBookRead = ({ user }) => {
 
     useEffect(() => {
         getData();
-        console.log(data);
     }, [getData]);
 
     return (
         <>
-            {data && (
+            {data.length > 0 && (
                 <View style={styles.itemBox}>
                     <Text style={styles.headerItem}>Last book read</Text>
                     <View style={styles.lastViewContainer}>
