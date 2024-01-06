@@ -3,9 +3,9 @@ import { SafeAreaView, Text, View, TouchableOpacity, TouchableWithoutFeedback, K
 import styles from "../components/common/styles";
 import { LogoWithText } from "../components/logo";
 import { Title } from "../components/header";
-import { white, accentGreen, black } from "../constants/colors";
+import { white, accentGreen } from "../constants/colors";
 import { TextInput } from "react-native-paper";
-import Button from "../components/button";
+import { Button } from "../components/button";
 import { BackButton } from "../components/header";
 import { fetchForgotPassword } from "../API/authUser";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";

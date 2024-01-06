@@ -10,7 +10,7 @@ import styles from "../components/common/styles";
 import { LogoWithText } from "../components/logo";
 import { Title, BackButton } from "../components/header";
 import { white, accentGreen } from "../constants/colors";
-import Button from "../components/button";
+import { Button } from "../components/button";
 
 const VerifyCode = ({ navigation, route }) => {
     const { email } = route.params;
