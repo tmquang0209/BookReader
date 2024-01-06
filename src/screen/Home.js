@@ -7,8 +7,8 @@ import { white } from "../constants/colors";
 import { Avatar } from "react-native-paper";
 import { connect } from "react-redux";
 
-import { getInterestBook } from "../API/book";
-import { ForYou } from "../components/home/recommend";
+import { getInterestBook, getTrendingBook } from "../API/book";
+import { ForYou, Trending } from "../components/home/recommend";
 import { LastBookRead } from "../components/home/lastRead";
 import { banner } from "../constants/images";
 import { GreetingWithFullName } from "../components/home/greeting";
@@ -19,13 +19,17 @@ const HomeView = (props) => {
     const letterName = splitFullName ? splitFullName[splitFullName.length - 1][0] : "";
 
     const [forYouList, setForYouList] = useState([]);
+    const [trendingList, setTrendingList] = useState([]);
 
     useEffect(() => {
         const fetchBook = async () => {
-            const response = await getInterestBook(user.idUser);
+            const forYouResponse = await getInterestBook(user.idUser);
+            const trendingResponse = await getTrendingBook();
 
-            if (response) setForYouList(response.result);
+            if (forYouResponse) setForYouList(forYouResponse.result);
+            if (trendingResponse) setTrendingList(trendingResponse);
         };
+
         fetchBook();
     }, []);
 
@@ -46,8 +50,9 @@ const HomeView = (props) => {
             </View>
             <View style={styles.flexView1}>
                 <Image style={styles.bannerImage} source={banner} />
-                <LastBookRead />
+                <LastBookRead user={user} />
                 <ForYou list={forYouList} />
+                <Trending list={trendingList} />
             </View>
         </ScrollView>
     );

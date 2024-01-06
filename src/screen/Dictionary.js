@@ -55,9 +55,11 @@ const WordItem = ({ item, showModal }) => {
             </Text>
 
             <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-                {item.phonetics.map((phonetic) => (
-                    <View>
-                        <Text style={{ color: white, fontStyle: "italic" }}>{phonetic.text}, </Text>
+                {item.phonetics.map((phonetic, index) => (
+                    <View key={index}>
+                        <Text style={{ color: white, fontStyle: "italic" }}>
+                            {phonetic.text} {index < item.phonetics.length - 1 && ","}
+                        </Text>
                     </View>
                 ))}
             </View>
@@ -68,8 +70,9 @@ const Dictionary = ({ user }) => {
     const [wordList, setWordList] = useState([]);
 
     const [visible, setVisible] = useState(false);
+    const [animating, setAnimating] = useState(false);
 
-    const [wordDetail, setWordDetail] = useState({});
+    const [wordDetail, setWordDetail] = useState([]);
 
     const showModal = (item) => {
         setVisible(true);
@@ -84,8 +87,10 @@ const Dictionary = ({ user }) => {
     };
 
     const onDeleteWord = async () => {
+        setAnimating(true);
         const data = await deleteWord(user.idUser, wordDetail.word);
         data.success && getList();
+        setAnimating(false);
         hideModal();
     };
 
@@ -111,7 +116,7 @@ const Dictionary = ({ user }) => {
                     />
                 </View>
             </SafeAreaView>
-            <DictionaryModal wordDetail={wordDetail} visible={visible} onDeleteWord={onDeleteWord} hideModal={hideModal} />
+            <DictionaryModal wordDetail={wordDetail} visible={visible} onDeleteWord={onDeleteWord} hideModal={hideModal} loading={animating} />
         </>
     );
 };

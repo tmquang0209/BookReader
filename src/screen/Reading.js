@@ -14,22 +14,23 @@ import styles from "../components/common/styles";
 import { DictionaryModal } from "../components/modal";
 
 const Reading = ({ user, navigation, route }) => {
-    const { bookId, file } = route.params;
+    const { bookId, file, cfi } = route.params;
     const { width, height } = useWindowDimensions();
     const [visible, setVisible] = useState(false);
-    const [animating, setAnimating] = useState(false);
     const [words, setWords] = useState();
-
+    const [animating, setAnimating] = useState(false);
     const [lastPage, setLastPage] = useState();
 
     //onLocationChange => update last page to db
     const updateLastPage = async (cfi) => {
         const response = await savedLastRead(user.idUser, bookId, cfi);
+        console.log(response);
     };
 
     //initialLocation => open last page
     const getLastPage = async () => {
         const response = await getLastPageReading(user.idUser, bookId);
+        console.log("gest", response);
         response.success && setLastPage(response.result[0].lastPageReading);
     };
 
@@ -51,8 +52,6 @@ const Reading = ({ user, navigation, route }) => {
         translateByWord(text).then((res) => {
             setWords(res[0]);
         });
-
-        console.log(words);
     };
 
     const hideModal = () => setVisible(false);
@@ -76,6 +75,8 @@ const Reading = ({ user, navigation, route }) => {
         navigation.setOptions({
             headerShown: true,
         });
+        // if (cfi) setLastPage(cfi);
+        // else
         getLastPage();
     }, []);
 
@@ -96,7 +97,7 @@ const Reading = ({ user, navigation, route }) => {
                 </ReaderProvider>
             </ScrollView>
 
-            <DictionaryModal visible={visible} hideModal={hideModal} wordDetail={words} playSound={playSound} onSavedWord={onSavedWord} user={user} />
+            <DictionaryModal visible={visible} hideModal={hideModal} wordDetail={words} playSound={playSound} onSavedWord={onSavedWord} user={user} loading={animating} />
         </>
     );
 };

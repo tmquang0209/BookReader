@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Keyboard, SafeAreaView, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import { connect } from "react-redux";
 import styles from "../components/common/styles";
-import { accentGreen, gray2, gray4, white } from "../constants/colors";
-import { TextInput } from "react-native-paper";
+import { gray4, white } from "../constants/colors";
 
 import { search } from "../API/book";
 import { useNavigation } from "@react-navigation/native";
 import { TitleWithinUnderLine } from "../components/header";
+import { KeywordInput } from "../components/textInput";
 
 const Search = (props) => {
     const { categories, getCatList } = props;
@@ -21,6 +21,7 @@ const Search = (props) => {
         const response = await search(keyword);
         navigation.navigate("BookList", { bookList: response });
     };
+
     //print hello world
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -32,20 +33,7 @@ const Search = (props) => {
                             marginTop: 16,
                         }}
                     >
-                        <TextInput
-                            left={<TextInput.Icon icon={"magnify"} color={gray2} />}
-                            placeholder="Title, author or keyword"
-                            style={{
-                                backgroundColor: gray4,
-                                borderRadius: 8,
-                            }}
-                            textColor={white}
-                            activeUnderlineColor={accentGreen}
-                            placeholderTextColor={gray2}
-                            onSubmitEditing={() => onSearchSubmit()}
-                            value={keyword}
-                            onChangeText={(text) => setKeyword(text)}
-                        />
+                        <KeywordInput keyword={keyword} setKeyword={setKeyword} onSearchSubmit={onSearchSubmit} />
                     </View>
                     <View
                         style={{
@@ -99,22 +87,3 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {})(Search);
-
-function KeywordInput({ gray2, white, accentGreen, onSearchSubmit, keyword, text, setKeyword }) {
-    return (
-        <TextInput
-            left={<TextInput.Icon icon={"magnify"} color={gray2} />}
-            placeholder="Title, author or keyword"
-            style={{
-                backgroundColor: gray4,
-                borderRadius: 8,
-            }}
-            textColor={white}
-            activeUnderlineColor={accentGreen}
-            placeholderTextColor={gray2}
-            onSubmitEditing={() => onSearchSubmit()}
-            value={keyword}
-            onChangeText={(text) => setKeyword(text)}
-        />
-    );
-}
