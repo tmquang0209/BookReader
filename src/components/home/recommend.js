@@ -1,9 +1,10 @@
-import { View, Text, FlatList, Image, TouchableOpacity } from "react-native";
-import styles from "./styles";
-import { NextIcon } from "../constants/images";
 import { useNavigation } from "@react-navigation/native";
+import { View, Text, FlatList, Image, TouchableOpacity } from "react-native";
 
-const ForYouItem = ({ item }) => {
+import styles from "../common/styles";
+import { NextIcon } from "../../constants/images";
+
+const ItemView = ({ item }) => {
     const navigation = useNavigation();
 
     const onItemPress = (bookId) => {
@@ -28,13 +29,13 @@ const ForYouItem = ({ item }) => {
     );
 };
 
-const ForYouList = ({ list }) => (
+const ListItem = ({ list }) => (
     <FlatList
         showsHorizontalScrollIndicator={false}
         horizontal
         data={list}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => <ForYouItem item={item} />}
+        renderItem={({ item }) => <ItemView item={item} />}
         ListFooterComponent={<View style={{ height: 200 }} />}
     />
 );
@@ -56,7 +57,29 @@ export const ForYou = ({ list }) => {
                 </View>
             </View>
             <View>
-                <ForYouList list={reducedList} />
+                <ListItem list={reducedList} />
+            </View>
+        </View>
+    );
+};
+
+export const Trending = ({ list }) => {
+    const navigation = useNavigation();
+    const reducedList = list ? list.filter((item, index) => index <= 10) : [];
+    return (
+        <View style={styles.itemBox}>
+            <View style={styles.headerContainer}>
+                <Text style={styles.headerItem}>Trending</Text>
+                <View style={styles.showAllContainer}>
+                    <TouchableOpacity onPress={() => navigation.navigate("BookList", { bookList: list })}>
+                        <Text style={styles.showAllText}>
+                            Show all <NextIcon />
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+            <View>
+                <ListItem list={reducedList} />
             </View>
         </View>
     );

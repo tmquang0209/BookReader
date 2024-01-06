@@ -1,34 +1,44 @@
-import { FlatList, SafeAreaView, ScrollView, View, Text, TouchableOpacity, Image, Dimensions } from "react-native";
+import { useEffect, useState } from "react";
+import { FlatList, SafeAreaView, View, Text, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
-import styles from "../components/styles";
-import { TitleWithinUnderLine } from "../components/title";
-import { useState } from "react";
-import { accentGreen, black, gray1, gray2, gray3, white } from "../constants/colors";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { demoDetail } from "../constants/images";
-import { GridItem } from "../components/listItem";
+import * as Animatable from "react-native-animatable";
+
+import { getBookListByStatus } from "../API/library";
+
+import styles from "../components/common/styles";
+import { TitleWithinUnderLine } from "../components/header";
+import { accentGreen, black, gray3, white } from "../constants/colors";
+import { GridItem } from "../components/item/itemView";
+import { completed, inProcess, savedBook } from "../constants/text";
 
 const Library = (props) => {
+    const { user } = props;
+
     const [tabs, setTabs] = useState([
-        { key: 1, active: true, icon: "bookmark", name: "Saved Books" },
-        { key: 2, active: false, icon: "book-reader", name: "In Process" },
-        { key: 3, active: false, icon: "check-circle", name: "Complete" },
+        { key: 1, active: true, icon: "bookmark", name: "Saved Books", status: savedBook },
+        { key: 2, active: false, icon: "book-reader", name: "In Process", status: inProcess },
+        { key: 3, active: false, icon: "check-circle", name: "Complete", status: completed },
     ]);
-    const [bookList, setBookList] = useState([
-        { id: 1, img: demoDetail, title: "The good guy 1", author: [{ name: "Mark mcaillister" }] },
-        { id: 2, img: demoDetail, title: "The good guy 2", author: [{ name: "Mark mcaillister" }] },
-        { id: 3, img: demoDetail, title: "The good guy 3", author: [{ name: "Mark mcaillister" }] },
-        { id: 4, img: demoDetail, title: "The good guy 4", author: [{ name: "Mark mcaillister" }] },
-        { id: 5, img: demoDetail, title: "The good guy 5", author: [{ name: "Mark mcaillister" }] },
-        { id: 6, img: demoDetail, title: "The good guy 6", author: [{ name: "Mark mcaillister" }] },
-        { id: 7, img: demoDetail, title: "The good guy 7", author: [{ name: "Mark mcaillister" }] },
-        { id: 8, img: demoDetail, title: "The good guy 8", author: [{ name: "Mark mcaillister" }] },
-    ]);
+    const [bookList, setBookList] = useState([]);
 
     const onTabPress = (key) => {
         const updated = tabs.map((item) => ({ ...item, active: item.key === key }));
         setTabs(updated);
     };
+
+    //fetch saved book
+    const fetchBookList = async (status) => {
+        setBookList([]);
+        const response = await getBookListByStatus(user.idUser, status);
+        setBookList(response?.result || []);
+    };
+
+    useEffect(() => {
+        tabs.map((item) => {
+            if (item.active) fetchBookList(item.status);
+        });
+    }, [tabs]);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -41,25 +51,27 @@ const Library = (props) => {
                     keyExtractor={(item) => item.key}
                     renderItem={({ item }) => {
                         return (
-                            <TouchableOpacity
-                                activeOpacity={0.5}
-                                style={{
-                                    padding: 10,
-                                    borderRadius: 90,
-                                    borderWidth: 1,
-                                    borderColor: gray3,
-                                    marginTop: 20,
-                                    marginRight: 10,
-                                    backgroundColor: item.active ? accentGreen : null,
-                                    flexDirection: "row",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                }}
-                                onPress={() => onTabPress(item.key)}
-                            >
-                                <FontAwesome5 name={item.icon} size={24} color={item.active ? black : white} />
-                                <Text style={{ marginLeft: 5, color: item.active ? black : white }}>{item.name}</Text>
-                            </TouchableOpacity>
+                            <Animatable.View animation={"bounce"} duration={1000} delay={item.key * 200}>
+                                <TouchableOpacity
+                                    activeOpacity={0.5}
+                                    style={{
+                                        padding: 10,
+                                        borderRadius: 90,
+                                        borderWidth: 1,
+                                        borderColor: gray3,
+                                        marginTop: 20,
+                                        marginRight: 10,
+                                        backgroundColor: item.active ? accentGreen : null,
+                                        flexDirection: "row",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                    }}
+                                    onPress={() => onTabPress(item.key)}
+                                >
+                                    <FontAwesome5 name={item.icon} size={24} color={item.active ? black : white} />
+                                    <Text style={{ marginLeft: 5, color: item.active ? black : white }}>{item.name}</Text>
+                                </TouchableOpacity>
+                            </Animatable.View>
                         );
                     }}
                 />
@@ -70,14 +82,16 @@ const Library = (props) => {
                     flex: 1,
                 }}
             >
-                <FlatList
-                    showsVerticalScrollIndicator={false}
-                    data={bookList}
-                    numColumns={2}
-                    scrollEnabled={true}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => <GridItem image={item.img} title={item.title} authorName={item.author[0].name} />}
-                />
+                {bookList && (
+                    <FlatList
+                        showsVerticalScrollIndicator={false}
+                        data={bookList}
+                        numColumns={2}
+                        scrollEnabled={true}
+                        keyExtractor={(item) => item.id}
+                        renderItem={({ item }) => <GridItem bookData={item} />}
+                    />
+                )}
             </View>
         </SafeAreaView>
     );

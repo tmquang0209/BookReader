@@ -2,11 +2,14 @@ import React from "react";
 import { Image, ImageBackground, ScrollView, View, Text, TouchableOpacity, SafeAreaView, Dimensions } from "react-native";
 import { Feather, FontAwesome } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import { useNavigation } from "@react-navigation/native";
 import { Avatar } from "react-native-paper";
-import styles from "../components/styles";
-import { accentGreen, black, white } from "../constants/colors";
+
+import styles from "../components/common/styles";
+import { white } from "../constants/colors";
 import { BackButton } from "../components/header";
-import { CategoryTypeItem } from "../components/categoryType";
+import { CategoryTypeItem } from "../components/item/categoryType";
+import { Button } from "../components/button";
 
 const CategoryList = ({ subjects }) => (
     <View style={{ flex: 1, flexDirection: "row", flexWrap: "wrap" }}>
@@ -40,6 +43,7 @@ const AuthorDetail = ({ author }) => {
 
 const BookDetail = (props) => {
     const { bookData } = props.route.params;
+    const navigation = useNavigation();
 
     return (
         <SafeAreaView style={styles.container}>
@@ -65,7 +69,7 @@ const BookDetail = (props) => {
                             <Text style={[styles.bookTitle, { width: Dimensions.get("screen").width - 30 }]}>{bookData?.title}</Text>
                             <FontAwesome name="bookmark-o" size={24} color={white} style={{ position: "absolute", right: 0 }} />
                         </View>
-                        <Text style={[styles.authorName]}>{bookData?.author[0]?.name}</Text>
+                        <Text style={[styles.authorName]}>{bookData?.authors[0]?.name}</Text>
                         <View style={styles.infoContainer}>
                             <View style={styles.infoBox}>
                                 <Feather name="clock" size={24} color={white} />
@@ -82,7 +86,7 @@ const BookDetail = (props) => {
                         <Text style={styles.aboutText}>Updating...</Text>
                         <CategoryList subjects={bookData?.subjects} />
                     </View>
-                    <AuthorDetail author={bookData?.author[0]} />
+                    <AuthorDetail author={bookData?.authors[0]} />
                 </View>
             </ScrollView>
             <View
@@ -90,25 +94,7 @@ const BookDetail = (props) => {
                     alignItems: "center",
                 }}
             >
-                <TouchableOpacity
-                    style={{
-                        backgroundColor: accentGreen,
-                        padding: 10,
-                        alignItems: "center",
-                        padding: 10,
-                        borderRadius: 10,
-                        bottom: 10,
-                        width: "90%",
-                    }}
-                >
-                    <Text
-                        style={{
-                            color: black,
-                        }}
-                    >
-                        Read now
-                    </Text>
-                </TouchableOpacity>
+                <Button children={"Reading now"} style={{ width: "90%" }} onPress={() => navigation.navigate("Reading", { bookId: bookData.id, file: bookData.formats.epub })} />
             </View>
         </SafeAreaView>
     );

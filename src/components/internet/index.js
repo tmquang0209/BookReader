@@ -1,8 +1,8 @@
 import React from "react";
 import { Image, View } from "react-native";
-import { noInternet } from "../constants/images";
+import { noInternet } from "../../constants/images";
 import { Text } from "react-native";
-import { white } from "../constants/colors";
+import { white } from "../../constants/colors";
 
 export const NoInternet = () => {
     return (

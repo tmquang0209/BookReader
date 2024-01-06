@@ -1,16 +1,14 @@
 import React, { useState } from "react";
-import { SafeAreaView, Text, View, TouchableWithoutFeedback, Alert } from "react-native";
+import { SafeAreaView, Text, View, TouchableWithoutFeedback, Alert, Keyboard } from "react-native";
 import { connect } from "react-redux";
-import styles from "../components/styles";
+import styles from "../components/common/styles";
 import { LogoWithoutText } from "../components/logo";
-import Title from "../components/title";
+import { Title, BackButton } from "../components/header";
 import { white, accentGreen } from "../constants/colors";
 import { TextInput } from "react-native-paper";
-import Button from "../components/button";
-import { BackButton } from "../components/header";
+import { Button } from "../components/button";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Keyboard } from "react-native";
 import { resetPassword } from "../API/authUser";
 
 const SetPassword = ({ navigation, route }) => {

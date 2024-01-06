@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { View, Text, Alert, Keyboard, SafeAreaView, TouchableWithoutFeedback, Image, TouchableOpacity, ScrollView } from "react-native";
 import { TextInput } from "react-native-paper";
-import Button from "../components/button";
 import { connect } from "react-redux";
-import styles from "../components/styles";
-import { girlReadingBook } from "../constants/images";
+
+import Button from "../components/button";
+import styles from "../components/common/styles";
 import { accentGreen, gray2, gray4, white } from "../constants/colors";
 import { signupAccount, emptyAuth } from "../store/actions/authActions";
 import { LogoWithoutText } from "../components/logo";
-import Title from "../components/title";
+import { Title } from "../components/header";
 
 const Signup = (props) => {
     const { loggedIn, user, err, signupAccount, navigation, emptyAuth } = props;

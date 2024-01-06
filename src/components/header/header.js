@@ -1,8 +1,8 @@
 import { View, TouchableOpacity, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import styles from "./styles";
-import { white } from "../constants/colors";
+import styles from "../common/styles";
+import { white } from "../../constants/colors";
 
 export const BackButton = ({ name, componentName, styleBackButton, styleText }) => {
     const navigation = useNavigation();

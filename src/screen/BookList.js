@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, SafeAreaView, View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
-import styles from "../components/styles";
+import { FlatList, SafeAreaView, View, ScrollView } from "react-native";
 import { connect } from "react-redux";
-import { useNavigation } from "@react-navigation/native";
 import { ActivityIndicator, TextInput } from "react-native-paper";
-import { gray2, gray4, white, accentGreen } from "../constants/colors";
-import { CategoryTypeItem } from "../components/categoryType";
+
 import { search } from "../API/book";
-import { ListItem } from "../components/listItem";
+
+import styles from "../components/common/styles";
+import { useNavigation } from "@react-navigation/native";
+import { gray2, gray4, white, accentGreen } from "../constants/colors";
+import { CategoryTypeItem } from "../components/item/categoryType";
+import { ListItem } from "../components/item/itemView";
 
 const BookList = (props) => {
     const { categories } = props;
@@ -72,7 +74,7 @@ const BookList = (props) => {
                     onChangeText={(text) => setKeyword(text)}
                     onSubmitEditing={() => onSubmitSearch()}
                 />
-                <ScrollView horizontal>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                     {catList.map((item, index) => (
                         <CategoryTypeItem
                             title={item.name}
