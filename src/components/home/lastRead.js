@@ -30,7 +30,6 @@ export const LastBookRead = ({ user }) => {
 
     useEffect(() => {
         getData();
-        console.log(data.authors);
     }, [getData]);
 
     return (

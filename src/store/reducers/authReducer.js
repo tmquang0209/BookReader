@@ -19,7 +19,7 @@ export const authReducer = (state = initialState, action) => {
         case AUTO_LOGIN:
             return {
                 ...state,
-                user: action.payload?.user,
+                user: action.payload?.user || state.user,
                 loggedIn: action.payload?.loggedIn,
                 localStorageCheck: action.payload.localStorageCheck,
             };

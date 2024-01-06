@@ -2,6 +2,7 @@ import { Button as DefaultButton } from "react-native-paper";
 import styles from "../common/styles";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { gray4, white } from "../../constants/colors";
+import { googleLogo } from "../../constants/images";
 
 export const Button = ({ children, onPress, loading, style }) => {
     return (
