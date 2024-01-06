@@ -66,6 +66,7 @@ const Signup = (props) => {
         if (user?.email) {
             navigation.replace("SelectGenres");
         }
+        console.log("signup",user);
     }, [user, err]);
 
     return (

@@ -83,3 +83,22 @@ export const getTrendingBook = async () => {
         return error.response.data;
     }
 };
+
+export const updateStatusBook = async (userId, bookId, status) => {
+    const url = `${API_URI}/api/updateStatus`;
+
+    try {
+        const response = await axios.post(url, {
+            idUser: userId,
+            idBook: bookId,
+            status: status,
+        });
+        // Assuming a successful response with a JSON body
+        const responseData = response.data;
+        return responseData;
+    } catch (error) {
+        // Handle errors
+        console.error("Error:", error.message);
+        return error.response.data;
+    }
+};

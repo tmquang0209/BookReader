@@ -2,7 +2,6 @@ import React from "react";
 import { Image, ImageBackground, ScrollView, View, Text, TouchableOpacity, SafeAreaView, Dimensions } from "react-native";
 import { Feather, FontAwesome } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { useNavigation } from "@react-navigation/native";
 import { Avatar } from "react-native-paper";
 
 import styles from "../components/common/styles";
@@ -10,6 +9,9 @@ import { white } from "../constants/colors";
 import { BackButton } from "../components/header";
 import { CategoryTypeItem } from "../components/item/categoryType";
 import { Button } from "../components/button";
+import { connect } from "react-redux";
+import { updateStatusBook } from "../API/book";
+import { savedBook } from "../constants/text";
 
 const CategoryList = ({ subjects }) => (
     <View style={{ flex: 1, flexDirection: "row", flexWrap: "wrap" }}>
@@ -41,9 +43,15 @@ const AuthorDetail = ({ author }) => {
     );
 };
 
-const BookDetail = (props) => {
-    const { bookData } = props.route.params;
-    const navigation = useNavigation();
+const BookDetail = ({ user, route, navigation }) => {
+    const { bookData } = route.params;
+    const [bookmark, setBookmark] = React.useState(false);
+
+    const saveBook = async () => {
+        console.log("save book");
+        const response = await updateStatusBook(user.idUser, bookData.id, savedBook);
+        if (response.success) setBookmark(true);
+    };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -67,7 +75,7 @@ const BookDetail = (props) => {
                     <View>
                         <View>
                             <Text style={[styles.bookTitle, { width: Dimensions.get("screen").width - 30 }]}>{bookData?.title}</Text>
-                            <FontAwesome name="bookmark-o" size={24} color={white} style={{ position: "absolute", right: 0 }} />
+                            <FontAwesome name={bookmark ? "bookmark" : "bookmark-o"} size={24} color={white} style={{ position: "absolute", right: 0 }} onPress={saveBook} />
                         </View>
                         <Text style={[styles.authorName]}>{bookData?.authors[0]?.name}</Text>
                         <View style={styles.infoContainer}>
@@ -100,4 +108,8 @@ const BookDetail = (props) => {
     );
 };
 
-export default BookDetail;
+const mapStateToProps = (state) => ({
+    user: state.auth.user,
+});
+
+export default connect(mapStateToProps, {})(BookDetail);

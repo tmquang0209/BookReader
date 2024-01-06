@@ -4,10 +4,11 @@ import { connect } from "react-redux";
 import styles from "../components/common/styles";
 import { accentGreen, gray1, gray4, white } from "../constants/colors";
 import { girlReadingBook } from "../constants/images";
-
+import { autoLogin } from "../store/actions/authActions";
 import { Button } from "react-native-paper";
 import { ActiveItem, UnActiveItem } from "../components/item/genresItem";
 import { addFavCat, getCategory } from "../API/category";
+import { setAuthStorage } from "../components/localStorage";
 
 const ListItemView = ({ dataItem, onPressItem }) =>
     dataItem.map((item) =>
@@ -19,7 +20,7 @@ const ListItemView = ({ dataItem, onPressItem }) =>
     );
 
 export const SelectGenres = (props) => {
-    const { navigation, user } = props;
+    const { navigation, user, autoLogin } = props;
     const [data, setData] = useState([]);
 
     const onPressItem = (id) => {
@@ -42,8 +43,12 @@ export const SelectGenres = (props) => {
             const favCatIds = data.filter((item) => item.active === true).map((item) => item.idCategory);
             const result = await saveToDB(user.idUser, favCatIds);
 
+            //save to localstorage
+            setAuthStorage(user);
+            autoLogin();
+
             //navigate to home
-            if (result.success) navigation.navigate("bottomTab");
+            // if (result.success) navigation.navigate("bottomTab");
         }
         //else => notice
         else Alert.alert("Error", "Please choose at least 3 genres.");
@@ -56,7 +61,8 @@ export const SelectGenres = (props) => {
 
     useEffect(() => {
         getCatList();
-    }, []);
+        console.log("get", user);
+    }, [user]);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -156,10 +162,8 @@ export const SelectGenres = (props) => {
     );
 };
 
-const mapStateToProps = (state) => {
-    return {
-        user: state.auth.user,
-    };
-};
+const mapStateToProps = (state) => ({
+    user: state.auth.user,
+});
 
-export default connect(mapStateToProps, {})(SelectGenres);
+export default connect(mapStateToProps, { autoLogin })(SelectGenres);
