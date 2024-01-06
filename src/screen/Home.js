@@ -30,8 +30,6 @@ const HomeView = (props) => {
             if (trendingResponse) setTrendingList(trendingResponse);
         };
 
-        console.log("trending",trendingList);
-
         fetchBook();
     }, []);
 

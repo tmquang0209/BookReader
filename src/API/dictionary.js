@@ -57,3 +57,18 @@ export const deleteWord = async (userId, word) => {
         return error;
     }
 };
+
+export const checkWord = async (userId, word) => {
+    try {
+        const url = `${API_URI}/api/wordIsExists`;
+        const response = await axios.post(url, {
+            idUser: userId,
+            word,
+        });
+        const data = await response.data;
+        return data;
+    } catch (error) {
+        console.log(error);
+        return error.response.data;
+    }
+};

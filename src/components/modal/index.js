@@ -4,7 +4,7 @@ import { View } from "react-native-animatable";
 import { Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-export const DictionaryModal = ({ user, wordDetail, visible, hideModal, onDeleteWord, onSavedWord }) => {
+export const DictionaryModal = ({ user, wordDetail, visible, hideModal, onDeleteWord, onSavedWord, loading }) => {
     const getExample = (item) => {
         let example = "";
         item?.meanings?.map((meaning) => {
@@ -48,8 +48,8 @@ export const DictionaryModal = ({ user, wordDetail, visible, hideModal, onDelete
                     <Text style={{ color: white }}>Meaning</Text>
                     <View style={{ backgroundColor: gray5, padding: 10, borderRadius: 8, flexWrap: "wrap", flexDirection: "row" }}>
                         <View>
-                            {wordDetail?.meanings?.map((item) => (
-                                <Text style={{ color: white }}>
+                            {wordDetail?.meanings?.map((item, index) => (
+                                <Text key={index} style={{ color: white }}>
                                     ({item.partOfSpeech}): {item.definitions[0].definition}
                                 </Text>
                             ))}
@@ -69,13 +69,13 @@ export const DictionaryModal = ({ user, wordDetail, visible, hideModal, onDelete
                     }}
                 >
                     {onDeleteWord && (
-                        <Button mode="contained-tonal" labelStyle={{ color: "red" }} onPress={() => onDeleteWord()}>
+                        <Button mode="contained-tonal" labelStyle={{ color: "red" }} onPress={() => onDeleteWord()} loading={loading}>
                             Delete
                         </Button>
                     )}
 
                     {onSavedWord && (
-                        <Button mode="contained-tonal" labelStyle={{ color: "green" }} onPress={() => onSavedWord(wordDetail?.word)}>
+                        <Button mode="contained-tonal" labelStyle={{ color: "green" }} onPress={() => onSavedWord(wordDetail?.word)} loading={loading}>
                             Save
                         </Button>
                     )}

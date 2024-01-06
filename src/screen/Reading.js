@@ -18,7 +18,7 @@ const Reading = ({ user, navigation, route }) => {
     const { width, height } = useWindowDimensions();
     const [visible, setVisible] = useState(false);
     const [words, setWords] = useState();
-
+    const [animating, setAnimating] = useState(false);
     const [lastPage, setLastPage] = useState();
 
     //onLocationChange => update last page to db
@@ -97,7 +97,7 @@ const Reading = ({ user, navigation, route }) => {
                 </ReaderProvider>
             </ScrollView>
 
-            <DictionaryModal visible={visible} hideModal={hideModal} wordDetail={words} playSound={playSound} onSavedWord={onSavedWord} user={user} />
+            <DictionaryModal visible={visible} hideModal={hideModal} wordDetail={words} playSound={playSound} onSavedWord={onSavedWord} user={user} loading={animating} />
         </>
     );
 };

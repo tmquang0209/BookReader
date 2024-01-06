@@ -1,12 +1,16 @@
-import { Pressable, SafeAreaView, ScrollView, Text, View } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Pressable, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Feather, FontAwesome } from "@expo/vector-icons";
 import styles from "../components/common/styles";
-import { white } from "../constants/colors";
+import { black, white } from "../constants/colors";
 import { Audio } from "expo-av";
+import { useEffect, useState } from "react";
+import { checkWord, deleteWord, saveWordToDb } from "../API/dictionary";
+import { connect } from "react-redux";
 
-export default WordDetail = ({ route }) => {
+const WordDetail = ({ navigation, route, user }) => {
     const { wordDetail } = route.params;
-    console.log(wordDetail);
+    const [saved, setSaved] = useState(false);
+
     const playSound = async (url) => {
         const { sound } = await Audio.Sound.createAsync(
             {
@@ -17,21 +21,47 @@ export default WordDetail = ({ route }) => {
         await sound.playAsync();
     };
 
+    const handleSave = async () => {
+        if (saved) {
+            //delete
+            const response = await deleteWord(user.idUser, wordDetail.word);
+            console.log("deleted", response);
+            response.success && setSaved(false);
+        } else {
+            //save
+            const response = await saveWordToDb(user.idUser, wordDetail.word);
+            console.log("saved", response);
+            response.success && setSaved(true);
+        }
+    };
+
+    const checkSaved = async () => {
+        const response = await checkWord(user.idUser, wordDetail.word);
+        console.log("check", response);
+        response.success && setSaved(true);
+        console.log(saved);
+    };
+
+    useEffect(() => {
+        navigation.setOptions({
+            title: wordDetail?.word,
+            headerShown: true,
+            headerStyle: { backgroundColor: black },
+            headerTintColor: white,
+            headerRight: () => (
+                <TouchableOpacity style={{ marginRight: 10 }} onPress={() => handleSave()}>
+                    <FontAwesome name={saved ? "bookmark" : "bookmark-o"} size={24} color={white} />
+                </TouchableOpacity>
+            ),
+        });
+
+        checkSaved();
+    }, [saved]);
+
     return (
         <>
             <ScrollView style={styles.container}>
                 <SafeAreaView style={{ margin: 10 }}>
-                    <View
-                        style={{
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            marginVertical: 5,
-                        }}
-                    >
-                        <Text style={{ color: white, fontSize: 20 }}>{wordDetail?.word}</Text>
-                    </View>
-
                     <View>
                         <View>
                             {wordDetail?.phonetics.map((item, index) => {
@@ -112,3 +142,9 @@ export default WordDetail = ({ route }) => {
         </>
     );
 };
+
+const mapStateToProps = (state) => ({
+    user: state.auth.user,
+});
+
+export default connect(mapStateToProps, {})(WordDetail);
