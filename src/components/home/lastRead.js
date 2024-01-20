@@ -34,21 +34,24 @@ export const LastBookRead = ({ user }) => {
 
     return (
         <>
-            {data.length > 0 && (
-                <View style={styles.itemBox}>
-                    <Text style={styles.headerItem}>Last book read</Text>
-                    <View style={styles.lastViewContainer}>
-                        <ImageBackground source={{ uri: data?.formats?.image }} resizeMode="cover" blurRadius={2} style={[styles.backgroundImage, { position: "relative", width: 115, height: 150 }]}>
-                            <LinearGradient colors={["#18191900", "#18191999", "#181919"]}>
-                                <Image style={styles.lastReadImg} source={{ uri: data?.formats?.image }} />
-                            </LinearGradient>
-                        </ImageBackground>
+            {data && (
+                <>
+                    <View style={styles.headerContainer}>
+                        <Text style={styles.headerItem}>Last book read</Text>
+                    </View>
+                    <View style={styles.itemBox}>
+                        <View style={styles.lastViewContainer}>
+                            <ImageBackground source={{ uri: data?.formats?.image }} resizeMode="cover" blurRadius={2} style={[styles.backgroundImage, { position: "relative", width: 115, height: 150 }]}>
+                                <LinearGradient colors={["#18191900", "rgba(255, 255, 255, 0.12)", "#18191999"]}>
+                                    <Image style={styles.lastReadImg} source={{ uri: data?.formats?.image }} />
+                                </LinearGradient>
+                            </ImageBackground>
 
-                        <View style={{ marginLeft: 15, marginTop: 16, flex: 1 }}>
-                            <Text style={styles.itemBookName}>{data?.title}</Text>
-                            <Text style={styles.itemBookAuthor}>{data?.authors && data?.authors[0] && data?.authors[0]?.name}</Text>
-                            <View style={{ flexDirection: "row", alignItems: "center", height: 15, marginTop: 8 }}>
-                                {/* <View>
+                            <View style={{ marginLeft: 15, marginTop: 16, flex: 1 }}>
+                                <Text style={styles.itemBookName}>{data?.title}</Text>
+                                <Text style={styles.itemBookAuthor}>{data?.authors && data?.authors[0] && data?.authors[0]?.name}</Text>
+                                <View style={{ flexDirection: "row", alignItems: "center", height: 15, marginTop: 8 }}>
+                                    {/* <View>
                                     <Progress.Bar
                                         progress={0.3}
                                         style={{
@@ -67,23 +70,24 @@ export const LastBookRead = ({ user }) => {
                                 >
                                     24/520
                                 </Text> */}
-                            </View>
-                            <View style={{ marginRight: 10, marginTop: 16 }}>
-                                <Button
-                                    mode="contained-tonal"
-                                    style={{
-                                        borderRadius: 4,
-                                        backgroundColor: accentGreen,
-                                    }}
-                                    labelStyle={{ fontSize: 13, fontFamily: "SVN-Gotham-Bold", color: { BGShade } }}
-                                    onPress={() => handlePressContinueReading()}
-                                >
-                                    Continue reading
-                                </Button>
+                                </View>
+                                <View style={{ marginRight: 10, marginTop: 16 }}>
+                                    <Button
+                                        mode="contained-tonal"
+                                        style={{
+                                            borderRadius: 4,
+                                            backgroundColor: accentGreen,
+                                        }}
+                                        labelStyle={{ fontSize: 13, fontFamily: "SVN-Gotham-Bold", color: { BGShade } }}
+                                        onPress={() => handlePressContinueReading()}
+                                    >
+                                        Continue reading
+                                    </Button>
+                                </View>
                             </View>
                         </View>
                     </View>
-                </View>
+                </>
             )}
         </>
     );
