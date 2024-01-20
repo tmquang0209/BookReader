@@ -11,12 +11,11 @@ import { useNavigation } from "@react-navigation/native";
 export const LastBookRead = ({ user }) => {
     const navigation = useNavigation();
 
-    const [data, setData] = useState([]);
+    const [data, setData] = useState();
 
     //use callback to get last book read
     const getData = useCallback(async () => {
         const response = await getLastBookRead(user.idUser);
-        console.log(response);
         setData(response.result[0]);
     }, [user]);
 
@@ -36,17 +35,20 @@ export const LastBookRead = ({ user }) => {
         <>
             {data && (
                 <>
-                    <View style={styles.headerContainer}>
-                        <Text style={styles.headerItem}>Last book read</Text>
-                    </View>
                     <View style={styles.itemBox}>
+                        <Text style={styles.headerItem}>Last book read</Text>
                         <View style={styles.lastViewContainer}>
-                            <ImageBackground source={{ uri: data?.formats?.image }} resizeMode="cover" blurRadius={2} style={[styles.backgroundImage, { position: "relative", width: 115, height: 150 }]}>
-                                <LinearGradient colors={["#18191900", "rgba(255, 255, 255, 0.12)", "#18191999"]}>
+                            <ImageBackground
+                                source={{ uri: data?.formats?.image }}
+                                resizeMode="cover"
+                                blurRadius={2}
+                                style={[styles.backgroundImage, { position: "relative", width: 115, height: 150 }]}
+                            >
+                                <LinearGradient colors={["#18191900", "#18191999", "#181919"]}>
                                     <Image style={styles.lastReadImg} source={{ uri: data?.formats?.image }} />
                                 </LinearGradient>
                             </ImageBackground>
-
+                            Stashed changes
                             <View style={{ marginLeft: 15, marginTop: 16, flex: 1 }}>
                                 <Text style={styles.itemBookName}>{data?.title}</Text>
                                 <Text style={styles.itemBookAuthor}>{data?.authors && data?.authors[0] && data?.authors[0]?.name}</Text>

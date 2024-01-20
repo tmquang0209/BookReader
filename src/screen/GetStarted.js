@@ -16,6 +16,7 @@ const GetStarted = (props) => {
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
+    const [hidden, setHidden] = useState(true);
 
     const onSubmitPress = async () => {
         setLoading((prev) => !prev);
@@ -80,7 +81,16 @@ const GetStarted = (props) => {
                         <TextInput
                             placeholder="Password"
                             onChangeText={(text) => setPassword(text)}
-                            secureTextEntry
+                            right={
+                                <TextInput.Icon
+                                    icon={hidden ? "eye" : "eye-off"}
+                                    onPress={() => {
+                                        setHidden((prev) => !prev);
+                                        Keyboard.dismiss();
+                                    }}
+                                />
+                            }
+                            secureTextEntry={hidden}
                             style={{
                                 marginTop: 10,
                                 borderRadius: 8,
@@ -126,7 +136,7 @@ const GetStarted = (props) => {
                                     fontSize: 14,
                                 }}
                             >
-                                Don't have an account?{" "}
+                                Don't have an account?
                             </Text>
                             <TouchableOpacity onPress={() => onSignupPress()}>
                                 <Text
