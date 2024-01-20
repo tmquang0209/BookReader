@@ -8,107 +8,23 @@ import styles from "../components/common/styles";
 import { TitleWithinUnderLine } from "../components/header";
 import { accentGreen, gray4, white } from "../constants/colors";
 import { congratulations, encouragement } from "../constants/text";
+import { getAllChallenges } from "../API/challenges";
+import { useEffect, useState } from "react";
+import { fullDate, longDate } from "../components/date/date";
 
 const Challenge = (props) => {
-    const { navigation } = props;
+    const { navigation, user } = props;
 
     const onPressCreateNewChallenge = () => {
         navigation.navigate("CreateChallenge");
     };
 
-    //create sample challenge
-    const sampleData = [
-        {
-            id: 1,
-            title: "Challenge 1",
-            description: "Description 1",
-            start: "Monday, 01 Jan 2024",
-            end: "Monday, 01 Jan 2024",
-            target: 23,
-            completed: 10,
-        },
-        {
-            id: 2,
-            title: "Challenge 2",
-            description: "Description 2",
-            start: "Tue, 02 Feb 2024",
-            end: "Friday, 06 Dec 2024",
-            target: 10,
-            completed: 1,
-        },
-        {
-            id: 3,
-            title: "Challenge 3",
-            description: "Description 3",
-            start: "Wed, 03 Mar 2024",
-            end: "Friday, 06 Dec 2024",
-            target: 10,
-            completed: 1,
-        },
-        {
-            id: 4,
-            title: "Challenge 4",
-            description: "Description 4",
-            start: "Thu, 04 Apr 2024",
-            end: "Friday, 06 Dec 2024",
-            target: 10,
-            completed: 1,
-        },
-        {
-            id: 5,
-            title: "Challenge 4",
-            description: "Description 4",
-            start: "Thu, 04 Apr 2024",
-            end: "Friday, 06 Dec 2024",
-            target: 10,
-            completed: 1,
-        },
-        {
-            id: 6,
-            title: "Challenge 4",
-            description: "Description 4",
-            start: "Thu, 04 Apr 2024",
-            end: "Friday, 06 Dec 2024",
-            target: 10,
-            completed: 1,
-        },
-        {
-            id: 7,
-            title: "Challenge 4",
-            description: "Description 4",
-            start: "Thu, 04 Apr 2024",
-            end: "Friday, 06 Dec 2024",
-            target: 10,
-            completed: 1,
-        },
-        {
-            id: 8,
-            title: "Challenge 4",
-            description: "Description 4",
-            start: "Thu, 04 Apr 2024",
-            end: "Friday, 06 Dec 2024",
-            target: 10,
-            completed: 1,
-        },
-        {
-            id: 9,
-            title: "Challenge 4",
-            description: "Description 4",
-            start: "Thu, 04 Apr 2024",
-            end: "Friday, 06 Dec 2024",
-            target: 10,
-            completed: 1,
-        },
-        {
-            id: 10,
-            title: "Challenge 4",
-            description: "Description 4",
-            start: "Thu, 04 Apr 2024",
-            end: "Friday, 06 Dec 2024",
-            target: 10,
-            completed: 1,
-        },
-    ];
+    const [data, setData] = useState([]);
+
+    const fetchData = async () => {
+        const response = await getAllChallenges(user.idUser);
+        setData(response.data);
+    };
 
     const generateQuote = (progress) => {
         if (progress === 1) {
@@ -123,6 +39,10 @@ const Challenge = (props) => {
     const onChallengeItemPress = (data) => {
         navigation.navigate("UpdateChallenge", { challengeItem: data });
     };
+
+    useEffect(() => {
+        fetchData();
+    }, [data]);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -155,8 +75,8 @@ const Challenge = (props) => {
                     <FlatList
                         showsVerticalScrollIndicator={false}
                         scrollEnabled={true}
-                        data={sampleData}
-                        keyExtractor={(item) => item.id.toString()}
+                        data={data}
+                        keyExtractor={(item, index) => index.toString()}
                         renderItem={({ item }) => (
                             <TouchableOpacity activeOpacity={0.5} onPress={() => onChallengeItemPress(item)}>
                                 <LinearGradient
@@ -182,13 +102,13 @@ const Challenge = (props) => {
                                             fontSize: 18,
                                         }}
                                     >
-                                        {item.title}
+                                        {item.name}
                                     </Text>
                                     <Text style={{ color: white }}>
-                                        <Text style={{ fontFamily: "SVN-Gotham-Bold" }}>Start:</Text> {item.start}
+                                        <Text style={{ fontFamily: "SVN-Gotham-Bold" }}>Start: </Text> {longDate(new Date(item.startDate))}
                                     </Text>
                                     <Text style={{ color: white }}>
-                                        <Text style={{ fontFamily: "SVN-Gotham-Bold" }}>End:</Text> {item.end}
+                                        <Text style={{ fontFamily: "SVN-Gotham-Bold" }}>End:</Text> {longDate(new Date(item.endDate))}
                                     </Text>
                                     <View
                                         style={{
@@ -198,7 +118,7 @@ const Challenge = (props) => {
                                         }}
                                     >
                                         <Progress.Bar
-                                            progress={item.completed / item.target}
+                                            progress={item.completedBooksCount / item.target}
                                             color={white}
                                             width={null}
                                             style={{ width: "65%", marginTop: 10 }}
@@ -207,12 +127,12 @@ const Challenge = (props) => {
                                             unfilledColor={"#EAF4F433"}
                                         />
                                         <Text style={{ color: white, marginLeft: 10 }}>
-                                            {item.completed}/{item.target} books
+                                            {item.completedBooksCount}/{item.target} books
                                         </Text>
                                     </View>
                                     <View>
                                         <Text style={{ color: white, fontStyle: "italic", fontFamily: "SVN-Gotham-Bold", fontSize: 10, marginTop: 10 }}>
-                                            {generateQuote(item.completed / item.target)}
+                                            {generateQuote(item.completedBooksCount / item.target)}
                                         </Text>
                                     </View>
                                 </LinearGradient>

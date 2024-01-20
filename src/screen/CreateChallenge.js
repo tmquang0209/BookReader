@@ -1,5 +1,5 @@
-import React from "react";
-import { Keyboard, Pressable, SafeAreaView, Text, Touchable, TouchableWithoutFeedback, View } from "react-native";
+import React, { useState } from "react";
+import { Alert, Keyboard, Pressable, SafeAreaView, Text, Touchable, TouchableWithoutFeedback, View } from "react-native";
 import { connect } from "react-redux";
 import { Button, TextInput } from "react-native-paper";
 
@@ -7,11 +7,15 @@ import styles from "../components/common/styles";
 import { BackButton, Title } from "../components/header";
 import { accentGreen, bgMain, gray3, gray5, white } from "../constants/colors";
 import { DatePicker, longDate } from "../components/date";
+import { createChallenge } from "../API/challenges";
 
-const CreateChallenge = () => {
-    const [challenge, setChallenge] = React.useState({ start: new Date(), end: new Date() });
-    const [show, setShow] = React.useState(false);
-    const [dateType, setDateType] = React.useState(null);
+const CreateChallenge = (props) => {
+    const { navigation, user } = props;
+
+    const [challenge, setChallenge] = useState({ startDate: new Date(), endDate: new Date() });
+    const [show, setShow] = useState(false);
+    const [dateType, setDateType] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const onShow = (type) => {
         setDateType(type);
@@ -21,16 +25,24 @@ const CreateChallenge = () => {
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate;
         Platform.OS === "android" && setShow(false);
-        dateType === "start" ? setChallenge({ ...challenge, start: currentDate }) : setChallenge({ ...challenge, end: currentDate });
+        dateType === "start" ? setChallenge({ ...challenge, startDate: currentDate }) : setChallenge({ ...challenge, endDate: currentDate });
     };
 
     const onFieldChange = (field, text) => {
         setChallenge((prevChallenge) => ({ ...prevChallenge, [field]: text }));
     };
 
-    const onCreateChallenge = () => {
+    const onCreateChallenge = async () => {
         //update challenge
-        console.log("create challenge");
+        setLoading(true);
+        const response = await createChallenge(user.idUser, challenge);
+        if (response.success) {
+            Alert.alert("Success", "Create challenge successfully");
+            navigation.goBack();
+        } else {
+            Alert.alert("Error", response.error);
+        }
+        setLoading(false);
     };
 
     return (
@@ -46,9 +58,9 @@ const CreateChallenge = () => {
                             placeholder="Title"
                             style={{ backgroundColor: gray5 }}
                             placeholderTextColor={gray3}
-                            value={challenge.title}
+                            value={challenge.name}
                             textColor={white}
-                            onChangeText={(text) => onFieldChange("title", text)}
+                            onChangeText={(text) => onFieldChange("name", text)}
                         />
 
                         <TextInput
@@ -61,11 +73,11 @@ const CreateChallenge = () => {
                         />
 
                         <Pressable onPress={() => onShow("start")} style={{ backgroundColor: gray5, marginTop: 5, width: "100%" }} textColor={white}>
-                            <Text style={{ color: white, padding: 15, fontSize: 15 }}>{longDate(challenge.start)}</Text>
+                            <Text style={{ color: white, padding: 15, fontSize: 15 }}>{longDate(challenge.startDate)}</Text>
                         </Pressable>
 
                         <Pressable onPress={() => onShow("end")} style={{ backgroundColor: gray5, marginTop: 5, width: "100%" }} textColor={white}>
-                            <Text style={{ color: white, padding: 15, fontSize: 15 }}>{longDate(challenge.end)}</Text>
+                            <Text style={{ color: white, padding: 15, fontSize: 15 }}>{longDate(challenge.endDate)}</Text>
                         </Pressable>
 
                         <TextInput
@@ -85,6 +97,8 @@ const CreateChallenge = () => {
                             style={{ backgroundColor: accentGreen, padding: 5, borderRadius: 4 }}
                             onPress={() => onCreateChallenge()}
                             labelStyle={{ color: bgMain, fontFamily: "SVN-Gotham-Bold" }}
+                            loading={loading}
+                            disabled={loading}
                         >
                             Create a new Challenge
                         </Button>
@@ -93,13 +107,13 @@ const CreateChallenge = () => {
                 {show && (
                     <DatePicker
                         testID="dateTimePicker"
-                        value={dateType === "start" ? challenge.start : challenge.end}
+                        value={dateType === "start" ? challenge.startDate : challenge.endDate}
                         mode="date"
                         is24Hour={true}
                         display="default"
                         onChange={onChange}
                         maximumDate={new Date(2040, 1, 1)}
-                        minimumDate={dateType === "end" ? challenge.start : null}
+                        minimumDate={dateType === "end" ? challenge.startDate : null}
                     />
                 )}
             </SafeAreaView>

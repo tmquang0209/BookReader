@@ -4,6 +4,8 @@ import styles from "../components/common/styles";
 import { Keyboard, SafeAreaView, Text, View, TouchableWithoutFeedback, Pressable, Alert } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 
+import { updateChallengeDetails, deleteChallenge } from "../API/challenges";
+
 import { Title, BackButton } from "../components/header";
 import { accentGreen, bgMain, black, gray3, gray5, white } from "../constants/colors";
 import { DatePicker, longDate } from "../components/date";
@@ -11,10 +13,11 @@ import { DatePicker, longDate } from "../components/date";
 const updateChallenge = ({ navigation, user, route }) => {
     const { challengeItem } = route.params;
 
-    const [challenge, setChallenge] = useState({ ...challengeItem, start: new Date(challengeItem.start), end: new Date(challengeItem.end) });
+    const [challenge, setChallenge] = useState({ ...challengeItem, startDate: new Date(challengeItem.startDate), endDate: new Date(challengeItem.endDate) });
     const [show, setShow] = useState(false);
     const [dateType, setDateType] = useState(null);
     const [disable, setDisable] = useState(false);
+    const [deleteProgress, setDeleteProgress] = useState(false);
 
     const onShow = (type) => {
         setDateType(type);
@@ -25,16 +28,25 @@ const updateChallenge = ({ navigation, user, route }) => {
         const currentDate = selectedDate;
         Platform.OS === "android" && setShow(false);
         // setInfo({ ...user, birthDay: currentDate });
-        dateType === "start" ? setChallenge({ ...challenge, start: currentDate }) : setChallenge({ ...challenge, end: currentDate });
+        dateType === "start" ? setChallenge({ ...challenge, startDate: currentDate }) : setChallenge({ ...challenge, endDate: currentDate });
     };
 
     const onFieldChange = (field, text) => {
         setChallenge((prevChallenge) => ({ ...prevChallenge, [field]: text }));
     };
 
-    const handleDelete = () => {
+    const handleDelete = async () => {
         //delete challenge
         console.log("delete challenge");
+        setDeleteProgress(true);
+        const response = await deleteChallenge(user.idUser, challenge.idChallenge);
+        if (response.success) {
+            Alert.alert("Success", "Delete challenge successfully");
+            navigation.goBack();
+        } else {
+            Alert.alert("Error", response.error);
+        }
+        setDeleteProgress(false);
     };
 
     const onDelete = () => {
@@ -50,18 +62,21 @@ const updateChallenge = ({ navigation, user, route }) => {
         ]);
     };
 
-    const onUpdateChallenge = () => {
+    const onUpdateChallenge = async () => {
         //update challenge
-        console.log("update challenge");
         setDisable(true);
-        setTimeout(() => {
-            setDisable(false);
-            navigation.navigate("Challenge");
-        }, 2000);
+        const response = await updateChallengeDetails(user.idUser, challenge);
+        if (response.success) {
+            Alert.alert("Success", "Update challenge successfully");
+            navigation.goBack();
+        } else {
+            Alert.alert("Error", response.error);
+        }
+        setDisable(false);
     };
 
     useEffect(() => {
-        setChallenge({ ...challengeItem, start: new Date(challengeItem.start), end: new Date(challengeItem.end) });
+        setChallenge({ ...challengeItem, startDate: new Date(challengeItem.startDate), endDate: new Date(challengeItem.endDate) });
     }, []);
 
     //console log to check if the data is correct
@@ -90,7 +105,7 @@ const updateChallenge = ({ navigation, user, route }) => {
                             placeholder="Title"
                             style={{ backgroundColor: gray5 }}
                             placeholderTextColor={gray3}
-                            value={challenge.title}
+                            value={challenge.name}
                             textColor={white}
                             onChangeText={(text) => onFieldChange("title", text)}
                         />
@@ -105,11 +120,11 @@ const updateChallenge = ({ navigation, user, route }) => {
                         />
 
                         <Pressable onPress={() => onShow("start")} style={{ backgroundColor: gray5, marginTop: 5, width: "100%" }} textColor={white}>
-                            <Text style={{ color: white, padding: 15, fontSize: 15 }}>{longDate(challenge.start)}</Text>
+                            <Text style={{ color: white, padding: 15, fontSize: 15 }}>{longDate(challenge.startDate)}</Text>
                         </Pressable>
 
                         <Pressable onPress={() => onShow("end")} style={{ backgroundColor: gray5, marginTop: 5, width: "100%" }} textColor={white}>
-                            <Text style={{ color: white, padding: 15, fontSize: 15 }}>{longDate(challenge.end)}</Text>
+                            <Text style={{ color: white, padding: 15, fontSize: 15 }}>{longDate(challenge.endDate)}</Text>
                         </Pressable>
 
                         <TextInput
@@ -138,6 +153,8 @@ const updateChallenge = ({ navigation, user, route }) => {
                             color: "red",
                         }}
                         onPress={() => onDelete()}
+                        loading={deleteProgress}
+                        disabled={deleteProgress}
                     >
                         Delete
                     </Button>

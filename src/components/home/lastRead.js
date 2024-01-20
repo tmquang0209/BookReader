@@ -48,31 +48,10 @@ export const LastBookRead = ({ user }) => {
                                     <Image style={styles.lastReadImg} source={{ uri: data?.formats?.image }} />
                                 </LinearGradient>
                             </ImageBackground>
-                            Stashed changes
                             <View style={{ marginLeft: 15, marginTop: 16, flex: 1 }}>
                                 <Text style={styles.itemBookName}>{data?.title}</Text>
                                 <Text style={styles.itemBookAuthor}>{data?.authors && data?.authors[0] && data?.authors[0]?.name}</Text>
-                                <View style={{ flexDirection: "row", alignItems: "center", height: 15, marginTop: 8 }}>
-                                    {/* <View>
-                                    <Progress.Bar
-                                        progress={0.3}
-                                        style={{
-                                            height: 6,
-                                        }}
-                                        color={white}
-                                    />
-                                </View>
-                                <Text
-                                    style={{
-                                        color: white,
-                                        fontFamily: "SVN-Gotham-Light",
-                                        fontSize: 10,
-                                        marginLeft: 8, // Adjust the margin as needed
-                                    }}
-                                >
-                                    24/520
-                                </Text> */}
-                                </View>
+                                <View style={{ flexDirection: "row", alignItems: "center", height: 15, marginTop: 8 }}></View>
                                 <View style={{ marginRight: 10, marginTop: 16 }}>
                                     <Button
                                         mode="contained-tonal"
