@@ -15,8 +15,8 @@ export const LastBookRead = ({ user }) => {
 
     //use callback to get last book read
     const getData = useCallback(async () => {
-        const response = await getLastBookRead(user.idUser);
-        setData(response.result[0]);
+        const response = await getLastBookRead(user?.idUser);
+        if (response.success) setData(response?.result[0]);
     }, [user]);
 
     //handle press continue reading

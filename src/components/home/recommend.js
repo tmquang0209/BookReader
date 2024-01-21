@@ -42,8 +42,7 @@ const ListItem = ({ list }) => (
 
 export const ForYou = ({ list }) => {
     const navigation = useNavigation();
-
-    const reducedList = list ? list.filter((item, index) => index <= 10) : [];
+    const reducedList = list.length !== 0 ? list.filter((item, index) => index <= 10) : [];
     return (
         <>
             <View style={styles.headerContainer}>

@@ -49,8 +49,17 @@ const Profile = (props) => {
         navigation.navigate("Dictionary");
     };
 
+    const onChangeGenres = () => {
+        navigation.navigate("SelectGenres");
+    };
+
+    const onChangePassword = () => {
+        navigation.navigate("ChangePassword");
+    };
+
     const onLogoutPress = () => {
         logoutUser();
+        navigation.navigate("GetStarted");
     };
 
     return (
@@ -84,7 +93,9 @@ const Profile = (props) => {
                     }}
                 >
                     <MenuItem iconLeft={userIcon} title={"Profile details"} iconRight={"arrow-right"} onPress={onProfileDetail} />
-                    <MenuItem iconLeft={dictionaryIcon} title={"Your dictionary"} iconRight={"arrow-right"} onPress={onDictionary}/>
+                    <MenuItem iconLeft={dictionaryIcon} title={"Your dictionary"} iconRight={"arrow-right"} onPress={onDictionary} />
+                    <MenuItem iconLeft={dictionaryIcon} title={"Genres"} iconRight={"arrow-right"} onPress={onChangeGenres} />
+                    <MenuItem iconLeft={dictionaryIcon} title={"Change password"} iconRight={"arrow-right"} onPress={onChangePassword} />
                     <Line />
                     <MenuItem iconLeft={logoutIcon} title={"Logout"} onPress={onLogoutPress} />
                 </View>
