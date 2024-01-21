@@ -45,9 +45,9 @@ export const SelectGenres = (props) => {
 
             //save to localstorage
             setAuthStorage(user);
-            // autoLogin();
+            autoLogin();
 
-            loginUser(user);
+            // loginUser(user);
             //navigate to home
             if (result.success) navigation.navigate("bottomTab");
         }

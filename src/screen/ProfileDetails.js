@@ -12,6 +12,8 @@ import { gray5, white } from "../constants/colors";
 import { Button } from "../components/button";
 import { updateInfo } from "../store/actions/authActions";
 import { fullDate, DatePicker } from "../components/date";
+import { validateHtmlTag, validateLimit, validateSpecialCharacter } from "../components/validate/text";
+import { validateNumberExist } from "../components/validate/number";
 
 const ProfileDetails = (props) => {
     const { user, updateInfo } = props;
@@ -34,6 +36,14 @@ const ProfileDetails = (props) => {
     };
 
     const onSubmitPress = async () => {
+        if (info.fullName === "") return Alert.alert("Error", "Name is required");
+        else if (validateNumberExist(info.fullName)) return Alert.alert("Error", "Name must not contain number");
+        else if (!validateLimit(info.fullName, 50)) return Alert.alert("Error", "Name must be less than 50 characters");
+        else if (validateHtmlTag(info.fullName)) return Alert.alert("Error", "Name must not contain html tag");
+        else if (!validateSpecialCharacter(info.fullName)) return Alert.alert("Error", "Name must not contain special character");
+        else if (info.birthDay === "") return Alert.alert("Error", "Date of birth is required");
+        else if (info.birthDay > new Date()) return Alert.alert("Error", "Date of birth must be less than current date");
+
         try {
             const response = await updateInfoUser(info);
             if (response.success) {

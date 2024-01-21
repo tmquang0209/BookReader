@@ -11,6 +11,7 @@ import { LogoWithText } from "../components/logo";
 import { Title, BackButton } from "../components/header";
 import { white, accentGreen } from "../constants/colors";
 import { Button } from "../components/button";
+import { validateNumber } from "../components/validate/number";
 
 const VerifyCode = ({ navigation, route }) => {
     const { email } = route.params;
@@ -19,10 +20,25 @@ const VerifyCode = ({ navigation, route }) => {
 
     const onSubmitPress = async () => {
         setLoading((prev) => !prev);
+
+        if (code === "") {
+            Alert.alert("Error", "Please fill in all the information.");
+            setLoading((prev) => !prev);
+            return;
+        } else if (code.length !== 6) {
+            Alert.alert("Error", "Code is invalid.");
+            setLoading((prev) => !prev);
+            return;
+        } else if (validateNumber(code) === false) {
+            Alert.alert("Error", "Code is invalid.");
+            setLoading((prev) => !prev);
+            return;
+        }
+
         const response = await fetchVerifyCode(email, code);
-        console.log(response);
+
         if (!response.success) {
-            Alert.alert("Error!", response.message);
+            Alert.alert("Error!", response.message || response.error);
             setLoading((prev) => !prev);
             return;
         }
@@ -34,6 +50,12 @@ const VerifyCode = ({ navigation, route }) => {
         const result = await fetchForgotPassword(email);
         if (result.success) {
             Alert.alert("Successful!", result.message, [
+                {
+                    text: "OK",
+                },
+            ]);
+        } else {
+            Alert.alert("Error!", result.message || result.error, [
                 {
                     text: "OK",
                 },

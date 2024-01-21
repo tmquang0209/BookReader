@@ -9,6 +9,7 @@ import { Button } from "../components/button";
 import { BackButton } from "../components/header";
 import { fetchForgotPassword } from "../API/authUser";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { validateEmail } from "../components/validate/email";
 
 const ForgotPassword = ({ navigation }) => {
     const [loading, setLoading] = useState(false);
@@ -19,6 +20,10 @@ const ForgotPassword = ({ navigation }) => {
 
         if (email === "") {
             Alert.alert("Error", "Please fill in all the information.");
+            setLoading((prev) => !prev);
+            return;
+        } else if (validateEmail(email) === false) {
+            Alert.alert("Error", "Email is invalid.");
             setLoading((prev) => !prev);
             return;
         }

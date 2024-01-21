@@ -32,7 +32,7 @@ const ChangePassword = (props) => {
         setDisable(true);
         const response = await updatePassword({ ...info, idUser: user.idUser });
         setDisable(false);
-        console.log(response);
+
         if (response.success) {
             Alert.alert("Success", "Change password successfully", [{ text: "OK", onPress: () => props.navigation.goBack() }]);
         } else {

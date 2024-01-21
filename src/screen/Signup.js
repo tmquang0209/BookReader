@@ -9,6 +9,33 @@ import { accentGreen, gray2, gray4, white } from "../constants/colors";
 import { signupAccount, emptyAuth } from "../store/actions/authActions";
 import { LogoWithoutText } from "../components/logo";
 import { Title } from "../components/header";
+import { validateHtmlTag, validateLimit, validateSpecialCharacter } from "../components/validate/text";
+import { validatePassword } from "../components/validate/password";
+import { validateEmail } from "../components/validate/email";
+
+const validateField = (field, value, errorMessage) => {
+    console.log(validateLimit(field, 0));
+    if (value.trim().length === 0) {
+        Alert.alert("Error", errorMessage);
+        return false;
+    } else if (field === "Email" && validateEmail(value) === false) {
+        Alert.alert("Error", `${field} is invalid.`);
+        return false;
+    } else if (!["Email", "Password", "Re-password"].includes(field) && !validateSpecialCharacter(value)) {
+        Alert.alert("Error", `${field} cannot contain special characters.`);
+        return false;
+    } else if (validateHtmlTag(value)) {
+        Alert.alert("Error", `${field} cannot contain html tag.`);
+        return false;
+    } else if (validateLimit(value, 50) === false) {
+        Alert.alert("Error", `${field} cannot be more than 50 characters.`);
+        return false;
+    } else if (validatePassword(value) === false && (field === "Password" || field === "Re-password")) {
+        Alert.alert("Error", `${field} must contain at least 1 uppercase, lowercase, number and special character.`);
+        return false;
+    }
+    return true;
+};
 
 const Signup = (props) => {
     const { loggedIn, user, err, signupAccount, navigation, emptyAuth } = props;
@@ -16,18 +43,34 @@ const Signup = (props) => {
     const [loading, setLoading] = useState(false);
     const [hidden, setHidden] = useState(true);
 
-    const [fullName, setFullName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [rePassword, setRePassword] = useState("");
+    const [userData, setUserData] = useState({
+        fullName: "",
+        email: "",
+        password: "",
+        rePassword: "",
+    });
+
+    const onFieldChange = (field, value) => {
+        setUserData((prev) => ({ ...prev, [field]: value.trimStart() }));
+    };
 
     const onSubmitPress = async () => {
-        const userData = {
-            fullName,
-            email,
-            password,
-            rePassword,
-        };
+        const { fullName, email, password, rePassword } = userData;
+
+        if (
+            !validateField("Full name", fullName, "Full name cannot be empty.") ||
+            !validateField("Email", email, "Email cannot be empty.") ||
+            !validateField("Password", password, "Password cannot be empty.") ||
+            !validateField("Re-password", rePassword, "Re-password cannot be empty.")
+        ) {
+            return;
+        }
+
+        if (password !== rePassword) {
+            Alert.alert("Error", "Password and re-password must be the same.");
+            return;
+        }
+
         try {
             setLoading((prev) => !prev);
             await signupAccount(userData);
@@ -37,6 +80,8 @@ const Signup = (props) => {
             setLoading((prev) => !prev);
         } catch (err) {
             console.error(err);
+            Alert.alert("Error", "Something went wrong. Please try again.");
+            setLoading((prev) => !prev);
         }
     };
 
@@ -66,7 +111,7 @@ const Signup = (props) => {
         if (user?.email) {
             navigation.replace("SelectGenres");
         }
-        console.log("signup",user);
+        console.log("signup", user);
     }, [user, err]);
 
     return (
@@ -109,16 +154,16 @@ const Signup = (props) => {
                         </View>
                         <TextInput
                             placeholder="Full name"
-                            value={fullName}
-                            onChangeText={(text) => setFullName(text)}
+                            value={userData.fullName}
+                            onChangeText={(text) => onFieldChange("fullName", text)}
                             style={{
                                 borderRadius: 8,
                             }}
                         />
                         <TextInput
                             placeholder="Email"
-                            value={email}
-                            onChangeText={(text) => setEmail(text)}
+                            value={userData.email}
+                            onChangeText={(text) => onFieldChange("email", text)}
                             keyboardType="email-address"
                             style={{
                                 marginTop: 10,
@@ -127,8 +172,8 @@ const Signup = (props) => {
                         />
                         <TextInput
                             placeholder="Password"
-                            value={password}
-                            onChangeText={(text) => setPassword(text)}
+                            value={userData.password}
+                            onChangeText={(text) => onFieldChange("password", text)}
                             right={
                                 <TextInput.Icon
                                     icon={hidden ? "eye" : "eye-off"}
@@ -146,8 +191,8 @@ const Signup = (props) => {
                         />
                         <TextInput
                             placeholder="Re-password"
-                            value={rePassword}
-                            onChangeText={(text) => setRePassword(text)}
+                            value={userData.rePassword}
+                            onChangeText={(text) => onFieldChange("rePassword", text)}
                             right={
                                 <TextInput.Icon
                                     icon={hidden ? "eye" : "eye-off"}

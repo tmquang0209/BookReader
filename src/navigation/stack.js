@@ -64,9 +64,9 @@ const StackNav = (props) => {
                 headerShown: false,
             }}
         >
+            <Stack.Screen name="GetStarted" component={GetStarted} />
             {!loggedIn && (
                 <Stack.Group>
-                    <Stack.Screen name="GetStarted" component={GetStarted} />
                     <Stack.Screen name="Signup" component={Signup} />
                     <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
                     <Stack.Screen name="VerifyCode" component={VerifyCode} />

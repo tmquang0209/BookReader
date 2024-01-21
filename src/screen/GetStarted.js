@@ -9,6 +9,7 @@ import { accentGreen, white } from "../constants/colors";
 import { LogoWithText } from "../components/logo";
 import { GoogleButton, Button } from "../components/button";
 import { LineOr } from "../components/common/line";
+import { validateEmail } from "../components/validate/email";
 
 const GetStarted = (props) => {
     const { loggedIn, err, loginUser, navigation, emptyAuth, autoLogin } = props;
@@ -20,11 +21,15 @@ const GetStarted = (props) => {
 
     const onSubmitPress = async () => {
         setLoading((prev) => !prev);
-        try {
-            await loginUser({ email, password });
-        } catch (error) {
-            console.log("Error", error.message);
-        }
+
+        if (validateEmail(email) && password.length >= 6)
+            try {
+                await loginUser({ email, password });
+            } catch (error) {
+                console.log("Error", error.message);
+            }
+        else Alert.alert("Error", "Email or password is invalid");
+
         setLoading((prev) => !prev);
     };
 
