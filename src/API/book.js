@@ -106,3 +106,18 @@ export const updateStatusBook = async (userId, bookId, status) => {
         return error.response.data;
     }
 };
+
+export const getBookStatus = async (userId, bookId) => {
+    const url = `${API_URI}/api/getBookmark/${userId}/${bookId}`;
+
+    try {
+        const response = await axios.get(url);
+        // Assuming a successful response with a JSON body
+        const responseData = response.data;
+        return responseData;
+    } catch (error) {
+        // Handle errors
+        console.error("Error:", error.message);
+        return error.response.data;
+    }
+};

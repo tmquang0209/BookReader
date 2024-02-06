@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { ScrollView, ToastAndroid, useWindowDimensions } from "react-native";
-import { Reader, ReaderProvider } from "@epubjs-react-native/core";
+import { Reader, ReaderProvider, useReader } from "@epubjs-react-native/core";
 import { useFileSystem } from "@epubjs-react-native/expo-file-system";
 import { connect } from "react-redux";
 import { Audio } from "expo-av";
 
 //import API
-import { getLastPageReading, savedLastRead } from "../API/book";
+import { getLastPageReading, savedLastRead, updateStatusBook } from "../API/book";
 import { saveWordToDb, translateByWord } from "../API/dictionary";
 
 //import components
 import styles from "../components/common/styles";
 import { DictionaryModal } from "../components/modal";
+import { completed } from "../constants/text";
 
 const Reading = ({ user, navigation, route }) => {
     const { bookId, file, cfi } = route.params;
@@ -20,6 +21,8 @@ const Reading = ({ user, navigation, route }) => {
     const [words, setWords] = useState();
     const [animating, setAnimating] = useState(false);
     const [lastPage, setLastPage] = useState();
+
+    const { atEnd } = useReader();
 
     //onLocationChange => update last page to db
     const updateLastPage = async (cfi) => {
@@ -71,13 +74,18 @@ const Reading = ({ user, navigation, route }) => {
             });
     };
 
+    const updateStatus = async () => {
+        const response = await updateStatusBook(user.idUser, bookId, completed);
+    };
+
     useEffect(() => {
         navigation.setOptions({
             headerShown: true,
         });
-        // if (cfi) setLastPage(cfi);
-        // else
+
         getLastPage();
+
+        atEnd && updateStatus();
     }, []);
 
     return (

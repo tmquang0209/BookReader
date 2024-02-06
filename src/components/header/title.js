@@ -1,5 +1,6 @@
 import { Text, View } from "react-native";
 import { white, accentGreen } from "../../constants/colors";
+
 export const Title = ({ name, color = white, size = 28 }) => {
     return (
         <Text

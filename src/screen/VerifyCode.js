@@ -3,6 +3,8 @@ import { SafeAreaView, Text, View, TouchableOpacity, TouchableWithoutFeedback, A
 import { Ionicons } from "@expo/vector-icons";
 import { TextInput } from "react-native-paper";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Formik } from "formik";
+import * as Yup from "yup";
 
 import { fetchForgotPassword, fetchVerifyCode } from "../API/authUser";
 
@@ -12,21 +14,25 @@ import { Title, BackButton } from "../components/header";
 import { white, accentGreen } from "../constants/colors";
 import { Button } from "../components/button";
 
+const validationSchema = Yup.object().shape({
+    code: Yup.number("Code must be a number").required("Code is required"),
+});
+
 const VerifyCode = ({ navigation, route }) => {
     const { email } = route.params;
     const [loading, setLoading] = useState(false);
-    const [code, setCode] = useState("");
 
-    const onSubmitPress = async () => {
+    const onSubmitPress = async (values) => {
         setLoading((prev) => !prev);
-        const response = await fetchVerifyCode(email, code);
-        console.log(response);
+
+        const response = await fetchVerifyCode(email, values.code);
+
         if (!response.success) {
-            Alert.alert("Error!", response.message);
+            Alert.alert("Error!", response.message || response.error);
             setLoading((prev) => !prev);
             return;
         }
-        navigation.navigate("SetPassword", { email, code });
+        navigation.navigate("SetPassword", { email, code: values.code });
         setLoading((prev) => !prev);
     };
 
@@ -34,6 +40,12 @@ const VerifyCode = ({ navigation, route }) => {
         const result = await fetchForgotPassword(email);
         if (result.success) {
             Alert.alert("Successful!", result.message, [
+                {
+                    text: "OK",
+                },
+            ]);
+        } else {
+            Alert.alert("Error!", result.message || result.error, [
                 {
                     text: "OK",
                 },
@@ -65,17 +77,25 @@ const VerifyCode = ({ navigation, route }) => {
                         >
                             An authentication code has been sent to your email.
                         </Text>
-                        <TextInput
-                            placeholder="Enter code"
-                            style={{
-                                marginTop: 20,
-                                borderRadius: 8,
-                            }}
-                            value={code}
-                            keyboardType="number-pad"
-                            onChangeText={(text) => setCode(text)}
-                        />
-                        <Button children={"Verify"} loading={loading} onPress={onSubmitPress} />
+                        <Formik initialValues={{ code: "" }} validationSchema={validationSchema} onSubmit={(values) => onSubmitPress(values)}>
+                            {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+                                <>
+                                    <TextInput
+                                        placeholder="Enter code"
+                                        style={{
+                                            marginTop: 20,
+                                            borderRadius: 8,
+                                        }}
+                                        onChangeText={handleChange("code")}
+                                        onBlur={handleBlur("code")}
+                                        value={values.code}
+                                        keyboardType="numeric"
+                                    />
+                                    {errors.code && touched.code && <Text style={{ fontSize: 12, color: "red" }}>{errors.code}</Text>}
+                                    <Button children={"Verify"} loading={loading} onPress={handleSubmit} />
+                                </>
+                            )}
+                        </Formik>
                         <View
                             style={{
                                 justifyContent: "center",

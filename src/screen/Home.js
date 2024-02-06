@@ -15,7 +15,7 @@ import { GreetingWithFullName } from "../components/home/greeting";
 
 const HomeView = (props) => {
     const { user } = props;
-    const splitFullName = user?.fullName?.split(" ");
+    const splitFullName ="A";
     const letterName = splitFullName ? splitFullName[splitFullName.length - 1][0] : "";
 
     const [forYouList, setForYouList] = useState([]);
@@ -23,7 +23,7 @@ const HomeView = (props) => {
 
     useEffect(() => {
         const fetchBook = async () => {
-            const forYouResponse = await getInterestBook(user.idUser);
+            const forYouResponse = await getInterestBook(user?.idUser);
             const trendingResponse = await getTrendingBook();
 
             if (forYouResponse) setForYouList(forYouResponse.result);
@@ -50,7 +50,7 @@ const HomeView = (props) => {
             </View>
             <View style={styles.flexView1}>
                 <Image style={styles.bannerImage} source={banner} />
-                <LastBookRead user={user} />
+                <LastBookRead user={user} /> 
                 <ForYou list={forYouList} />
                 <Trending list={trendingList} />
             </View>

@@ -59,18 +59,18 @@ export default styles = StyleSheet.create({
     },
 
     itemBox: {
-        margin: 10,
-        gap: 16,
+        marginVertical: 8,
+        marginLeft: 16,
         flex: 1,
     },
 
     headerContainer: {
-        flex: 1,
-        flexDirection: "row",
-        alignItems: "center",
+        marginLeft: 16,
     },
 
     headerItem: {
+        // marginBottom: 10,
+        marginLeft: 8,
         flex: 1,
         color: white,
         fontSize: 20,
@@ -78,16 +78,18 @@ export default styles = StyleSheet.create({
     },
 
     showAllContainer: {
+        marginRight: 10,
         alignItems: "center",
         alignContent: "center",
-        flexDirection: "column",
+        flexDirection: "row",
+        columnGap: 5,
         justifyContent: "space-between",
     },
 
     showAllText: {
         color: accentGreen,
         fontFamily: "SVN-Gotham-Bold",
-        fontSize: 12,
+        fontSize: 16,
         alignSelf: "center",
         justifyContent: "center",
     },
@@ -98,18 +100,23 @@ export default styles = StyleSheet.create({
     },
 
     itemBookName: {
+        marginRight: 10,
         color: white,
         fontFamily: "SVN-Gotham-Bold",
-        fontSize: 12,
+        fontSize: 15,
     },
 
     itemBookAuthor: {
+        marginTop: 2,
         color: white,
         fontSize: 10,
         fontFamily: "SVN-Gotham-Light",
     },
 
     backgroundImage: {
+        overflow: "hidden",
+        borderTopLeftRadius: 8,
+        borderBottomLeftRadius: 8,
         width: "100%",
         height: 350,
         justifyContent: "flex-end",
@@ -267,9 +274,10 @@ export default styles = StyleSheet.create({
     },
 
     bannerImage: {
-        width: Dimensions.get("screen").width - 15,
+        width: Dimensions.get("screen").width - 25,
         height: 200,
-        margin: 5,
+        marginVertical: 5,
+        marginHorizontal: 16,
         borderRadius: 10,
         alignSelf: "center",
     },
@@ -286,5 +294,7 @@ export default styles = StyleSheet.create({
         backgroundColor: "rgba(255, 255, 255, 0.12)",
         flex: 1,
         flexDirection: "row",
+        marginRight: 16,
+        borderRadius: 8,
     },
 });

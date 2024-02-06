@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaView, View, Text, TouchableWithoutFeedback, Keyboard, Pressable, Platform, Alert } from "react-native";
 import { connect } from "react-redux";
 import { Avatar, TextInput } from "react-native-paper";
+import { Form, Formik } from "formik";
+import * as Yup from "yup";
 
 import { updateInfoUser } from "../API/authUser";
 
@@ -12,6 +14,14 @@ import { gray5, white } from "../constants/colors";
 import { Button } from "../components/button";
 import { updateInfo } from "../store/actions/authActions";
 import { fullDate, DatePicker } from "../components/date";
+
+const validationSchema = Yup.object().shape({
+    fullName: Yup.string()
+        .required("Full name is required")
+        .max(50, "Full name must be at most 50 characters")
+        .matches(/^[a-zA-Z\s]+$/, "Full name must contain only letters")
+        .label("Full Name"),
+});
 
 const ProfileDetails = (props) => {
     const { user, updateInfo } = props;
@@ -29,13 +39,9 @@ const ProfileDetails = (props) => {
         setShow((prev) => !prev);
     };
 
-    const handleNameChange = (text) => {
-        setInfo({ ...info, fullName: text });
-    };
-
-    const onSubmitPress = async () => {
+    const onSubmitPress = async (values) => {
         try {
-            const response = await updateInfoUser(info);
+            const response = await updateInfoUser({ ...info, fullName: values.fullName });
             if (response.success) {
                 Alert.alert("Success", response.message);
                 updateInfo(info);
@@ -68,24 +74,37 @@ const ProfileDetails = (props) => {
                         <Avatar.Text label="A" size={123} />
                     </View>
                     <Line />
-                    <View>
-                        <View>
-                            <Text style={{ color: white, fontFamily: "SVN-Gotham-Light" }}>Your name</Text>
-                            <TextInput placeholder="Enter your name" value={info.fullName} style={{ backgroundColor: gray5 }} textColor={white} onChangeText={(text) => handleNameChange(text)} />
-                        </View>
-                        <View>
-                            <Text style={{ color: white, fontFamily: "SVN-Gotham-Light" }}>Email</Text>
-                            <TextInput placeholder="Enter your name" value={info.email} style={{ backgroundColor: gray5 }} textColor={white} disabled />
-                        </View>
-                        <View>
-                            <Text style={{ color: white, fontFamily: "SVN-Gotham-Light" }}>Date of Birth</Text>
+                    <Formik initialValues={info} onSubmit={(values) => onSubmitPress(values)} validationSchema={validationSchema}>
+                        {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+                            <View>
+                                <View>
+                                    <Text style={{ color: white, fontFamily: "SVN-Gotham-Light" }}>Your name</Text>
+                                    <TextInput
+                                        placeholder="Enter your name"
+                                        style={{ backgroundColor: gray5 }}
+                                        textColor={white}
+                                        onChangeText={handleChange("fullName")}
+                                        onBlur={handleBlur("fullName")}
+                                        value={values.fullName}
+                                    />
+                                    {errors.fullName && touched.fullName && <Text style={{ color: "red" }}>{errors.fullName}</Text>}
+                                </View>
 
-                            <Pressable onPress={onShow} style={{ backgroundColor: gray5, marginTop: 5, width: "100%" }} textColor={white}>
-                                <Text style={{ color: white, padding: 15, fontSize: 15 }}>{fullDate(info.birthDay)}</Text>
-                            </Pressable>
-                        </View>
-                        <Button children={"Submit"} onPress={onSubmitPress} />
-                    </View>
+                                <View>
+                                    <Text style={{ color: white, fontFamily: "SVN-Gotham-Light" }}>Email</Text>
+                                    <TextInput placeholder="Enter your name" value={info.email} style={{ backgroundColor: gray5 }} textColor={white} disabled />
+                                </View>
+                                <View>
+                                    <Text style={{ color: white, fontFamily: "SVN-Gotham-Light" }}>Date of Birth</Text>
+
+                                    <Pressable onPress={onShow} style={{ backgroundColor: gray5, marginTop: 5, width: "100%" }} textColor={white}>
+                                        <Text style={{ color: white, padding: 15, fontSize: 15 }}>{fullDate(info.birthDay)}</Text>
+                                    </Pressable>
+                                </View>
+                                <Button children={"Submit"} onPress={handleSubmit} />
+                            </View>
+                        )}
+                    </Formik>
                 </View>
                 {show && <DatePicker value={info.birthDay} mode={"date"} onChange={onChange} onShow={onShow} minimumDate={new Date(1950, 1, 1)} maximumDate={new Date(2010, 1, 1)} />}
             </SafeAreaView>

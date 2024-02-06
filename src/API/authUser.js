@@ -24,7 +24,7 @@ export const register = async (userData) => {
 
 export const fetchForgotPassword = async (email) => {
     try {
-        const response = await axios.post(`${API_URI}/api/forgotPassword/${email}`);
+        const response = await axios.post(`${API_URI}/api/forgotPassword`, { email });
         const responseData = response.data;
         return responseData;
     } catch (err) {
@@ -59,7 +59,18 @@ export const updateInfoUser = async (userData) => {
     try {
         const response = await axios.post(`${API_URI}/api/updateInfoUser`, { ...userData });
         const responseData = response.data;
-        return responseData
+        return responseData;
+    } catch (err) {
+        console.error(err);
+        return err.response.data;
+    }
+};
+
+export const updatePassword = async (info) => {
+    try {
+        const response = await axios.post(`${API_URI}/api/changePassword`, { ...info });
+        const responseData = response.data;
+        return responseData;
     } catch (err) {
         console.error(err);
         return err.response.data;
