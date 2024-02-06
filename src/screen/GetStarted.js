@@ -12,7 +12,6 @@ import { LogoWithText } from "../components/logo";
 import { GoogleButton, Button } from "../components/button";
 import { LineOr } from "../components/common/line";
 
-
 const validationSchema = yup.object().shape({
     email: yup.string().email().required(),
     password: yup.string().min(6).required(),
@@ -25,11 +24,11 @@ const GetStarted = (props) => {
     const [hidden, setHidden] = useState(true);
 
     const onSubmitPress = async (values) => {
-        console.log("Values", values);
         setLoading((prev) => !prev);
 
         try {
             await loginUser({ ...values });
+            navigation.navigate("bottomTab");
         } catch (error) {
             console.log("Error", error.message);
         }
@@ -68,10 +67,17 @@ const GetStarted = (props) => {
     };
 
     useEffect(() => {
-        autoLogin();
         renderErr();
-        if (loggedIn) navigation.replace("bottomTab");
     }, [err, loggedIn]);
+
+    useEffect(() => {
+        const checkLoginStatus = async () => {
+            await autoLogin();
+            if (loggedIn) navigation.navigate("bottomTab");
+        };
+
+        checkLoginStatus();
+    }, []);
 
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
