@@ -1,4 +1,4 @@
-import { FlatList, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, RefreshControl, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import { connect } from "react-redux";
 import { Button } from "react-native-paper";
 import * as Progress from "react-native-progress";
@@ -20,6 +20,13 @@ const Challenge = (props) => {
     };
 
     const [data, setData] = useState([]);
+    const [refreshing, setRefreshing] = useState(false);
+
+    const onRefresh = () => {
+        setRefreshing(true);
+        fetchData();
+        setRefreshing(false);
+    };
 
     const fetchData = async () => {
         const response = await getAllChallenges(user.idUser);
@@ -73,6 +80,7 @@ const Challenge = (props) => {
                     }}
                 >
                     <FlatList
+                        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={["#000"]} tintColor={"#000"} />}
                         showsVerticalScrollIndicator={false}
                         scrollEnabled={true}
                         data={data}

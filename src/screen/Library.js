@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FlatList, SafeAreaView, View, Text, TouchableOpacity } from "react-native";
+import { FlatList, SafeAreaView, View, Text, TouchableOpacity, RefreshControl } from "react-native";
 import { connect } from "react-redux";
 import { FontAwesome5 } from "@expo/vector-icons";
 import * as Animatable from "react-native-animatable";
@@ -21,6 +21,16 @@ const Library = (props) => {
         { key: 3, active: false, icon: "check-circle", name: "Complete", status: completed },
     ]);
     const [bookList, setBookList] = useState([]);
+    const [refresing, setRefreshing] = useState(false);
+
+    const onRefresh = () => {
+        setRefreshing(true);
+        setBookList([]);
+        tabs.map((item) => {
+            if (item.active) fetchBookList(item.status);
+        });
+        setRefreshing(false);
+    };
 
     const onTabPress = (key) => {
         const updated = tabs.map((item) => ({ ...item, active: item.key === key }));
@@ -84,6 +94,8 @@ const Library = (props) => {
             >
                 {bookList && (
                     <FlatList
+                        refreshControl={<RefreshControl refreshing={refresing} onRefresh={onRefresh} colors={["#000"]} tintColor={"#000"} />}
+                        extraData={bookList}
                         showsVerticalScrollIndicator={false}
                         data={bookList}
                         numColumns={2}

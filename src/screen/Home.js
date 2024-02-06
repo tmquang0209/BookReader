@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Image, SafeAreaView, ScrollView, View } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { Image, RefreshControl, SafeAreaView, ScrollView, Text, View } from "react-native";
 import { useNetInfo } from "@react-native-community/netinfo";
 import styles from "../components/common/styles";
 import { NoInternet } from "../components/internet";
@@ -12,29 +12,47 @@ import { ForYou, Trending } from "../components/home/recommend";
 import { LastBookRead } from "../components/home/lastRead";
 import { banner } from "../constants/images";
 import { GreetingWithFullName } from "../components/home/greeting";
+import ShimmerPlaceholder from "../components/shimmer";
 
 const HomeView = (props) => {
     const { user } = props;
-    const splitFullName ="A";
+    const splitFullName = "A";
     const letterName = splitFullName ? splitFullName[splitFullName.length - 1][0] : "";
 
     const [forYouList, setForYouList] = useState([]);
     const [trendingList, setTrendingList] = useState([]);
 
+    const [refresing, setRefreshing] = useState(false);
+
+    const fetchBook = async () => {
+        const forYouResponse = await getInterestBook(user?.idUser);
+        const trendingResponse = await getTrendingBook();
+
+        if (forYouResponse) setForYouList(forYouResponse.result);
+        if (trendingResponse) setTrendingList(trendingResponse);
+    };
+
+    const [visible, setVisible] = useState(false);
     useEffect(() => {
-        const fetchBook = async () => {
-            const forYouResponse = await getInterestBook(user?.idUser);
-            const trendingResponse = await getTrendingBook();
+        setTimeout(() => {
+            setVisible(true);
+        }, 5000);
+    }, []);
 
-            if (forYouResponse) setForYouList(forYouResponse.result);
-            if (trendingResponse) setTrendingList(trendingResponse);
-        };
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        setForYouList([]);
+        setTrendingList([]);
+        fetchBook();
+        setRefreshing(false);
+    }, []);
 
+    useEffect(() => {
         fetchBook();
     }, []);
 
     return (
-        <ScrollView style={{ flex: 1 }}>
+        <ScrollView style={{ flex: 1 }} refreshControl={<RefreshControl refreshing={refresing} onRefresh={onRefresh} colors={["#000"]} tintColor={"#000"} />}>
             <View style={styles.headerContainer}>
                 <GreetingWithFullName fullName={user?.fullName} />
                 <View>
@@ -50,7 +68,7 @@ const HomeView = (props) => {
             </View>
             <View style={styles.flexView1}>
                 <Image style={styles.bannerImage} source={banner} />
-                <LastBookRead user={user} /> 
+                <LastBookRead user={user} />
                 <ForYou list={forYouList} />
                 <Trending list={trendingList} />
             </View>
