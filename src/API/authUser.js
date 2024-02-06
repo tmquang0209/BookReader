@@ -10,7 +10,7 @@ export const login = async (userData) => {
         return err.response.data;
     }
 };
-
+    
 export const register = async (userData) => {
     try {
         const response = await axios.post(`${API_URI}/api/registerUser`, userData);
