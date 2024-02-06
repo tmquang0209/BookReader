@@ -24,7 +24,7 @@ export const register = async (userData) => {
 
 export const fetchForgotPassword = async (email) => {
     try {
-        const response = await axios.post(`${API_URI}/api/forgotPassword/${email}`);
+        const response = await axios.post(`${API_URI}/api/forgotPassword`, { email });
         const responseData = response.data;
         return responseData;
     } catch (err) {
