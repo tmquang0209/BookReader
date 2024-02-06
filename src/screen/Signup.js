@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { View, Text, Alert, Keyboard, SafeAreaView, TouchableWithoutFeedback, Image, TouchableOpacity, ScrollView } from "react-native";
 import { TextInput } from "react-native-paper";
 import { connect } from "react-redux";
+import { Formik } from "formik";
+import * as Yup from "yup";
 
 import { Button } from "../components/button";
 import styles from "../components/common/styles";
@@ -9,33 +11,21 @@ import { accentGreen, gray2, gray4, white } from "../constants/colors";
 import { signupAccount, emptyAuth } from "../store/actions/authActions";
 import { LogoWithoutText } from "../components/logo";
 import { Title } from "../components/header";
-import { validateHtmlTag, validateLimit, validateSpecialCharacter } from "../components/validate/text";
-import { validatePassword } from "../components/validate/password";
-import { validateEmail } from "../components/validate/email";
 
-const validateField = (field, value, errorMessage) => {
-    console.log(validateLimit(field, 0));
-    if (value.trim().length === 0) {
-        Alert.alert("Error", errorMessage);
-        return false;
-    } else if (field === "Email" && validateEmail(value) === false) {
-        Alert.alert("Error", `${field} is invalid.`);
-        return false;
-    } else if (!["Email", "Password", "Re-password"].includes(field) && !validateSpecialCharacter(value)) {
-        Alert.alert("Error", `${field} cannot contain special characters.`);
-        return false;
-    } else if (validateHtmlTag(value)) {
-        Alert.alert("Error", `${field} cannot contain html tag.`);
-        return false;
-    } else if (validateLimit(value, 50) === false) {
-        Alert.alert("Error", `${field} cannot be more than 50 characters.`);
-        return false;
-    } else if (validatePassword(value) === false && (field === "Password" || field === "Re-password")) {
-        Alert.alert("Error", `${field} must contain at least 1 uppercase, lowercase, number and special character.`);
-        return false;
-    }
-    return true;
-};
+const validationSchema = Yup.object().shape({
+    fullName: Yup.string().required("Full name is required"),
+    fullName: Yup.string().max(50, "Full name must be at most 50 characters"),
+    fullName: Yup.string().matches(/^[a-zA-Z\s]+$/, "Full name must contain only letters"),
+    // fullName: Yup.string().matches(/^[a-zA-Z]+$/, "Full name must contain at least one letter"),
+    email: Yup.string().email("Invalid email").required("Email is required"),
+    email: Yup.string().max(40, "Email must be at most 40 characters"),
+    password: Yup.string().required("Password is required"),
+    password: Yup.string().min(8, "Password must be at least 8 characters"),
+    password: Yup.string().matches(/[a-zA-Z]/, "Password must contain at least one letter"),
+    password: Yup.string().matches(/[0-9]/, "Password must contain at least one number"),
+    password: Yup.string().matches(/[!@#$%^&*(),.?":{}|<>]/, "Password must contain at least one special character"),
+    rePassword: Yup.string().oneOf([Yup.ref("password"), null], "Passwords must match"),
+});
 
 const Signup = (props) => {
     const { loggedIn, user, err, signupAccount, navigation, emptyAuth } = props;
@@ -43,34 +33,7 @@ const Signup = (props) => {
     const [loading, setLoading] = useState(false);
     const [hidden, setHidden] = useState(true);
 
-    const [userData, setUserData] = useState({
-        fullName: "",
-        email: "",
-        password: "",
-        rePassword: "",
-    });
-
-    const onFieldChange = (field, value) => {
-        setUserData((prev) => ({ ...prev, [field]: value.trimStart() }));
-    };
-
-    const onSubmitPress = async () => {
-        const { fullName, email, password, rePassword } = userData;
-
-        if (
-            !validateField("Full name", fullName, "Full name cannot be empty.") ||
-            !validateField("Email", email, "Email cannot be empty.") ||
-            !validateField("Password", password, "Password cannot be empty.") ||
-            !validateField("Re-password", rePassword, "Re-password cannot be empty.")
-        ) {
-            return;
-        }
-
-        if (password !== rePassword) {
-            Alert.alert("Error", "Password and re-password must be the same.");
-            return;
-        }
-
+    const onSubmitPress = async (userData) => {
         try {
             setLoading((prev) => !prev);
             await signupAccount(userData);
@@ -152,80 +115,95 @@ const Signup = (props) => {
                                 Let's create a new account for you.
                             </Text>
                         </View>
-                        <TextInput
-                            placeholder="Full name"
-                            value={userData.fullName}
-                            onChangeText={(text) => onFieldChange("fullName", text)}
-                            style={{
-                                borderRadius: 8,
-                            }}
-                        />
-                        <TextInput
-                            placeholder="Email"
-                            value={userData.email}
-                            onChangeText={(text) => onFieldChange("email", text)}
-                            keyboardType="email-address"
-                            style={{
-                                marginTop: 10,
-                                borderRadius: 8,
-                            }}
-                        />
-                        <TextInput
-                            placeholder="Password"
-                            value={userData.password}
-                            onChangeText={(text) => onFieldChange("password", text)}
-                            right={
-                                <TextInput.Icon
-                                    icon={hidden ? "eye" : "eye-off"}
-                                    onPress={() => {
-                                        setHidden((prev) => !prev);
-                                        Keyboard.dismiss();
-                                    }}
-                                />
-                            }
-                            secureTextEntry={hidden}
-                            style={{
-                                marginTop: 10,
-                                borderRadius: 8,
-                            }}
-                        />
-                        <TextInput
-                            placeholder="Re-password"
-                            value={userData.rePassword}
-                            onChangeText={(text) => onFieldChange("rePassword", text)}
-                            right={
-                                <TextInput.Icon
-                                    icon={hidden ? "eye" : "eye-off"}
-                                    onPress={() => {
-                                        setHidden((prev) => !prev);
-                                        Keyboard.dismiss();
-                                    }}
-                                />
-                            }
-                            secureTextEntry={hidden}
-                            style={{
-                                marginTop: 10,
-                                borderRadius: 8,
-                            }}
-                        />
-                        <Text
-                            style={{
-                                marginTop: 16,
-                                color: white,
-                                fontSize: 14,
-                            }}
-                        >
-                            By selecting Create Account below, I agree to <Text style={{ color: accentGreen, fontWeight: 800 }}>Terms of Service</Text> &{" "}
-                            <Text
-                                style={{
-                                    color: accentGreen,
-                                    fontWeight: 800,
-                                }}
-                            >
-                                Privacy Policy
-                            </Text>
-                        </Text>
-                        <Button children={"Create account"} onPress={onSubmitPress} loading={loading} />
+                        <Formik initialValues={{ fullName: "", email: "", password: "", rePassword: "" }} validationSchema={validationSchema} onSubmit={(values) => onSubmitPress(values)}>
+                            {({ values, handleChange, errors, setFieldTouched, touched, isValid, handleSubmit }) => (
+                                <>
+                                    <TextInput
+                                        placeholder="Full name"
+                                        value={values.fullName}
+                                        onBlur={() => setFieldTouched("fullName")}
+                                        onChangeText={handleChange("fullName")}
+                                        style={{
+                                            borderRadius: 8,
+                                        }}
+                                    />
+                                    {errors.fullName && touched.fullName && <Text style={{ fontSize: 12, color: "red" }}>{errors.fullName}</Text>}
+                                    <TextInput
+                                        placeholder="Email"
+                                        value={values.email}
+                                        onChangeText={handleChange("email")}
+                                        onBlur={() => setFieldTouched("email")}
+                                        keyboardType="email-address"
+                                        style={{
+                                            marginTop: 10,
+                                            borderRadius: 8,
+                                        }}
+                                        autoCapitalize="none"
+                                    />
+                                    {errors.email && touched.email && <Text style={{ fontSize: 12, color: "red" }}>{errors.email}</Text>}
+                                    <TextInput
+                                        placeholder="Password"
+                                        value={values.password}
+                                        onChangeText={handleChange("password")}
+                                        onBlur={() => setFieldTouched("password")}
+                                        right={
+                                            <TextInput.Icon
+                                                icon={hidden ? "eye" : "eye-off"}
+                                                onPress={() => {
+                                                    setHidden((prev) => !prev);
+                                                    Keyboard.dismiss();
+                                                }}
+                                            />
+                                        }
+                                        secureTextEntry={hidden}
+                                        style={{
+                                            marginTop: 10,
+                                            borderRadius: 8,
+                                        }}
+                                    />
+                                    {errors.password && touched.password && <Text style={{ fontSize: 12, color: "red" }}>{errors.password}</Text>}
+                                    <TextInput
+                                        placeholder="Re-password"
+                                        value={values.rePassword}
+                                        onChangeText={handleChange("rePassword")}
+                                        onBlur={() => setFieldTouched("rePassword")}
+                                        right={
+                                            <TextInput.Icon
+                                                icon={hidden ? "eye" : "eye-off"}
+                                                onPress={() => {
+                                                    setHidden((prev) => !prev);
+                                                    Keyboard.dismiss();
+                                                }}
+                                            />
+                                        }
+                                        secureTextEntry={hidden}
+                                        style={{
+                                            marginTop: 10,
+                                            borderRadius: 8,
+                                        }}
+                                    />
+                                    {errors.rePassword && touched.rePassword && <Text style={{ fontSize: 12, color: "red" }}>{errors.rePassword}</Text>}
+                                    <Text
+                                        style={{
+                                            marginTop: 16,
+                                            color: white,
+                                            fontSize: 14,
+                                        }}
+                                    >
+                                        By selecting Create Account below, I agree to <Text style={{ color: accentGreen, fontWeight: 800 }}>Terms of Service</Text> &{" "}
+                                        <Text
+                                            style={{
+                                                color: accentGreen,
+                                                fontWeight: 800,
+                                            }}
+                                        >
+                                            Privacy Policy
+                                        </Text>
+                                    </Text>
+                                    <Button children={"Create account"} onPress={handleSubmit} loading={loading} />
+                                </>
+                            )}
+                        </Formik>
                         <View
                             style={{
                                 flexDirection: "row",
