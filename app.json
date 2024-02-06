@@ -1,32 +1,35 @@
 {
-    "expo": {
-        "name": "BookReader",
-        "slug": "BookReader",
-        "version": "1.0.0",
-        "orientation": "portrait",
-        "icon": "./assets/icon.png",
-        "sdkVersion": "49.0.0",
-        "userInterfaceStyle": "automatic",
-        "splash": {
-            "image": "./assets/Splash_Screens.png",
-            "resizeMode": "cover",
-            "backgroundColor": "#ffffff"
-        },
-        "assetBundlePatterns": ["**/*"],
-        "ios": {
-            "supportsTablet": true
-        },
-        "android": {
-            "package": "com.bookreader",
-            "versionCode": 1
-        },
-        "web": {
-            "favicon": "./assets/favicon.png"
-        },
-        "extra": {
-            "eas": {
-                "projectId": "13cf0dca-c92f-4719-9905-9c63df440b54"
-            }
-        }
-    }
+  "expo": {
+    "name": "BookReader",
+    "slug": "bookreader",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "sdkVersion": "49.0.0",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/Splash_Screens.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.bookreader",
+      "versionCode": 1
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f62c4345-4fbb-45f0-afe2-9fe2f17ad43d"
+      }
+    },
+    "owner": "bookreaderteam"
+  }
 }
