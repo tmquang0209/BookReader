@@ -49,7 +49,7 @@ export const LastBookRead = ({ user }) => {
                                 </LinearGradient>
                             </ImageBackground>
                             <View style={{ marginLeft: 15, marginTop: 16, flex: 1 }}>
-                                <Text style={styles.itemBookName}>{data?.title}</Text>
+                                <Text style={styles.itemBookName} numberOfLines={1}>{data?.title}</Text>
                                 <Text style={styles.itemBookAuthor}>{data?.authors && data?.authors[0] && data?.authors[0]?.name}</Text>
                                 <View style={{ flexDirection: "row", alignItems: "center", height: 15, marginTop: 8 }}></View>
                                 <View style={{ marginRight: 10, marginTop: 16 }}>
