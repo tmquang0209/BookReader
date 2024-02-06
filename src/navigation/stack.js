@@ -23,6 +23,7 @@ import CreateChallenge from "../screen/CreateChallenge";
 import UpdateChallenge from "../screen/UpdateChallenge";
 import Dictionary from "../screen/Dictionary";
 import WordDetail from "../screen/WordDetail";
+import ChangePassword from "../screen/ChangePassword";
 
 const StackNav = (props) => {
     const { loggedIn, autoLogin, getCatList, localStorageCheck, categories } = props;
@@ -63,20 +64,21 @@ const StackNav = (props) => {
                 headerShown: false,
             }}
         >
+            <Stack.Screen name="GetStarted" component={GetStarted} />
             {!loggedIn && (
                 <Stack.Group>
-                    <Stack.Screen name="GetStarted" component={GetStarted} />
                     <Stack.Screen name="Signup" component={Signup} />
-                    <Stack.Screen name="SelectGenres" component={SelectGenres} />
                     <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
                     <Stack.Screen name="VerifyCode" component={VerifyCode} />
                     <Stack.Screen name="SetPassword" component={SetPassword} />
                 </Stack.Group>
             )}
 
+            <Stack.Screen name="bottomTab" component={BottomTab} />
+            <Stack.Screen name="SelectGenres" component={SelectGenres} />
             {loggedIn && (
                 <Stack.Group>
-                    <Stack.Screen name="bottomTab" component={BottomTab} />
+                    <Stack.Screen name="ChangePassword" component={ChangePassword} />
                     <Stack.Screen name="BookDetail" component={BookDetail} />
                     <Stack.Screen name="BookList" component={BookList} />
                     <Stack.Screen name="Reading" component={Reading} />

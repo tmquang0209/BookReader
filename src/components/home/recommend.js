@@ -23,7 +23,7 @@ const ItemView = ({ item }) => {
                 <Text style={styles.itemBookName} ellipsizeMode="tail" numberOfLines={1}>
                     {item.title}
                 </Text>
-                <Text style={styles.itemBookAuthor}>{item.authors?.name}</Text>
+                <Text style={styles.itemBookAuthor}>{item.authors[0]?.name}</Text>
             </View>
         </TouchableOpacity>
     );
@@ -42,24 +42,24 @@ const ListItem = ({ list }) => (
 
 export const ForYou = ({ list }) => {
     const navigation = useNavigation();
-
-    const reducedList = list ? list.filter((item, index) => index <= 10) : [];
+    const reducedList = list.length !== 0 ? list.filter((item, index) => index <= 10) : [];
     return (
-        <View style={styles.itemBox}>
+        <>
             <View style={styles.headerContainer}>
                 <Text style={styles.headerItem}>For you</Text>
-                <View style={styles.showAllContainer}>
-                    <TouchableOpacity onPress={() => navigation.navigate("BookList", { bookList: list })}>
-                        <Text style={styles.showAllText}>
-                            Show all <NextIcon />
-                        </Text>
+                <>
+                    <TouchableOpacity onPress={() => navigation.navigate("BookList", { bookList: list })} style={styles.showAllContainer}>
+                        <Text style={styles.showAllText}>Show all</Text>
+                        <NextIcon />
                     </TouchableOpacity>
+                </>
+            </View>
+            <View style={styles.itemBox}>
+                <View>
+                    <ListItem list={reducedList} />
                 </View>
             </View>
-            <View>
-                <ListItem list={reducedList} />
-            </View>
-        </View>
+        </>
     );
 };
 
@@ -67,20 +67,21 @@ export const Trending = ({ list }) => {
     const navigation = useNavigation();
     const reducedList = list ? list.filter((item, index) => index <= 10) : [];
     return (
-        <View style={styles.itemBox}>
+        <>
             <View style={styles.headerContainer}>
                 <Text style={styles.headerItem}>Trending</Text>
-                <View style={styles.showAllContainer}>
-                    <TouchableOpacity onPress={() => navigation.navigate("BookList", { bookList: list })}>
-                        <Text style={styles.showAllText}>
-                            Show all <NextIcon />
-                        </Text>
+                <>
+                    <TouchableOpacity onPress={() => navigation.navigate("BookList", { bookList: list })} style={styles.showAllContainer}>
+                        <Text style={styles.showAllText}>Show all</Text>
+                        <NextIcon />
                     </TouchableOpacity>
+                </>
+            </View>
+            <View style={styles.itemBox}>
+                <View>
+                    <ListItem list={reducedList} />
                 </View>
             </View>
-            <View>
-                <ListItem list={reducedList} />
-            </View>
-        </View>
+        </>
     );
 };

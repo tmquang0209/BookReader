@@ -1,41 +1,47 @@
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, Text, View, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Alert, KeyboardAvoidingView, Platform } from "react-native";
 import styles from "../components/common/styles";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Formik } from "formik";
+import * as Yup from "yup";
+
 import { LogoWithText } from "../components/logo";
 import { Title } from "../components/header";
 import { white, accentGreen } from "../constants/colors";
 import { TextInput } from "react-native-paper";
 import { Button } from "../components/button";
 import { BackButton } from "../components/header";
+
 import { fetchForgotPassword } from "../API/authUser";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
+const validationSchema = Yup.object().shape({
+    email: Yup.string().email("Invalid email").required("Email is required"),
+    email: Yup.string().max(40, "Email is too long").required("Email is required"),
+});
 
 const ForgotPassword = ({ navigation }) => {
     const [loading, setLoading] = useState(false);
-    const [email, setEmail] = useState("");
 
-    const onSubmitPress = async () => {
+    const onSubmitPress = async (values) => {
         setLoading((prev) => !prev);
 
-        if (email === "") {
-            Alert.alert("Error", "Please fill in all the information.");
-            setLoading((prev) => !prev);
-            return;
-        }
-
-        const result = await fetchForgotPassword(email);
+        const result = await fetchForgotPassword(values.email);
 
         if (result.success) {
             Alert.alert("Successful!", result.message, [
                 {
                     text: "OK",
                     onPress: () => {
-                        navigation.navigate("VerifyCode", { email });
+                        navigation.navigate("VerifyCode", { email: values.email });
                         setLoading((prev) => !prev);
                     },
                 },
             ]);
         }
+    };
+
+    const onLoginPress = () => {
+        navigation.navigate("GetStarted");
     };
 
     useEffect(() => {}, []);
@@ -68,15 +74,26 @@ const ForgotPassword = ({ navigation }) => {
                         >
                             Forgot your password? Don't worry, enter your email to reset your current password.
                         </Text>
-                        <TextInput
-                            placeholder="Email"
-                            style={{
-                                marginTop: 20,
-                                borderRadius: 8,
-                            }}
-                            onChangeText={(text) => setEmail(text)}
-                        />
-                        <Button children={"Submit"} loading={loading} onPress={onSubmitPress} />
+                        <Formik initialValues={{ email: "" }} validationSchema={validationSchema} onSubmit={(values) => onSubmitPress(values)}>
+                            {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+                                <View>
+                                    <TextInput
+                                        placeholder="Email"
+                                        style={{
+                                            marginTop: 20,
+                                            borderRadius: 8,
+                                        }}
+                                        onChangeText={handleChange("email")}
+                                        onBlur={() => handleBlur("email")}
+                                        value={values.email}
+                                    />
+                                    {errors.email && touched.email && <Text style={{ color: "red" }}>{errors.email}</Text>}
+                                    <Text style={{ color: "red" }}>{errors.email && touched.email && errors.email}</Text>
+                                    <Button children={"Submit"} loading={loading} onPress={handleSubmit} />
+                                </View>
+                            )}
+                        </Formik>
+
                         <View
                             style={{
                                 justifyContent: "center",
@@ -94,16 +111,16 @@ const ForgotPassword = ({ navigation }) => {
                                     fontSize: 14,
                                 }}
                             >
-                                Don't have an account?{" "}
+                                Already have an account?{" "}
                             </Text>
-                            <TouchableOpacity onPress={() => onSignupPress()}>
+                            <TouchableOpacity onPress={() => onLoginPress()}>
                                 <Text
                                     style={{
                                         color: accentGreen,
                                         fontFamily: "SVN-Gotham-Bold",
                                     }}
                                 >
-                                    Sign up
+                                    Login
                                 </Text>
                             </TouchableOpacity>
                         </View>

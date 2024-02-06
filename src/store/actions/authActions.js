@@ -1,4 +1,4 @@
-import { LOGIN_SUCCESS, LOGIN_FAIL, LOGIN_PROCESS, SIGNUP_PROCESS, SIGNUP_FAIL, SIGNUP_SUCCESS, EMPTY_AUTH, AUTO_LOGIN, LOGOUT, UPDATE_INFO } from "../actionTypes";
+import { LOGIN_SUCCESS, LOGIN_FAIL, LOGIN_PROCESS, SIGNUP_PROCESS, SIGNUP_FAIL, SIGNUP_SUCCESS, EMPTY_AUTH, AUTO_LOGIN, LOGOUT, UPDATE_INFO, UPDATE_PASSWORD_SUCCESS } from "../actionTypes";
 import { login, register } from "../../API/authUser";
 import { getAuthStorage, removeAuthStorage, setAuthStorage } from "../../components/localStorage";
 
@@ -105,6 +105,17 @@ export const updateInfo = (info) => {
         try {
             setAuthStorage(info);
             dispatch({ type: UPDATE_INFO, payload: { userData: info } });
+        } catch (err) {
+            console.error(err);
+        }
+    };
+};
+
+export const updatePassword = (info) => {
+    return async (dispatch) => {
+        try {
+            setAuthStorage(info);
+            dispatch({ type: UPDATE_PASSWORD_SUCCESS, payload: { userData: info } });
         } catch (err) {
             console.error(err);
         }
