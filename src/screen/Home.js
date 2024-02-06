@@ -50,7 +50,7 @@ const HomeView = (props) => {
             </View>
             <View style={styles.flexView1}>
                 <Image style={styles.bannerImage} source={banner} />
-                <LastBookRead user={user} />
+                <LastBookRead user={user} /> 
                 <ForYou list={forYouList} />
                 <Trending list={trendingList} />
             </View>
