@@ -13,17 +13,18 @@ import { LogoWithoutText } from "../components/logo";
 import { Title } from "../components/header";
 
 const validationSchema = Yup.object().shape({
-    fullName: Yup.string().required("Full name is required"),
-    fullName: Yup.string().max(50, "Full name must be at most 50 characters"),
-    fullName: Yup.string().matches(/^[a-zA-Z\s]+$/, "Full name must contain only letters"),
+    fullName: Yup.string()
+        .required("Full name is required")
+        .max(50, "Full name must be at most 50 characters")
+        .matches(/^[a-zA-Z\s]+$/, "Full name must contain only letters"),
     // fullName: Yup.string().matches(/^[a-zA-Z]+$/, "Full name must contain at least one letter"),
-    email: Yup.string().email("Invalid email").required("Email is required"),
-    email: Yup.string().max(40, "Email must be at most 40 characters"),
-    password: Yup.string().required("Password is required"),
-    password: Yup.string().min(8, "Password must be at least 8 characters"),
-    password: Yup.string().matches(/[a-zA-Z]/, "Password must contain at least one letter"),
-    password: Yup.string().matches(/[0-9]/, "Password must contain at least one number"),
-    password: Yup.string().matches(/[!@#$%^&*(),.?":{}|<>]/, "Password must contain at least one special character"),
+    email: Yup.string().email("Invalid email").required("Email is required").max(40, "Email must be at most 40 characters"),
+    password: Yup.string()
+        .required("Password is required")
+        .min(8, "Password must be at least 8 characters")
+        .matches(/[a-zA-Z]/, "Password must contain at least one letter")
+        .matches(/[0-9]/, "Password must contain at least one number")
+        .matches(/[!@#$%^&*(),.?":{}|<>]/, "Password must contain at least one special character"),
     rePassword: Yup.string().oneOf([Yup.ref("password"), null], "Passwords must match"),
 });
 
