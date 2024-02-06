@@ -100,10 +100,10 @@ export default styles = StyleSheet.create({
     },
 
     itemBookName: {
-        marginTop: 8,
+        marginRight: 10,
         color: white,
         fontFamily: "SVN-Gotham-Bold",
-        fontSize: 12,
+        fontSize: 15,
     },
 
     itemBookAuthor: {
