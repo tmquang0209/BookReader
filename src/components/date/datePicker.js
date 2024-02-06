@@ -32,7 +32,6 @@ const DatePickerIOS = ({ date, mode, onChange, onClose, minimumDate, maximumDate
 };
 
 const DatePicker = ({ value, mode, onChange, onShow, minimumDate, maximumDate }) => {
-    console.log(value, "value");
     const [date, setDate] = useState(value || new Date(1970, 1, 1));
 
     const defaultMinDate = minimumDate ? minimumDate : new Date(1900, 1, 1);
