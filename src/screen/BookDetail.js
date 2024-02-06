@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Image, ImageBackground, ScrollView, View, Text, TouchableOpacity, SafeAreaView, Dimensions } from "react-native";
 import { Feather, FontAwesome } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -10,13 +10,13 @@ import { BackButton } from "../components/header";
 import { CategoryTypeItem } from "../components/item/categoryType";
 import { Button } from "../components/button";
 import { connect } from "react-redux";
-import { updateStatusBook } from "../API/book";
+import { getBookStatus, updateStatusBook } from "../API/book";
 import { savedBook } from "../constants/text";
 
 const CategoryList = ({ subjects }) => (
     <View style={{ flex: 1, flexDirection: "row", flexWrap: "wrap" }}>
         {subjects.map((item, index) => (
-            <CategoryTypeItem title={item} key={index} />
+            <CategoryTypeItem title={item} key={index} onPress={() => console.log(123)} />
         ))}
     </View>
 );
@@ -49,9 +49,19 @@ const BookDetail = ({ user, route, navigation }) => {
 
     const saveBook = async () => {
         console.log("save book");
+        setBookmark((prev) => !prev);
         const response = await updateStatusBook(user.idUser, bookData.id, savedBook);
-        if (response.success) setBookmark(true);
+        console.log(response);
     };
+
+    const checkBookMark = async () => {
+        const response = await getBookStatus(user.idUser, bookData.id);
+        if (response.success) setBookmark(response.result !== null);
+    };
+
+    useEffect(() => {
+        checkBookMark();
+    }, []);
 
     return (
         <SafeAreaView style={styles.container}>
