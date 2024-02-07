@@ -10,6 +10,10 @@ import { TitleWithinUnderLine } from "../components/header";
 import { accentGreen, white } from "../constants/colors";
 import { dictionaryIcon, logoutIcon, userIcon } from "../constants/images";
 import { logoutUser } from "../store/actions/authActions";
+import { removeAuthStorage } from "../components/localStorage";
+
+import { CredentialContext } from "../components/context/credential";
+import { useContext } from "react";
 
 const MenuItem = ({ iconLeft, title, iconRight, onPress }) => {
     return (
@@ -39,6 +43,7 @@ const MenuItem = ({ iconLeft, title, iconRight, onPress }) => {
 
 const Profile = (props) => {
     const { user, logoutUser } = props;
+    const { storedCredentials, setStoredCredentials } = useContext(CredentialContext);
     const navigation = useNavigation();
 
     const onProfileDetail = () => {
@@ -58,8 +63,19 @@ const Profile = (props) => {
     };
 
     const onLogoutPress = () => {
-        logoutUser();
-        navigation.navigate("GetStarted");
+        removeAuthStorage()
+            .then(() => {
+                logoutUser();
+            })
+            .then(() => {
+                setStoredCredentials({});
+            })
+            .then(() => {
+                navigation.navigate("GetStarted");
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     };
 
     return (

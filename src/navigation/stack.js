@@ -25,8 +25,13 @@ import Dictionary from "../screen/Dictionary";
 import WordDetail from "../screen/WordDetail";
 import ChangePassword from "../screen/ChangePassword";
 
+import { CredentialContext } from "../components/context/credential";
+import { getAuthStorage } from "../components/localStorage";
+
 const StackNav = (props) => {
-    const { loggedIn, autoLogin, getCatList, localStorageCheck, categories } = props;
+    const { loggedIn, autoLogin, getCatList, localStorageCheck } = props;
+
+    const { storedCredentials, setStoredCredentials } = React.useContext(CredentialContext);
 
     const Stack = createStackNavigator();
 
@@ -37,13 +42,28 @@ const StackNav = (props) => {
     // Load font
     const [fontsLoaded] = useFonts(fontsList);
 
+    const checkLoginCredentials = async () => {
+        const auth = await getAuthStorage();
+        setStoredCredentials(auth);
+    };
+
     useEffect(() => {
+        const prepare = async () => {
+            await SplashScreen.preventAutoHideAsync();
+            try {
+                await autoLogin();
+                checkLoginCredentials();
+            } catch (error) {
+                console.log("Error", error.message);
+            } finally {
+                await SplashScreen.hideAsync();
+            }
+        };
+        prepare();
         getList();
     }, []);
 
     const onLayoutRootView = useCallback(async () => {
-        await autoLogin();
-
         // Only hide SplashScreen if fonts are loaded and localStorageCheck is not "0"
         if (fontsLoaded && localStorageCheck !== "0") {
             await SplashScreen.hideAsync();
@@ -59,37 +79,42 @@ const StackNav = (props) => {
     }
 
     return (
-        <Stack.Navigator
-            screenOptions={{
-                headerShown: false,
-            }}
-        >
-            <Stack.Screen name="GetStarted" component={GetStarted} />
-            {!loggedIn && (
-                <Stack.Group>
-                    <Stack.Screen name="Signup" component={Signup} />
-                    <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-                    <Stack.Screen name="VerifyCode" component={VerifyCode} />
-                    <Stack.Screen name="SetPassword" component={SetPassword} />
-                </Stack.Group>
+        <CredentialContext.Consumer>
+            {({ storedCredentials }) => (
+                <>
+                    <Stack.Navigator
+                        screenOptions={{
+                            headerShown: false,
+                        }}
+                        initialRouteName={loggedIn ? "bottomTab" : "GetStarted"}
+                    >
+                        {storedCredentials ? (
+                            <Stack.Group>
+                                <Stack.Screen name="ChangePassword" component={ChangePassword} />
+                                <Stack.Screen name="BookDetail" component={BookDetail} />
+                                <Stack.Screen name="BookList" component={BookList} />
+                                <Stack.Screen name="Reading" component={Reading} />
+                                <Stack.Screen name="ProfileDetails" component={ProfileDetails} />
+                                <Stack.Screen name="Dictionary" component={Dictionary} />
+                                <Stack.Screen name="CreateChallenge" component={CreateChallenge} />
+                                <Stack.Screen name="UpdateChallenge" component={UpdateChallenge} />
+                                <Stack.Screen name="WordDetail" component={WordDetail} />
+                            </Stack.Group>
+                        ) : (
+                            <Stack.Group>
+                                <Stack.Screen name="Signup" component={Signup} />
+                                <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+                                <Stack.Screen name="VerifyCode" component={VerifyCode} />
+                                <Stack.Screen name="SetPassword" component={SetPassword} />
+                            </Stack.Group>
+                        )}
+                        <Stack.Screen name="bottomTab" component={BottomTab} />
+                        <Stack.Screen name="GetStarted" component={GetStarted} />
+                        <Stack.Screen name="SelectGenres" component={SelectGenres} />
+                    </Stack.Navigator>
+                </>
             )}
-
-            <Stack.Screen name="bottomTab" component={BottomTab} />
-            <Stack.Screen name="SelectGenres" component={SelectGenres} />
-            {loggedIn && (
-                <Stack.Group>
-                    <Stack.Screen name="ChangePassword" component={ChangePassword} />
-                    <Stack.Screen name="BookDetail" component={BookDetail} />
-                    <Stack.Screen name="BookList" component={BookList} />
-                    <Stack.Screen name="Reading" component={Reading} />
-                    <Stack.Screen name="ProfileDetails" component={ProfileDetails} />
-                    <Stack.Screen name="Dictionary" component={Dictionary} />
-                    <Stack.Screen name="CreateChallenge" component={CreateChallenge} />
-                    <Stack.Screen name="UpdateChallenge" component={UpdateChallenge} />
-                    <Stack.Screen name="WordDetail" component={WordDetail} />
-                </Stack.Group>
-            )}
-        </Stack.Navigator>
+        </CredentialContext.Consumer>
     );
 };
 
