@@ -1,7 +1,8 @@
 import axios from "axios";
 
-import { API_URI } from "./url";
+import { API_URI, BOOK_URI } from "./url";
 import { inProcess } from "../constants/text";
+import { filterAndMapBooks } from "../utils/utilsFilterMapBook";
 
 export const getInterestBook = async (userId) => {
     try {
@@ -15,7 +16,7 @@ export const getInterestBook = async (userId) => {
 };
 
 export const search = async (keyword, topic = "all") => {
-    try {
+    /* try {
         const response = await axios.post(`${API_URI}/api/search`, {
             bookName: keyword,
             topic: topic,
@@ -25,6 +26,19 @@ export const search = async (keyword, topic = "all") => {
         return responseData;
     } catch (err) {
         console.log(err);
+        return err.response.data;
+    } */
+    try {
+        const params = topic === "all" ? `search=${keyword}` : `search=${keyword}&topic=${topic}`;
+        const response = await axios.get(`${BOOK_URI}?${params}`);
+
+        const jsonData = response.data;
+
+        const fetchedData = filterAndMapBooks(jsonData.results);
+
+        return fetchedData;
+    } catch (error) {
+        console.error(error);
         return err.response.data;
     }
 };
@@ -71,12 +85,14 @@ export const getLastBookRead = async (userId) => {
 };
 
 export const getTrendingBook = async () => {
-    const url = `${API_URI}/api/getTrending`;
+    const url = `${BOOK_URI}?sort=ascendingdescendingpopular`;
     try {
         const response = await axios.get(url);
         // Assuming a successful response with a JSON body
         const responseData = response.data;
-        return responseData;
+        const fetchedData = filterAndMapBooks(responseData.results);
+
+        return fetchedData;
     } catch (error) {
         // Handle errors
         console.error("Error:", error.message);
@@ -104,7 +120,7 @@ export const updateStatusBook = async (userId, bookId, status) => {
 };
 
 export const getBookStatus = async (userId, bookId) => {
-    const url = `${API_URI}/api/getBookmark/${userId}/${bookId}`;
+    const url = `${API_URI} /api/getBookmark / ${userId} /${bookId}`;
 
     try {
         const response = await axios.get(url);
