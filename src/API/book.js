@@ -88,16 +88,25 @@ export const getTrendingBook = async () => {
     const url = `${BOOK_URI}?sort=ascendingdescendingpopular`;
     try {
         const response = await axios.get(url);
-        // Assuming a successful response with a JSON body
         const responseData = response.data;
         const fetchedData = filterAndMapBooks(responseData.results);
 
         return fetchedData;
     } catch (error) {
-        // Handle errors
         console.error("Error:", error.message);
         return error.response.data;
     }
+    /* const url = `${API_URI}/api/getTrending`;
+    try {
+        const response = await axios.get(url);
+        // Assuming a successful response with a JSON body
+        const responseData = response.data;
+        return responseData;
+    } catch (error) {
+        // Handle errors
+        console.error("Error:", error.message);
+        return error.response.data;
+    } */
 };
 
 export const updateStatusBook = async (userId, bookId, status) => {
