@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { FlatList, SafeAreaView, View, Text, TouchableOpacity, RefreshControl } from "react-native";
+import React, { useEffect, useState } from "react";
+import { FlatList, SafeAreaView, View, Text, TouchableOpacity, RefreshControl, Animated } from "react-native";
 import { connect } from "react-redux";
 import { FontAwesome5 } from "@expo/vector-icons";
 import * as Animatable from "react-native-animatable";
@@ -11,6 +11,32 @@ import { TitleWithinUnderLine } from "../components/header";
 import { accentGreen, black, gray3, white } from "../constants/colors";
 import { GridItem } from "../components/item/itemView";
 import { completed, inProcess, savedBook } from "../constants/text";
+import { LinearGradient } from "react-native-svg";
+import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
+
+const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
+
+const ShimmerItem = () => {
+    const thumbnailRef = React.useRef();
+    const titleRef = React.useRef();
+    const authorRef = React.useRef();
+    const visible = false;
+
+    useEffect(() => {
+        const facebookAnimated = Animated.stagger(400, [Animated.parallel([thumbnailRef.current?.getAnimated(), titleRef.current?.getAnimated(), authorRef.current?.getAnimated()])]);
+        Animated.loop(facebookAnimated).start();
+    }, []);
+
+    return (
+        <View style={{ width: "50%", padding: 10 }}>
+            <ShimmerPlaceholder ref={thumbnailRef} shimmerColors={["#333", "#222", "#111"]} style={{ backgroundColor: black, height: 250, width: "100%" }} visible={visible} />
+
+            <ShimmerPlaceholder ref={titleRef} width={128} shimmerColors={["#333", "#222", "#111"]} style={{ backgroundColor: black, marginTop: 5 }} visible={visible} />
+
+            <ShimmerPlaceholder ref={authorRef} width={128} shimmerColors={["#333", "#222", "#111"]} style={{ backgroundColor: black, marginTop: 5 }} visible={visible} />
+        </View>
+    );
+};
 
 const Library = (props) => {
     const { user } = props;
@@ -54,6 +80,7 @@ const Library = (props) => {
         <SafeAreaView style={styles.container}>
             <View style={{ margin: 10 }}>
                 <TitleWithinUnderLine title={"My Library"} />
+
                 <FlatList
                     showsHorizontalScrollIndicator={false}
                     horizontal
@@ -92,6 +119,26 @@ const Library = (props) => {
                     flex: 1,
                 }}
             >
+                {!bookList.length && (
+                    <View
+                        style={{
+                            flex: 1,
+                            flexDirection: "row",
+                            flexWrap: "wrap",
+                        }}
+                    >
+                        <ShimmerItem />
+                        <ShimmerItem />
+                        <ShimmerItem />
+                        <ShimmerItem />
+                        <ShimmerItem />
+                        <ShimmerItem />
+                        <ShimmerItem />
+                        <ShimmerItem />
+                        <ShimmerItem />
+                        <ShimmerItem />
+                    </View>
+                )}
                 {bookList && (
                     <FlatList
                         refreshControl={<RefreshControl refreshing={refresing} onRefresh={onRefresh} colors={["#000"]} tintColor={"#000"} />}

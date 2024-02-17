@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, ImageBackground, ScrollView, View, Text, TouchableOpacity, SafeAreaView, Dimensions } from "react-native";
 import { Feather, FontAwesome } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -45,7 +45,7 @@ const AuthorDetail = ({ author }) => {
 
 const BookDetail = ({ user, route, navigation }) => {
     const { bookData } = route.params;
-    const [bookmark, setBookmark] = React.useState(false);
+    const [bookmark, setBookmark] = useState(false);
 
     const saveBook = async () => {
         console.log("save book");

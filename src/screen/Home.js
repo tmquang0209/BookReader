@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Image, RefreshControl, SafeAreaView, ScrollView, Text, View } from "react-native";
+import { Animated, Image, RefreshControl, SafeAreaView, ScrollView, Text, View } from "react-native";
 import { useNetInfo } from "@react-native-community/netinfo";
 import styles from "../components/common/styles";
 import { NoInternet } from "../components/internet";
-import { white } from "../constants/colors";
+import { bgDark, black, white } from "../constants/colors";
 import { Avatar } from "react-native-paper";
 import { connect } from "react-redux";
 
@@ -12,7 +12,10 @@ import { ForYou, Trending } from "../components/home/recommend";
 import { LastBookRead } from "../components/home/lastRead";
 import { banner } from "../constants/images";
 import { GreetingWithFullName } from "../components/home/greeting";
-import ShimmerPlaceholder from "../components/shimmer";
+import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
+import { LinearGradient } from "expo-linear-gradient";
+
+const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 
 const HomeView = (props) => {
     const { user } = props;
@@ -33,11 +36,6 @@ const HomeView = (props) => {
     };
 
     const [visible, setVisible] = useState(false);
-    useEffect(() => {
-        setTimeout(() => {
-            setVisible(true);
-        }, 5000);
-    }, []);
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
@@ -66,6 +64,7 @@ const HomeView = (props) => {
                     />
                 </View>
             </View>
+
             <View style={styles.flexView1}>
                 <Image style={styles.bannerImage} source={banner} />
                 <LastBookRead user={user} />

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, SafeAreaView, View, ScrollView } from "react-native";
+import { FlatList, SafeAreaView, View, ScrollView, Animated } from "react-native";
 import { connect } from "react-redux";
 import { ActivityIndicator, TextInput } from "react-native-paper";
+import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
+import { LinearGradient } from "expo-linear-gradient";
 
 import { search } from "../API/book";
 
@@ -10,6 +12,30 @@ import { useNavigation } from "@react-navigation/native";
 import { gray2, gray4, white, accentGreen } from "../constants/colors";
 import { CategoryTypeItem } from "../components/item/categoryType";
 import { ListItem } from "../components/item/itemView";
+
+const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
+
+const ShimmerItem = () => {
+    const thumbnailRef = React.useRef();
+    const titleRef = React.useRef();
+    const authorRef = React.useRef();
+    const visible = false;
+
+    useEffect(() => {
+        const facebookAnimated = Animated.stagger(400, [Animated.parallel([thumbnailRef.current?.getAnimated(), titleRef.current?.getAnimated(), authorRef.current?.getAnimated()])]);
+        Animated.loop(facebookAnimated).start();
+    }, []);
+
+    return (
+        <View style={{ margin: 10, flexDirection: "row", gap: 10 }}>
+            <ShimmerPlaceHolder ref={thumbnailRef} height={184} width={128} shimmerColors={["#333", "#222", "#111"]} style={{ backgroundColor: gray4 }} visible={visible} />
+            <View>
+                <ShimmerPlaceHolder ref={titleRef} width={128} shimmerColors={["#333", "#222", "#111"]} style={{ backgroundColor: gray4, marginTop: 5 }} visible={visible} />
+                <ShimmerPlaceHolder ref={authorRef} width={128} shimmerColors={["#333", "#222", "#111"]} style={{ backgroundColor: gray4, marginTop: 5 }} visible={visible} />
+            </View>
+        </View>
+    );
+};
 
 const BookList = (props) => {
     const { categories } = props;
@@ -40,6 +66,7 @@ const BookList = (props) => {
             const catActive = catList.find((item) => item.active === true);
             const getTopic = catActive ? catActive.name : "all";
 
+            setBookListItem(null);
             const response = await search(keyword, topic || getTopic);
             setBookListItem(response);
         } finally {
@@ -90,6 +117,21 @@ const BookList = (props) => {
                     ))}
                 </ScrollView>
             </View>
+            {!bookListItem && (
+                <ScrollView>
+                    <ShimmerItem />
+                    <ShimmerItem />
+                    <ShimmerItem />
+                    <ShimmerItem />
+                    <ShimmerItem />
+                    <ShimmerItem />
+                    <ShimmerItem />
+                    <ShimmerItem />
+                    <ShimmerItem />
+                    <ShimmerItem />
+                    <ShimmerItem />
+                </ScrollView>
+            )}
             <FlatList data={bookListItem} key={(item) => item.id} renderItem={({ item }) => <ListItem item={item} />} />
         </SafeAreaView>
     );

@@ -129,7 +129,7 @@ export const updateStatusBook = async (userId, bookId, status) => {
 };
 
 export const getBookStatus = async (userId, bookId) => {
-    const url = `${API_URI} /api/getBookmark / ${userId} /${bookId}`;
+    const url = `${API_URI}/api/getBookmark/${userId}/${bookId}`;
 
     try {
         const response = await axios.get(url);
