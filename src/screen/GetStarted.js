@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Keyboard, TouchableWithoutFeedback, View, Text, SafeAreaView, TouchableOpacity, Alert, ScrollView } from "react-native";
 import { TextInput } from "react-native-paper";
 import { connect } from "react-redux";
 import { Formik } from "formik";
 import * as yup from "yup";
+import { CredentialContext } from "../components/context/credential";
 
 import { loginUser, emptyAuth, autoLogin } from "../store/actions/authActions";
 import styles from "../components/common/styles";
@@ -11,6 +12,7 @@ import { accentGreen, white } from "../constants/colors";
 import { LogoWithText } from "../components/logo";
 import { GoogleButton, Button } from "../components/button";
 import { LineOr } from "../components/common/line";
+import { getAuthStorage } from "../components/localStorage";
 
 const validationSchema = yup.object().shape({
     email: yup.string().email().required(),
@@ -18,7 +20,10 @@ const validationSchema = yup.object().shape({
 });
 
 const GetStarted = (props) => {
-    const { loggedIn, err, loginUser, navigation, emptyAuth, autoLogin } = props;
+    const { loggedIn, err, loginUser, navigation, emptyAuth, autoLogin, user } = props;
+
+    // context
+    const { storedCredentials, setStoredCredentials } = useContext(CredentialContext);
 
     const [loading, setLoading] = useState(false);
     const [hidden, setHidden] = useState(true);
@@ -28,7 +33,14 @@ const GetStarted = (props) => {
 
         try {
             await loginUser({ ...values });
-            navigation.navigate("bottomTab");
+            const data = await getAuthStorage();
+            if (data) {
+                console.log(data);
+                persistLogin(data);
+                if (storedCredentials) {
+                    navigation.navigate("bottomTab", { screen: "Home" });
+                }
+            }
         } catch (error) {
             console.log("Error", error.message);
         }
@@ -68,16 +80,20 @@ const GetStarted = (props) => {
 
     useEffect(() => {
         renderErr();
-    }, [err, loggedIn]);
+    }, [err]);
 
     useEffect(() => {
         const checkLoginStatus = async () => {
             await autoLogin();
-            if (loggedIn) navigation.navigate("bottomTab");
+            if (loggedIn) navigation.navigate("bottomTab", { screen: "Home" });
         };
 
         checkLoginStatus();
-    }, []);
+    }, [loggedIn]);
+
+    const persistLogin = async (userData) => {
+        setStoredCredentials(userData);
+    };
 
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -184,6 +200,7 @@ const GetStarted = (props) => {
 
 const mapStateToProps = (state) => {
     return {
+        user: state.auth.user,
         err: state.auth.err,
         loggedIn: state.auth.loggedIn,
     };

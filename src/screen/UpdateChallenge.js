@@ -48,11 +48,12 @@ const updateChallenge = ({ navigation, user, route }) => {
         console.log("delete challenge");
         setDeleteProgress(true);
         const response = await deleteChallenge(user.idUser, challenge.idChallenge);
+        console.log(response);
         if (response.success) {
             Alert.alert("Success", "Delete challenge successfully");
             navigation.goBack();
         } else {
-            Alert.alert("Error", response.error);
+            Alert.alert("Error", response.error || response.message);
         }
         setDeleteProgress(false);
     };

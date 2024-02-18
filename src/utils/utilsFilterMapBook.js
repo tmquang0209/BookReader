@@ -1,5 +1,7 @@
 const axios = require("axios");
+const { BOOK_URI } = require("../API/url");
 const linkBook = "https://gutendex.com/books/";
+
 function filterAndMapBooks(results) {
     return results
         .map((book) => {
@@ -27,7 +29,8 @@ async function getBookDetailById(bookIds) {
     try {
         const bookIdsArray = Array.isArray(bookIds) ? bookIds : [bookIds];
         const bookIdsParam = bookIdsArray.length > 1 ? bookIdsArray.join(",") : bookIdsArray[0];
-        const response = await axios.get(linkBook, {
+
+        const response = await axios.get(BOOK_URI, {
             params: {
                 ids: bookIdsParam,
             },

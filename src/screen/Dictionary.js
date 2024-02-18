@@ -1,47 +1,13 @@
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { FlatList, Image, SafeAreaView, Text, Touchable, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 
 import styles from "../components/common/styles";
 import { BackButton, Title } from "../components/header";
-import { cartoonLearningEnglish } from "../constants/images";
 import { gray3, white } from "../constants/colors";
 import { deleteWord, getWordList } from "../API/dictionary";
 import { DictionaryModal } from "../components/modal";
-
-const EmptyDictionary = () => {
-    return (
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-            <Image
-                style={{
-                    width: 250,
-                    height: 250,
-                }}
-                source={cartoonLearningEnglish}
-            />
-            <Text
-                style={{
-                    color: white,
-                    fontFamily: "SVN-Gotham-Bold",
-                    fontSize: 20,
-                }}
-            >
-                No word found!
-            </Text>
-            <Text
-                style={{
-                    color: white,
-                    fontFamily: "SVN-Gotham-Thin",
-                    fontSize: 16,
-                    textAlign: "center",
-                    margin: 20,
-                }}
-            >
-                Add new words from the book to review whenever needed
-            </Text>
-        </View>
-    );
-};
+import EmptyData from "../components/empty";
 
 const WordItem = ({ item, showModal }) => {
     return (
@@ -112,7 +78,7 @@ const Dictionary = ({ user }) => {
                         data={wordList}
                         key={(item, index) => index.toString()}
                         renderItem={({ item, index }) => <WordItem item={item} showModal={showModal} />}
-                        ListEmptyComponent={<EmptyDictionary />}
+                        ListEmptyComponent={<EmptyData header="No word found!" message="Add new words from the book to review whenever needed" />}
                     />
                 </View>
             </SafeAreaView>

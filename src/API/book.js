@@ -1,9 +1,8 @@
 import axios from "axios";
 
-import { API_URI } from "./url";
+import { API_URI, BOOK_URI } from "./url";
 import { inProcess } from "../constants/text";
 import { filterAndMapBooks } from "../utils/utilsFilterMapBook";
-
 
 export const getInterestBook = async (userId) => {
     try {
@@ -18,6 +17,12 @@ export const getInterestBook = async (userId) => {
 };
 
 export const search = async (keyword, topic = "all") => {
+
+    /* try {
+        const response = await axios.post(`${API_URI}/api/search`, {
+            bookName: keyword,
+            topic: topic,
+        });
     try {
         const params = topic === "all" ? `search=${keyword}` : `search=${keyword}&topic=${topic}`;
         const response = await axios.get(`https://gutendex.com/books/?${params}`);
@@ -26,9 +31,21 @@ export const search = async (keyword, topic = "all") => {
 
         const fetchedData = filterAndMapBooks(jsonData.results);
         return fetchedData;
-
     } catch (err) {
         console.log(err);
+        return err.response.data;
+    } */
+    try {
+        const params = topic === "all" ? `search=${keyword}` : `search=${keyword}&topic=${topic}`;
+        const response = await axios.get(`${BOOK_URI}?${params}`);
+
+        const jsonData = response.data;
+
+        const fetchedData = filterAndMapBooks(jsonData.results);
+
+        return fetchedData;
+    } catch (error) {
+        console.error(error);
         return err.response.data;
     }
 };
@@ -75,17 +92,28 @@ export const getLastBookRead = async (userId) => {
 };
 
 export const getTrendingBook = async () => {
-    const url = `${API_URI}/api/getTrending`;
+    const url = `${BOOK_URI}?sort=popular`;
     try {
         const response = await axios.get(url);
-        // Assuming a successful response with a JSON body
         const responseData = response.data;
-        return responseData;
+        const fetchedData = filterAndMapBooks(responseData.results);
+
+        return fetchedData;
     } catch (error) {
-        // Handle errors
         console.error("Error:", error.message);
         return error.response.data;
     }
+    // const url = `${API_URI}/api/getTrending`;
+    // try {
+    //     const response = await axios.get(url);
+    //     // Assuming a successful response with a JSON body
+    //     const responseData = response.data;
+    //     return responseData;
+    // } catch (error) {
+    //     // Handle errors
+    //     console.error("Error:", error.message);
+    //     return error.response.data;
+    // }
 };
 
 export const updateStatusBook = async (userId, bookId, status) => {
@@ -96,6 +124,26 @@ export const updateStatusBook = async (userId, bookId, status) => {
             idUser: userId,
             idBook: bookId,
             status: status,
+        });
+        // Assuming a successful response with a JSON body
+        const responseData = response.data;
+        return responseData;
+    } catch (error) {
+        // Handle errors
+        console.error("Error:", error.message);
+        return error.response.data;
+    }
+};
+
+export const deleteBookmark = async (userId, bookId) => {
+    const url = `${API_URI}/api/deleteBookmark`;
+
+    try {
+        const response = await axios.delete(url, {
+            data: {
+                idUser: userId,
+                idBook: bookId,
+            },
         });
         // Assuming a successful response with a JSON body
         const responseData = response.data;

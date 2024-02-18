@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, SafeAreaView, View, ScrollView } from "react-native";
+import { FlatList, SafeAreaView, View, ScrollView, Animated } from "react-native";
 import { connect } from "react-redux";
 import { ActivityIndicator, TextInput } from "react-native-paper";
+import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
+import { LinearGradient } from "expo-linear-gradient";
 
 import { search } from "../API/book";
 
@@ -10,6 +12,31 @@ import { useNavigation } from "@react-navigation/native";
 import { gray2, gray4, white, accentGreen } from "../constants/colors";
 import { CategoryTypeItem } from "../components/item/categoryType";
 import { ListItem } from "../components/item/itemView";
+import EmptyData from "../components/empty";
+
+const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
+
+const ShimmerItem = () => {
+    const thumbnailRef = React.useRef();
+    const titleRef = React.useRef();
+    const authorRef = React.useRef();
+    const visible = false;
+
+    useEffect(() => {
+        const facebookAnimated = Animated.stagger(400, [Animated.parallel([thumbnailRef.current?.getAnimated(), titleRef.current?.getAnimated(), authorRef.current?.getAnimated()])]);
+        Animated.loop(facebookAnimated).start();
+    }, []);
+
+    return (
+        <View style={{ margin: 10, flexDirection: "row", gap: 10 }}>
+            <ShimmerPlaceHolder ref={thumbnailRef} height={184} width={128} shimmerColors={["#333", "#222", "#111"]} style={{ backgroundColor: gray4 }} visible={visible} />
+            <View>
+                <ShimmerPlaceHolder ref={titleRef} width={128} shimmerColors={["#333", "#222", "#111"]} style={{ backgroundColor: gray4, marginTop: 5 }} visible={visible} />
+                <ShimmerPlaceHolder ref={authorRef} width={128} shimmerColors={["#333", "#222", "#111"]} style={{ backgroundColor: gray4, marginTop: 5 }} visible={visible} />
+            </View>
+        </View>
+    );
+};
 
 const BookList = (props) => {
     const { categories } = props;
@@ -19,7 +46,7 @@ const BookList = (props) => {
 
     const [catList, setCatList] = useState(categories);
     const [bookListItem, setBookListItem] = useState(bookList);
-    const [keyword, setKeyword] = useState("");
+    const [keyword, setKeyword] = useState(props.route.params.keyword || "");
     const [loading, setLoading] = useState(false);
 
     const onCategoryPress = (catId) => {
@@ -40,6 +67,7 @@ const BookList = (props) => {
             const catActive = catList.find((item) => item.active === true);
             const getTopic = catActive ? catActive.name : "all";
 
+            setBookListItem(null);
             const response = await search(keyword, topic || getTopic);
             setBookListItem(response);
         } finally {
@@ -50,6 +78,9 @@ const BookList = (props) => {
     useEffect(() => {
         if (topicId) {
             onCategoryPress(topicId);
+        }
+        if (keyword) {
+            onSubmitSearch();
         }
     }, []);
 
@@ -63,6 +94,7 @@ const BookList = (props) => {
             >
                 <TextInput
                     placeholder="Search"
+                    value={keyword}
                     left={<TextInput.Icon icon={"chevron-left"} color={gray2} onPress={() => navigation.goBack()} />}
                     style={{
                         backgroundColor: gray4,
@@ -90,7 +122,27 @@ const BookList = (props) => {
                     ))}
                 </ScrollView>
             </View>
-            <FlatList data={bookListItem} key={(item) => item.id} renderItem={({ item }) => <ListItem item={item} />} />
+            {!bookListItem && (
+                <ScrollView>
+                    <ShimmerItem />
+                    <ShimmerItem />
+                    <ShimmerItem />
+                    <ShimmerItem />
+                    <ShimmerItem />
+                    <ShimmerItem />
+                    <ShimmerItem />
+                    <ShimmerItem />
+                    <ShimmerItem />
+                    <ShimmerItem />
+                    <ShimmerItem />
+                </ScrollView>
+            )}
+            <FlatList
+                data={bookListItem}
+                key={(item) => item.id}
+                renderItem={({ item }) => <ListItem item={item} />}
+                ListEmptyComponent={bookListItem && !loading && <EmptyData header="No books found!" message="Please search using other keywords." />}
+            />
         </SafeAreaView>
     );
 };

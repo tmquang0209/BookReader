@@ -16,13 +16,12 @@ const Search = (props) => {
 
     const [keyword, setKeyword] = useState("");
 
-    const onSearchSubmit = async () => {
+    const onSearchSubmit = () => {
         //call to api function
-        const response = await search(keyword);
-        navigation.navigate("BookList", { bookList: response });
+        // const response = await search(keyword);
+        navigation.navigate("BookList", { keyword });
     };
 
-    //print hello world
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <SafeAreaView style={styles.container}>

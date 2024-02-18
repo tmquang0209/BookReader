@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, ToastAndroid, useWindowDimensions } from "react-native";
+import { ScrollView, Text, ToastAndroid, TouchableOpacity, useWindowDimensions } from "react-native";
 import { Reader, ReaderProvider, useReader } from "@epubjs-react-native/core";
 import { useFileSystem } from "@epubjs-react-native/expo-file-system";
 import { connect } from "react-redux";
@@ -21,19 +21,17 @@ const Reading = ({ user, navigation, route }) => {
     const [words, setWords] = useState();
     const [animating, setAnimating] = useState(false);
     const [lastPage, setLastPage] = useState();
-
-    const { atEnd } = useReader();
+    const searchKeyword = "all";
+    const { atEnd, search, changeTheme } = useReader();
 
     //onLocationChange => update last page to db
     const updateLastPage = async (cfi) => {
         const response = await savedLastRead(user.idUser, bookId, cfi);
-        console.log(response);
     };
 
     //initialLocation => open last page
     const getLastPage = async () => {
         const response = await getLastPageReading(user.idUser, bookId);
-        console.log("gest", response);
         response.success && setLastPage(response.result[0].lastPageReading);
     };
 
@@ -81,6 +79,39 @@ const Reading = ({ user, navigation, route }) => {
     useEffect(() => {
         navigation.setOptions({
             headerShown: true,
+            headerRight: () => (
+                <TouchableOpacity
+                    onPress={() =>
+                        changeTheme({
+                            body: {
+                                background: "#333",
+                            },
+                            span: {
+                                color: "#fff !important",
+                            },
+                            p: {
+                                color: "#fff !important",
+                            },
+                            li: {
+                                color: "#fff !important",
+                            },
+                            h1: {
+                                color: "#fff !important",
+                            },
+                            a: {
+                                color: "#fff !important",
+                                "pointer-events": "auto",
+                                cursor: "pointer",
+                            },
+                            "::selection": {
+                                background: "lightskyblue",
+                            },
+                        })
+                    }
+                >
+                    <Text>123</Text>
+                </TouchableOpacity>
+            ),
         });
 
         getLastPage();
@@ -101,6 +132,9 @@ const Reading = ({ user, navigation, route }) => {
                         onSelected={(selectedText, cfi) => onMarkPressed(selectedText, cfi)}
                         enableSelection={true}
                         initialLocation={lastPage}
+                        onSearch={(searchKeyword) => {
+                            console.log(searchKeyword);
+                        }}
                     />
                 </ReaderProvider>
             </ScrollView>
