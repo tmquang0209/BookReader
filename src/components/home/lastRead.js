@@ -33,11 +33,13 @@ export const LastBookRead = ({ user }) => {
     const navigation = useNavigation();
 
     const [data, setData] = useState();
+    const [loading, setLoading] = useState(true);
 
     //use callback to get last book read
     const getData = useCallback(async () => {
         const response = await getLastBookRead(user?.idUser);
         if (response.success) setData(response?.result[0]);
+        setLoading(false);
     }, [user]);
 
     //handle press continue reading
@@ -54,7 +56,7 @@ export const LastBookRead = ({ user }) => {
 
     return (
         <>
-            {!data && <ShimmerItem />}
+            {!data && loading && <ShimmerItem />}
             {data && (
                 <>
                     <View style={styles.itemBox}>

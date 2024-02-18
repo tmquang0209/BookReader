@@ -13,6 +13,7 @@ import { GridItem } from "../components/item/itemView";
 import { completed, inProcess, savedBook } from "../constants/text";
 import { LinearGradient } from "react-native-svg";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
+import EmptyData from "../components/empty";
 
 const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 
@@ -47,6 +48,7 @@ const Library = (props) => {
         { key: 3, active: false, icon: "check-circle", name: "Complete", status: completed },
     ]);
     const [bookList, setBookList] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [refresing, setRefreshing] = useState(false);
 
     const onRefresh = () => {
@@ -65,9 +67,11 @@ const Library = (props) => {
 
     //fetch saved book
     const fetchBookList = async (status) => {
+        setLoading(true);
         setBookList([]);
         const response = await getBookListByStatus(user.idUser, status);
         setBookList(response?.result || []);
+        setLoading(false);
     };
 
     useEffect(() => {
@@ -119,7 +123,7 @@ const Library = (props) => {
                     flex: 1,
                 }}
             >
-                {!bookList.length && (
+                {bookList.length === 0 && loading ? (
                     <View
                         style={{
                             flex: 1,
@@ -138,7 +142,7 @@ const Library = (props) => {
                         <ShimmerItem />
                         <ShimmerItem />
                     </View>
-                )}
+                ) : null}
                 {bookList && (
                     <FlatList
                         refreshControl={<RefreshControl refreshing={refresing} onRefresh={onRefresh} colors={["#000"]} tintColor={"#000"} />}
@@ -149,6 +153,7 @@ const Library = (props) => {
                         scrollEnabled={true}
                         keyExtractor={(item) => item.id}
                         renderItem={({ item }) => <GridItem bookData={item} />}
+                        ListEmptyComponent={!bookList.length && !loading && <EmptyData header="No books found!" message="" />}
                     />
                 )}
             </View>

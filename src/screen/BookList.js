@@ -12,6 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 import { gray2, gray4, white, accentGreen } from "../constants/colors";
 import { CategoryTypeItem } from "../components/item/categoryType";
 import { ListItem } from "../components/item/itemView";
+import EmptyData from "../components/empty";
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -45,7 +46,7 @@ const BookList = (props) => {
 
     const [catList, setCatList] = useState(categories);
     const [bookListItem, setBookListItem] = useState(bookList);
-    const [keyword, setKeyword] = useState("");
+    const [keyword, setKeyword] = useState(props.route.params.keyword || "");
     const [loading, setLoading] = useState(false);
 
     const onCategoryPress = (catId) => {
@@ -78,6 +79,9 @@ const BookList = (props) => {
         if (topicId) {
             onCategoryPress(topicId);
         }
+        if (keyword) {
+            onSubmitSearch();
+        }
     }, []);
 
     return (
@@ -90,6 +94,7 @@ const BookList = (props) => {
             >
                 <TextInput
                     placeholder="Search"
+                    value={keyword}
                     left={<TextInput.Icon icon={"chevron-left"} color={gray2} onPress={() => navigation.goBack()} />}
                     style={{
                         backgroundColor: gray4,
@@ -132,7 +137,12 @@ const BookList = (props) => {
                     <ShimmerItem />
                 </ScrollView>
             )}
-            <FlatList data={bookListItem} key={(item) => item.id} renderItem={({ item }) => <ListItem item={item} />} />
+            <FlatList
+                data={bookListItem}
+                key={(item) => item.id}
+                renderItem={({ item }) => <ListItem item={item} />}
+                ListEmptyComponent={bookListItem && !loading && <EmptyData header="No books found!" message="Please search using other keywords." />}
+            />
         </SafeAreaView>
     );
 };

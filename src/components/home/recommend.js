@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { View, Text, FlatList, Image, TouchableOpacity, Animated } from "react-native";
+import { View, Text, FlatList, Image, TouchableOpacity, Animated, ScrollView } from "react-native";
 
 import styles from "../common/styles";
 import { NextIcon } from "../../constants/images";
@@ -48,20 +48,23 @@ const ShimmerItem = () => {
 
     return (
         <View style={{ marginRight: 10, maxWidth: 130 }}>
-            <ShimmerPlaceholder ref={thumbnailRef} height={184} width={128} shimmerColors={["#333", "#222", "#111"]} style={{ backgroundColor: black }} visible={visible} />
-
-            <ShimmerPlaceholder ref={titleRef} width={128} shimmerColors={["#333", "#222", "#111"]} style={{ backgroundColor: black, marginTop: 5 }} visible={visible} />
-
-            <ShimmerPlaceholder ref={authorRef} width={128} shimmerColors={["#333", "#222", "#111"]} style={{ backgroundColor: black, marginTop: 5 }} visible={visible} />
+            <ShimmerPlaceholder ref={thumbnailRef} height={184} width={128} shimmerColors={["#333", "#222", "#111"]} style={{ backgroundColor: black }} visible={visible}>
+                <Text>Thumbnail</Text>
+            </ShimmerPlaceholder>
+            <ShimmerPlaceholder ref={titleRef} width={128} shimmerColors={["#333", "#222", "#111"]} style={{ backgroundColor: black, marginTop: 5 }} visible={visible}>
+                <Text>Title</Text>
+            </ShimmerPlaceholder>
+            <ShimmerPlaceholder ref={authorRef} width={128} shimmerColors={["#333", "#222", "#111"]} style={{ backgroundColor: black, marginTop: 5 }} visible={visible}>
+                <Text>Author</Text>
+            </ShimmerPlaceholder>
         </View>
     );
 };
 
-const ListItem = ({ list }) => {
-    if (list.length === 0)
+const ListItem = ({ list, loading }) => {
+    if (list.length === 0 || loading || list === undefined)
         return (
-            <View style={{ flexDirection: "row" }}>
-                {/* create 10 item */}
+            <ScrollView horizontal style={{ flexDirection: "row", overflow: "scroll" }}>
                 <ShimmerItem />
                 <ShimmerItem />
                 <ShimmerItem />
@@ -72,7 +75,7 @@ const ListItem = ({ list }) => {
                 <ShimmerItem />
                 <ShimmerItem />
                 <ShimmerItem />
-            </View>
+            </ScrollView>
         );
     return (
         <FlatList
@@ -86,7 +89,7 @@ const ListItem = ({ list }) => {
     );
 };
 
-export const ForYou = ({ list }) => {
+export const ForYou = ({ list, loading }) => {
     const navigation = useNavigation();
     const reducedList = list.length !== 0 ? list.filter((item, index) => index <= 10) : [];
     return (
@@ -102,14 +105,14 @@ export const ForYou = ({ list }) => {
             </View>
             <View style={styles.itemBox}>
                 <View>
-                    <ListItem list={reducedList} />
+                    <ListItem list={reducedList} loading={loading}/>
                 </View>
             </View>
         </>
     );
 };
 
-export const Trending = ({ list }) => {
+export const Trending = ({ list, loading }) => {
     const navigation = useNavigation();
     const reducedList = list ? list.filter((item, index) => index <= 10) : [];
     return (
@@ -125,7 +128,7 @@ export const Trending = ({ list }) => {
             </View>
             <View style={styles.itemBox}>
                 <View>
-                    <ListItem list={reducedList} />
+                    <ListItem list={reducedList} loading={loading}/>
                 </View>
             </View>
         </>

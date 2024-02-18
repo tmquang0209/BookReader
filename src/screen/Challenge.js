@@ -11,7 +11,8 @@ import { accentGreen, black, gray4, white } from "../constants/colors";
 import { congratulations, encouragement } from "../constants/text";
 import { getAllChallenges } from "../API/challenges";
 import React, { useEffect, useState } from "react";
-import { fullDate, longDate } from "../components/date/date";
+import { longDate } from "../components/date/date";
+import EmptyData from "../components/empty";
 
 const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 
@@ -41,6 +42,68 @@ const ShimmerItem = () => {
     );
 };
 
+const ChallengeItem = (item) => {
+    return (
+        <TouchableOpacity activeOpacity={0.5} onPress={() => onChallengeItemPress(item)}>
+            <LinearGradient
+                colors={["#EAB734", "#313333"]}
+                locations={[0, 0.4]}
+                start={{ x: 0, y: 1 }}
+                end={{ x: 1, y: 0 }}
+                style={{
+                    marginTop: 10,
+                    backgroundColor: gray4,
+                    paddingTop: 16,
+                    paddingBottom: 16,
+                    paddingLeft: 18,
+                    paddingRight: 18,
+                    flex: 1,
+                    borderRadius: 10,
+                }}
+            >
+                <Text
+                    style={{
+                        color: white,
+                        fontFamily: "SVN-Gotham-Bold",
+                        fontSize: 18,
+                    }}
+                >
+                    {item.name}
+                </Text>
+                <Text style={{ color: white }}>
+                    <Text style={{ fontFamily: "SVN-Gotham-Bold" }}>Start: </Text> {longDate(new Date(item.startDate))}
+                </Text>
+                <Text style={{ color: white }}>
+                    <Text style={{ fontFamily: "SVN-Gotham-Bold" }}>End:</Text> {longDate(new Date(item.endDate))}
+                </Text>
+                <View
+                    style={{
+                        flex: 1,
+                        flexDirection: "row",
+                        alignItems: "center",
+                    }}
+                >
+                    <Progress.Bar
+                        progress={item.completedBooksCount / item.target}
+                        color={white}
+                        width={null}
+                        style={{ width: "65%", marginTop: 10 }}
+                        height={6}
+                        borderWidth={0}
+                        unfilledColor={"#EAF4F433"}
+                    />
+                    <Text style={{ color: white, marginLeft: 10 }}>
+                        {item.completedBooksCount}/{item.target} books
+                    </Text>
+                </View>
+                <View>
+                    <Text style={{ color: white, fontStyle: "italic", fontFamily: "SVN-Gotham-Bold", fontSize: 10, marginTop: 10 }}>{generateQuote(item.completedBooksCount / item.target)}</Text>
+                </View>
+            </LinearGradient>
+        </TouchableOpacity>
+    );
+};
+
 const Challenge = (props) => {
     const { navigation, user } = props;
 
@@ -49,18 +112,21 @@ const Challenge = (props) => {
     };
 
     const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
 
     const onRefresh = () => {
         setRefreshing(true);
-        setData([]);
         fetchData();
         setRefreshing(false);
     };
 
     const fetchData = async () => {
+        setLoading(true);
         const response = await getAllChallenges(user.idUser);
+        console.log(response);
         setData(response.data);
+        setLoading(false);
     };
 
     const generateQuote = (progress) => {
@@ -109,7 +175,7 @@ const Challenge = (props) => {
                         flex: 1,
                     }}
                 >
-                    {data.length === 0 && (
+                    {data.length === 0 && loading && (
                         <ScrollView>
                             <ShimmerItem />
                             <ShimmerItem />
@@ -124,67 +190,8 @@ const Challenge = (props) => {
                         scrollEnabled={true}
                         data={data}
                         keyExtractor={(item, index) => index.toString()}
-                        renderItem={({ item }) => (
-                            <TouchableOpacity activeOpacity={0.5} onPress={() => onChallengeItemPress(item)}>
-                                <LinearGradient
-                                    colors={["#EAB734", "#313333"]}
-                                    locations={[0, 0.4]}
-                                    start={{ x: 0, y: 1 }}
-                                    end={{ x: 1, y: 0 }}
-                                    style={{
-                                        marginTop: 10,
-                                        backgroundColor: gray4,
-                                        paddingTop: 16,
-                                        paddingBottom: 16,
-                                        paddingLeft: 18,
-                                        paddingRight: 18,
-                                        flex: 1,
-                                        borderRadius: 10,
-                                    }}
-                                >
-                                    <Text
-                                        style={{
-                                            color: white,
-                                            fontFamily: "SVN-Gotham-Bold",
-                                            fontSize: 18,
-                                        }}
-                                    >
-                                        {item.name}
-                                    </Text>
-                                    <Text style={{ color: white }}>
-                                        <Text style={{ fontFamily: "SVN-Gotham-Bold" }}>Start: </Text> {longDate(new Date(item.startDate))}
-                                    </Text>
-                                    <Text style={{ color: white }}>
-                                        <Text style={{ fontFamily: "SVN-Gotham-Bold" }}>End:</Text> {longDate(new Date(item.endDate))}
-                                    </Text>
-                                    <View
-                                        style={{
-                                            flex: 1,
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                        }}
-                                    >
-                                        <Progress.Bar
-                                            progress={item.completedBooksCount / item.target}
-                                            color={white}
-                                            width={null}
-                                            style={{ width: "65%", marginTop: 10 }}
-                                            height={6}
-                                            borderWidth={0}
-                                            unfilledColor={"#EAF4F433"}
-                                        />
-                                        <Text style={{ color: white, marginLeft: 10 }}>
-                                            {item.completedBooksCount}/{item.target} books
-                                        </Text>
-                                    </View>
-                                    <View>
-                                        <Text style={{ color: white, fontStyle: "italic", fontFamily: "SVN-Gotham-Bold", fontSize: 10, marginTop: 10 }}>
-                                            {generateQuote(item.completedBooksCount / item.target)}
-                                        </Text>
-                                    </View>
-                                </LinearGradient>
-                            </TouchableOpacity>
-                        )}
+                        renderItem={({ item }) => ChallengeItem(item)}
+                        ListEmptyComponent={!data.length && !loading && <EmptyData header="No challenges found!" message="Create a new challenge to get started." />}
                     />
                 </View>
             </View>
