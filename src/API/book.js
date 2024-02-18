@@ -85,7 +85,7 @@ export const getLastBookRead = async (userId) => {
 };
 
 export const getTrendingBook = async () => {
-    const url = `${BOOK_URI}?sort=ascendingdescendingpopular`;
+    const url = `${BOOK_URI}?sort=popular`;
     try {
         const response = await axios.get(url);
         const responseData = response.data;
@@ -96,17 +96,17 @@ export const getTrendingBook = async () => {
         console.error("Error:", error.message);
         return error.response.data;
     }
-    /* const url = `${API_URI}/api/getTrending`;
-    try {
-        const response = await axios.get(url);
-        // Assuming a successful response with a JSON body
-        const responseData = response.data;
-        return responseData;
-    } catch (error) {
-        // Handle errors
-        console.error("Error:", error.message);
-        return error.response.data;
-    } */
+    // const url = `${API_URI}/api/getTrending`;
+    // try {
+    //     const response = await axios.get(url);
+    //     // Assuming a successful response with a JSON body
+    //     const responseData = response.data;
+    //     return responseData;
+    // } catch (error) {
+    //     // Handle errors
+    //     console.error("Error:", error.message);
+    //     return error.response.data;
+    // }
 };
 
 export const updateStatusBook = async (userId, bookId, status) => {
@@ -117,6 +117,26 @@ export const updateStatusBook = async (userId, bookId, status) => {
             idUser: userId,
             idBook: bookId,
             status: status,
+        });
+        // Assuming a successful response with a JSON body
+        const responseData = response.data;
+        return responseData;
+    } catch (error) {
+        // Handle errors
+        console.error("Error:", error.message);
+        return error.response.data;
+    }
+};
+
+export const deleteBookmark = async (userId, bookId) => {
+    const url = `${API_URI}/api/deleteBookmark`;
+
+    try {
+        const response = await axios.delete(url, {
+            data: {
+                idUser: userId,
+                idBook: bookId,
+            },
         });
         // Assuming a successful response with a JSON body
         const responseData = response.data;

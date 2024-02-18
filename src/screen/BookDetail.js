@@ -10,7 +10,7 @@ import { BackButton } from "../components/header";
 import { CategoryTypeItem } from "../components/item/categoryType";
 import { Button } from "../components/button";
 import { connect } from "react-redux";
-import { getBookStatus, updateStatusBook } from "../API/book";
+import { deleteBookmark, getBookStatus, updateStatusBook } from "../API/book";
 import { savedBook } from "../constants/text";
 
 const CategoryList = ({ subjects }) => (
@@ -47,10 +47,23 @@ const BookDetail = ({ user, route, navigation }) => {
     const { bookData } = route.params;
     const [bookmark, setBookmark] = useState(false);
 
+    const onBookmarkPress = () => {
+        if (bookmark) {
+            handleDeleteBookmark();
+        } else {
+            saveBook();
+        }
+    };
+
     const saveBook = async () => {
-        console.log("save book");
         setBookmark((prev) => !prev);
         const response = await updateStatusBook(user.idUser, bookData.id, savedBook);
+        console.log(response);
+    };
+
+    const handleDeleteBookmark = async () => {
+        setBookmark((prev) => !prev);
+        const response = await deleteBookmark(user.idUser, bookData.id);
         console.log(response);
     };
 
@@ -85,7 +98,7 @@ const BookDetail = ({ user, route, navigation }) => {
                     <View>
                         <View>
                             <Text style={[styles.bookTitle, { width: Dimensions.get("screen").width - 30 }]}>{bookData?.title}</Text>
-                            <FontAwesome name={bookmark ? "bookmark" : "bookmark-o"} size={24} color={white} style={{ position: "absolute", right: 0 }} onPress={saveBook} />
+                            <FontAwesome name={bookmark ? "bookmark" : "bookmark-o"} size={24} color={white} style={{ position: "absolute", right: 0 }} onPress={onBookmarkPress} />
                         </View>
                         <Text style={[styles.authorName]}>{bookData?.authors[0]?.name}</Text>
                         <View style={styles.infoContainer}>
