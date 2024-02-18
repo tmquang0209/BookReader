@@ -4,7 +4,6 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Provider } from "react-redux";
 
 //load component
-import store from "./src/store";
 
 import StackNav from "./src/navigation/stack";
 import { PaperProvider } from "react-native-paper";
@@ -14,6 +13,8 @@ import { CredentialContext } from "./src/components/context/credential";
 import { useCallback, useEffect, useState } from "react";
 
 import * as SplashScreen from "expo-splash-screen";
+import { persistor, store } from "./src/store";
+import { PersistGate } from "redux-persist/integration/react";
 
 export default function App() {
     const [appIsReady, setAppIsReady] = useState(false);
@@ -45,21 +46,23 @@ export default function App() {
     }
     return (
         <Provider store={store}>
-            <PaperProvider>
-                <SafeAreaProvider onLayout={onLayoutRootView}>
-                    <CredentialContext.Provider
-                        value={{
-                            storedCredentials,
-                            setStoredCredentials,
-                        }}
-                    >
-                        <NavigationContainer>
-                            <StackNav />
-                        </NavigationContainer>
-                    </CredentialContext.Provider>
-                    <StatusBar animated barStyle={"light-content"} />
-                </SafeAreaProvider>
-            </PaperProvider>
+            <PersistGate loading={null} persistor={persistor}>
+                <PaperProvider>
+                    <SafeAreaProvider onLayout={onLayoutRootView}>
+                        <CredentialContext.Provider
+                            value={{
+                                storedCredentials,
+                                setStoredCredentials,
+                            }}
+                        >
+                            <NavigationContainer>
+                                <StackNav />
+                            </NavigationContainer>
+                        </CredentialContext.Provider>
+                        <StatusBar animated barStyle={"light-content"} />
+                    </SafeAreaProvider>
+                </PaperProvider>
+            </PersistGate>
         </Provider>
     );
 }

@@ -28,14 +28,12 @@ const HomeView = (props) => {
     const [refresing, setRefreshing] = useState(false);
 
     const fetchBook = async () => {
-        const forYouResponse = await getInterestBook(user?.idUser);
         const trendingResponse = await getTrendingBook();
-
-        if (forYouResponse) setForYouList(forYouResponse.result);
         if (trendingResponse) setTrendingList(trendingResponse);
-    };
 
-    const [visible, setVisible] = useState(false);
+        const forYouResponse = await getInterestBook(user?.idUser);
+        if (forYouResponse) setForYouList(forYouResponse.result);
+    };
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
