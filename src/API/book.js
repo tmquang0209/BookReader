@@ -6,6 +6,7 @@ import { filterAndMapBooks } from "../utils/utilsFilterMapBook";
 
 export const getInterestBook = async (userId) => {
     try {
+
         const response = await axios.get(`${API_URI}/api/getUserInterestCategory/${userId}`);
         const responseData = response.data;
         return responseData.success ? responseData : [];
@@ -16,14 +17,20 @@ export const getInterestBook = async (userId) => {
 };
 
 export const search = async (keyword, topic = "all") => {
+
     /* try {
         const response = await axios.post(`${API_URI}/api/search`, {
             bookName: keyword,
             topic: topic,
         });
+    try {
+        const params = topic === "all" ? `search=${keyword}` : `search=${keyword}&topic=${topic}`;
+        const response = await axios.get(`https://gutendex.com/books/?${params}`);
 
-        const responseData = response.data;
-        return responseData;
+        const jsonData = response.data;
+
+        const fetchedData = filterAndMapBooks(jsonData.results);
+        return fetchedData;
     } catch (err) {
         console.log(err);
         return err.response.data;
