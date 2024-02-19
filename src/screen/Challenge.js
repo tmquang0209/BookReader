@@ -1,4 +1,5 @@
-import { Animated, Dimensions, FlatList, RefreshControl, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Animated, FlatList, RefreshControl, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { connect } from "react-redux";
 import { Button } from "react-native-paper";
 import * as Progress from "react-native-progress";
@@ -10,7 +11,6 @@ import { TitleWithinUnderLine } from "../components/header";
 import { accentGreen, black, gray4, white } from "../constants/colors";
 import { congratulations, encouragement } from "../constants/text";
 import { getAllChallenges } from "../API/challenges";
-import React, { useEffect, useState } from "react";
 import { longDate } from "../components/date/date";
 import EmptyData from "../components/empty";
 
@@ -43,6 +43,16 @@ const ShimmerItem = () => {
 };
 
 const ChallengeItem = (item) => {
+    const generateQuote = (progress) => {
+        if (progress === 1) {
+            const indexRandom = Math.floor(Math.random() * congratulations.length);
+            return congratulations[indexRandom];
+        } else {
+            const indexRandom = Math.floor(Math.random() * encouragement.length);
+            return encouragement[indexRandom];
+        }
+    };
+
     return (
         <TouchableOpacity activeOpacity={0.5} onPress={() => onChallengeItemPress(item)}>
             <LinearGradient
@@ -127,16 +137,6 @@ const Challenge = (props) => {
         console.log(response);
         setData(response.data);
         setLoading(false);
-    };
-
-    const generateQuote = (progress) => {
-        if (progress === 1) {
-            const indexRandom = Math.floor(Math.random() * congratulations.length);
-            return congratulations[indexRandom];
-        } else {
-            const indexRandom = Math.floor(Math.random() * encouragement.length);
-            return encouragement[indexRandom];
-        }
     };
 
     const onChallengeItemPress = (data) => {
