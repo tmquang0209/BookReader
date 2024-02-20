@@ -59,7 +59,7 @@ export default function App() {
                                 <StackNav />
                             </NavigationContainer>
                         </CredentialContext.Provider>
-                        <StatusBar animated barStyle={"light-content"} />
+                        <StatusBar barStyle={"light-content"}  backgroundColor={"black"}/>
                     </SafeAreaProvider>
                 </PaperProvider>
             </PersistGate>
