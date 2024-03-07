@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { connect } from "react-redux";
 import { useFonts } from "expo-font";
@@ -24,14 +24,18 @@ import UpdateChallenge from "../screen/UpdateChallenge";
 import Dictionary from "../screen/Dictionary";
 import WordDetail from "../screen/WordDetail";
 import ChangePassword from "../screen/ChangePassword";
-
-import { CredentialContext } from "../components/context/credential";
-import { getAuthStorage } from "../components/localStorage";
+import SplashModal from "../screen/SplashScreen";
+import { NoInternet } from "../components/internet";
+import { useNetInfo } from "@react-native-community/netinfo";
+import { ToastAndroid } from "react-native";
 
 const StackNav = (props) => {
-    const { loggedIn, autoLogin, getCatList, localStorageCheck } = props;
+    const { loggedIn, autoLogin, getCatList } = props;
 
-    const { storedCredentials, setStoredCredentials } = React.useContext(CredentialContext);
+    const { isConnected } = useNetInfo();
+    const [isNetwork, setIsNetwork] = useState(false);
+
+    const [isShowSplash, setIsShowSplash] = useState(true);
 
     const Stack = createStackNavigator();
 
@@ -42,17 +46,24 @@ const StackNav = (props) => {
     // Load font
     const [fontsLoaded] = useFonts(fontsList);
 
-    const checkLoginCredentials = async () => {
-        const auth = await getAuthStorage();
-        setStoredCredentials(auth);
-    };
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            if (!isConnected) {
+                setIsNetwork(true);
+                ToastAndroid.show("No internet connection", ToastAndroid.SHORT);
+            } else {
+                setIsNetwork(false);
+            }
+        }, 500);
+
+        return () => clearTimeout(timeout);
+    }, [isConnected]);
 
     useEffect(() => {
         const prepare = async () => {
             await SplashScreen.preventAutoHideAsync();
             try {
                 await autoLogin();
-                checkLoginCredentials();
             } catch (error) {
                 console.log("Error", error.message);
             } finally {
@@ -61,66 +72,63 @@ const StackNav = (props) => {
         };
         prepare();
         getList();
+        const timeout = setTimeout(() => {
+            setIsShowSplash(false);
+        }, 500);
+
+        return () => clearTimeout(timeout);
     }, []);
-
-    const onLayoutRootView = useCallback(async () => {
-        // Only hide SplashScreen if fonts are loaded and localStorageCheck is not "0"
-        if (fontsLoaded && localStorageCheck !== "0") {
-            await SplashScreen.hideAsync();
-        }
-    }, [autoLogin, fontsLoaded, localStorageCheck]);
-
-    useEffect(() => {
-        onLayoutRootView();
-    }, [onLayoutRootView]);
 
     if (!fontsLoaded) {
         return null;
     }
 
     return (
-        <CredentialContext.Consumer>
-            {({ storedCredentials }) => (
+        <>
+            {isNetwork ? (
                 <>
-                    <Stack.Navigator
-                        screenOptions={{
-                            headerShown: false,
-                        }}
-                        initialRouteName={loggedIn ? "bottomTab" : "GetStarted"}
-                    >
-                        {storedCredentials ? (
-                            <Stack.Group>
-                                <Stack.Screen name="ChangePassword" component={ChangePassword} />
-                                <Stack.Screen name="BookDetail" component={BookDetail} />
-                                <Stack.Screen name="BookList" component={BookList} />
-                                <Stack.Screen name="Reading" component={Reading} />
-                                <Stack.Screen name="ProfileDetails" component={ProfileDetails} />
-                                <Stack.Screen name="Dictionary" component={Dictionary} />
-                                <Stack.Screen name="CreateChallenge" component={CreateChallenge} />
-                                <Stack.Screen name="UpdateChallenge" component={UpdateChallenge} />
-                                <Stack.Screen name="WordDetail" component={WordDetail} />
-                            </Stack.Group>
-                        ) : (
-                            <Stack.Group>
-                                <Stack.Screen name="Signup" component={Signup} />
-                                <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-                                <Stack.Screen name="VerifyCode" component={VerifyCode} />
-                                <Stack.Screen name="SetPassword" component={SetPassword} />
-                            </Stack.Group>
-                        )}
-                        <Stack.Screen name="bottomTab" component={BottomTab} />
-                        <Stack.Screen name="GetStarted" component={GetStarted} />
-                        <Stack.Screen name="SelectGenres" component={SelectGenres} />
-                    </Stack.Navigator>
+                    <NoInternet />
                 </>
+            ) : (
+                <Stack.Navigator
+                    screenOptions={{
+                        headerShown: false,
+                    }}
+                    initialRouteName={loggedIn ? "bottomTab" : "GetStarted"}
+                >
+                    {isShowSplash ? (
+                        <Stack.Screen name="Splash" component={SplashModal} />
+                    ) : loggedIn ? (
+                        <Stack.Group>
+                            <Stack.Screen name="ChangePassword" component={ChangePassword} />
+                            <Stack.Screen name="BookDetail" component={BookDetail} />
+                            <Stack.Screen name="BookList" component={BookList} />
+                            <Stack.Screen name="Reading" component={Reading} />
+                            <Stack.Screen name="ProfileDetails" component={ProfileDetails} />
+                            <Stack.Screen name="Dictionary" component={Dictionary} />
+                            <Stack.Screen name="CreateChallenge" component={CreateChallenge} />
+                            <Stack.Screen name="UpdateChallenge" component={UpdateChallenge} />
+                            <Stack.Screen name="WordDetail" component={WordDetail} />
+                        </Stack.Group>
+                    ) : (
+                        <Stack.Group>
+                            <Stack.Screen name="Signup" component={Signup} />
+                            <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+                            <Stack.Screen name="VerifyCode" component={VerifyCode} />
+                            <Stack.Screen name="SetPassword" component={SetPassword} />
+                        </Stack.Group>
+                    )}
+                    <Stack.Screen name="bottomTab" component={BottomTab} />
+                    <Stack.Screen name="GetStarted" component={GetStarted} />
+                    <Stack.Screen name="SelectGenres" component={SelectGenres} />
+                </Stack.Navigator>
             )}
-        </CredentialContext.Consumer>
+        </>
     );
 };
 
 const mapStateToProps = (state) => ({
     loggedIn: state.auth.loggedIn,
-    localStorageCheck: state.auth.localStorageCheck,
     categories: state.category.categories,
 });
 

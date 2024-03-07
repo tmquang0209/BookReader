@@ -29,7 +29,21 @@ export default function BottomTab() {
                     backgroundColor: "#1E1E1E",
                     borderTopWidth: 0,
                     paddingBottom: 20,
-                    // position: "absolute",
+                },
+                tabBarHideOnKeyboard: true,
+                tabBarVisibilityAnimationConfig: {
+                    show: {
+                        animation: "timing",
+                        config: {
+                            duration: 100,
+                        },
+                    },
+                    hide: {
+                        animation: "timing",
+                        config: {
+                            duration: 100,
+                        },
+                    },
                 },
             }}
         >
@@ -41,6 +55,7 @@ export default function BottomTab() {
                     tabBarIcon: ({ color }) => <HomeIcon color={color} />,
                 }}
             />
+
             <Tab.Screen
                 name="Search"
                 component={Search}
