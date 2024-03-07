@@ -3,17 +3,21 @@ import { Image, View } from "react-native";
 import { noInternet } from "../../constants/images";
 import { Text } from "react-native";
 import { white } from "../../constants/colors";
+import styles from "../common/styles";
 
 export const NoInternet = () => {
     return (
         <View
-            style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-                alignSelf: "center",
-                flexDirection: "column",
-            }}
+            style={[
+                styles.container,
+                {
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    alignSelf: "center",
+                    flexDirection: "column",
+                },
+            ]}
         >
             <Image
                 style={{

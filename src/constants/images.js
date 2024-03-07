@@ -1,13 +1,16 @@
 import { Svg, Path, Circle, G, Defs, ClipPath, Rect } from "react-native-svg";
 
+export const logoText = require("../../assets/Logo_text.png");
 export const banner = require("../../assets/banner.png");
 export const girlReadingBook = require("../../assets/girl-and-book.png");
 export const googleLogo = require("../../assets/google.png");
 export const noInternet = require("../../assets/no-internet.png");
 export const userIcon = require("../../assets/user.png");
 export const logoutIcon = require("../../assets/logout.png");
-export const demoDetail = require("../../assets/demo.png");
 export const dictionaryIcon = require("../../assets/dictionary.png");
+export const genresIcon = require("../../assets/genres.png");
+export const changePasswordIcon = require("../../assets/change_password.png");
+export const demoDetail = require("../../assets/demo.png");
 export const cartoonLearningEnglish = require("../../assets/cartoon-learning-english.png");
 
 export const HomeIcon = ({ color }) => (

@@ -8,12 +8,9 @@ import styles from "../components/common/styles";
 import { Line } from "../components/common/line";
 import { TitleWithinUnderLine } from "../components/header";
 import { accentGreen, white } from "../constants/colors";
-import { dictionaryIcon, logoutIcon, userIcon } from "../constants/images";
+import { changePasswordIcon, dictionaryIcon, genresIcon, logoutIcon, userIcon } from "../constants/images";
 import { logoutUser } from "../store/actions/authActions";
 import { removeAuthStorage } from "../components/localStorage";
-
-import { CredentialContext } from "../components/context/credential";
-import { useContext } from "react";
 
 const MenuItem = ({ iconLeft, title, iconRight, onPress }) => {
     return (
@@ -43,7 +40,6 @@ const MenuItem = ({ iconLeft, title, iconRight, onPress }) => {
 
 const Profile = (props) => {
     const { user, logoutUser } = props;
-    const { storedCredentials, setStoredCredentials } = useContext(CredentialContext);
     const navigation = useNavigation();
 
     const onProfileDetail = () => {
@@ -68,9 +64,6 @@ const Profile = (props) => {
                 logoutUser();
             })
             .then(() => {
-                setStoredCredentials({});
-            })
-            .then(() => {
                 navigation.navigate("GetStarted");
             })
             .catch((err) => {
@@ -90,7 +83,7 @@ const Profile = (props) => {
                     }}
                 >
                     <View>
-                        <Avatar.Text label="A" style={{ borderRadius: 90 }} />
+                        <Avatar.Text label={user?.fullName[0]} style={{ borderRadius: 90 }} />
                     </View>
                     <View style={{ marginLeft: 20, flex: 3 }}>
                         <Text style={{ fontFamily: "SVN-Gotham-Bold", fontSize: 15, color: white }}>{user?.fullName}</Text>
@@ -110,8 +103,8 @@ const Profile = (props) => {
                 >
                     <MenuItem iconLeft={userIcon} title={"Profile details"} iconRight={"arrow-right"} onPress={onProfileDetail} />
                     <MenuItem iconLeft={dictionaryIcon} title={"Your dictionary"} iconRight={"arrow-right"} onPress={onDictionary} />
-                    <MenuItem iconLeft={dictionaryIcon} title={"Genres"} iconRight={"arrow-right"} onPress={onChangeGenres} />
-                    <MenuItem iconLeft={dictionaryIcon} title={"Change password"} iconRight={"arrow-right"} onPress={onChangePassword} />
+                    <MenuItem iconLeft={genresIcon} title={"Genres"} iconRight={"arrow-right"} onPress={onChangeGenres} />
+                    <MenuItem iconLeft={changePasswordIcon} title={"Change password"} iconRight={"arrow-right"} onPress={onChangePassword} />
                     <Line />
                     <MenuItem iconLeft={logoutIcon} title={"Logout"} onPress={onLogoutPress} />
                 </View>

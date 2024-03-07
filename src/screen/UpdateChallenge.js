@@ -74,7 +74,8 @@ const updateChallenge = ({ navigation, user, route }) => {
     const onUpdateChallenge = async (values) => {
         //update challenge
         setDisable(true);
-        const response = await updateChallengeDetails(user.idUser, { ...values, startDate: challenge.startDate, endDate: challenge.endDate });
+        const response = await updateChallengeDetails(user.idUser, { ...values, idChallenge: challengeItem.idChallenge, startDate: challenge.startDate, endDate: challenge.endDate });
+        console.log(response, { ...values, idChallenge: challengeItem.idChallenge, startDate: challenge.startDate, endDate: challenge.endDate });
         if (response.success) {
             Alert.alert("Success", "Update challenge successfully");
             navigation.goBack();

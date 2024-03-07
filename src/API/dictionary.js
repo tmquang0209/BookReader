@@ -9,8 +9,8 @@ export const translateByWord = async (word) => {
         const data = await response.data;
         return data;
     } catch (error) {
-        console.log(error);
-        return [];
+        console.error(error);
+        return null;
     }
 };
 

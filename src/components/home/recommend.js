@@ -62,7 +62,7 @@ const ShimmerItem = () => {
 };
 
 const ListItem = ({ list, loading }) => {
-    if (list.length === 0 || loading || list === undefined)
+    if (list?.length === 0 || loading || list === undefined)
         return (
             <ScrollView horizontal style={{ flexDirection: "row", overflow: "scroll" }}>
                 <ShimmerItem />
@@ -91,7 +91,7 @@ const ListItem = ({ list, loading }) => {
 
 export const ForYou = ({ list, loading }) => {
     const navigation = useNavigation();
-    const reducedList = list.length !== 0 ? list.filter((item, index) => index <= 10) : [];
+    const reducedList = list?.length !== 0 ? list?.filter((item, index) => index <= 10) : [];
     return (
         <>
             <View style={styles.headerContainer}>

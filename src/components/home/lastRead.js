@@ -29,18 +29,9 @@ const ShimmerItem = () => {
     );
 };
 
-export const LastBookRead = ({ user }) => {
+export const LastBookRead = ({ user, data }) => {
     const navigation = useNavigation();
-
-    const [data, setData] = useState();
     const [loading, setLoading] = useState(true);
-
-    //use callback to get last book read
-    const getData = useCallback(async () => {
-        const response = await getLastBookRead(user?.idUser);
-        if (response.success) setData(response?.result[0]);
-        setLoading(false);
-    }, [user]);
 
     //handle press continue reading
     const handlePressContinueReading = () => {
@@ -49,10 +40,6 @@ export const LastBookRead = ({ user }) => {
         //display error with toast
         else console.log("error");
     };
-
-    useEffect(() => {
-        getData();
-    }, [getData]);
 
     return (
         <>

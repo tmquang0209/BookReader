@@ -1,7 +1,7 @@
 import { Button, Divider, Modal, Portal } from "react-native-paper";
 import { accentGreen, black, gray3, gray5, white } from "../../constants/colors";
 import { View } from "react-native-animatable";
-import { Text } from "react-native";
+import { ScrollView, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 export const DictionaryModal = ({ user, wordDetail, visible, hideModal, onDeleteWord, onSavedWord, loading }) => {
@@ -47,13 +47,17 @@ export const DictionaryModal = ({ user, wordDetail, visible, hideModal, onDelete
                     </View>
                     <Text style={{ color: white }}>Meaning</Text>
                     <View style={{ backgroundColor: gray5, padding: 10, borderRadius: 8, flexWrap: "wrap", flexDirection: "row" }}>
-                        <View>
+                        <ScrollView
+                            style={{
+                                maxHeight: 250,
+                            }}
+                        >
                             {wordDetail?.meanings?.map((item, index) => (
                                 <Text key={index} style={{ color: white }}>
-                                    ({item.partOfSpeech}): {item.definitions[0].definition}
+                                    (<Text style={{ color: accentGreen }}>{item.partOfSpeech}</Text>): {item.definitions[0].definition}
                                 </Text>
                             ))}
-                        </View>
+                        </ScrollView>
                     </View>
                     <Text style={{ color: white }}>Example</Text>
                     <View style={{ backgroundColor: gray5, padding: 10, borderRadius: 8, flexWrap: "wrap", flexDirection: "row" }}>

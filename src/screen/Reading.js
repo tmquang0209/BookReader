@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, Text, ToastAndroid, TouchableOpacity, useWindowDimensions } from "react-native";
+import { ToastAndroid, View, useWindowDimensions } from "react-native";
 import { Reader, ReaderProvider, useReader } from "@epubjs-react-native/core";
 import { useFileSystem } from "@epubjs-react-native/expo-file-system";
 import { connect } from "react-redux";
 import { Audio } from "expo-av";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 //import API
 import { getLastPageReading, savedLastRead, updateStatusBook } from "../API/book";
@@ -13,6 +14,7 @@ import { saveWordToDb, translateByWord } from "../API/dictionary";
 import styles from "../components/common/styles";
 import { DictionaryModal } from "../components/modal";
 import { completed } from "../constants/text";
+import { ActivityIndicator } from "react-native-paper";
 
 const Reading = ({ user, navigation, route }) => {
     const { bookId, file, cfi } = route.params;
@@ -20,13 +22,22 @@ const Reading = ({ user, navigation, route }) => {
     const [visible, setVisible] = useState(false);
     const [words, setWords] = useState();
     const [animating, setAnimating] = useState(false);
-    const [lastPage, setLastPage] = useState();
-    const searchKeyword = "all";
-    const { atEnd, search, changeTheme } = useReader();
+    const [lastPage, setLastPage] = useState(cfi);
+    const [loading, setLoading] = useState(false);
+
+    const { atEnd } = useReader();
 
     //onLocationChange => update last page to db
     const updateLastPage = async (cfi) => {
-        const response = await savedLastRead(user.idUser, bookId, cfi);
+        setLoading(true);
+        const res = await savedLastRead(user.idUser, bookId, cfi);
+        if (res.success) {
+            console.log(user.idUser, bookId, "Last page updated");
+        } else {
+            console.log("Failed to update last page");
+            ToastAndroid.show("Failed to update last page", ToastAndroid.LONG);
+        }
+        setLoading(false);
     };
 
     //initialLocation => open last page
@@ -45,23 +56,27 @@ const Reading = ({ user, navigation, route }) => {
         await sound.playAsync();
     };
 
-    const onMarkPressed = async (text, cfi) => {
-        setVisible(true);
-
-        setWords();
-
-        translateByWord(text).then((res) => {
-            setWords(res[0]);
-        });
-    };
-
     const hideModal = () => setVisible(false);
+
+    const onMarkPressed = async (text, cfi) => {
+        setWords();
+        try {
+            const res = await translateByWord(text);
+            setVisible(true);
+            if (!res) throw new Error("Failed to translate");
+
+            setWords(res[0]);
+        } catch (err) {
+            console.error(err);
+            hideModal();
+            ToastAndroid.show("Failed to translate", ToastAndroid.LONG);
+        }
+    };
 
     const onSavedWord = async (word) => {
         setAnimating(true);
         saveWordToDb(user.idUser, word)
             .then((res) => {
-                console.log(res);
                 setAnimating(false);
                 ToastAndroid.show("Saved successfully!", ToastAndroid.LONG);
             })
@@ -73,45 +88,27 @@ const Reading = ({ user, navigation, route }) => {
     };
 
     const updateStatus = async () => {
-        const response = await updateStatusBook(user.idUser, bookId, completed);
+        await updateStatusBook(user.idUser, bookId, completed);
     };
 
     useEffect(() => {
         navigation.setOptions({
-            headerShown: true,
             headerRight: () => (
-                <TouchableOpacity
-                    onPress={() =>
-                        changeTheme({
-                            body: {
-                                background: "#333",
-                            },
-                            span: {
-                                color: "#fff !important",
-                            },
-                            p: {
-                                color: "#fff !important",
-                            },
-                            li: {
-                                color: "#fff !important",
-                            },
-                            h1: {
-                                color: "#fff !important",
-                            },
-                            a: {
-                                color: "#fff !important",
-                                "pointer-events": "auto",
-                                cursor: "pointer",
-                            },
-                            "::selection": {
-                                background: "lightskyblue",
-                            },
-                        })
-                    }
+                <View
+                    style={{
+                        flexDirection: "row",
+                        marginRight: 5,
+                    }}
                 >
-                    <Text>123</Text>
-                </TouchableOpacity>
+                    {loading ? <ActivityIndicator animating={true} color="#000" /> : <MaterialCommunityIcons name="cloud-check" size={24} color="black" />}
+                </View>
             ),
+        });
+    }, [loading]);
+
+    useEffect(() => {
+        navigation.setOptions({
+            headerShown: true,
         });
 
         getLastPage();
@@ -121,7 +118,7 @@ const Reading = ({ user, navigation, route }) => {
 
     return (
         <>
-            <ScrollView style={styles.container}>
+            <View style={styles.container}>
                 <ReaderProvider>
                     <Reader
                         src={file}
@@ -137,7 +134,7 @@ const Reading = ({ user, navigation, route }) => {
                         }}
                     />
                 </ReaderProvider>
-            </ScrollView>
+            </View>
 
             <DictionaryModal visible={visible} hideModal={hideModal} wordDetail={words} playSound={playSound} onSavedWord={onSavedWord} user={user} loading={animating} />
         </>

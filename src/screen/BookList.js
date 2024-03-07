@@ -44,7 +44,7 @@ const BookList = (props) => {
 
     const navigation = useNavigation();
 
-    const [catList, setCatList] = useState(categories);
+    const [catList, setCatList] = useState([{ id: 0, name: "All", active: true }, ...categories]);
     const [bookListItem, setBookListItem] = useState(bookList);
     const [keyword, setKeyword] = useState(props.route.params.keyword || "");
     const [loading, setLoading] = useState(false);
