@@ -1,10 +1,9 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Keyboard, TouchableWithoutFeedback, View, Text, SafeAreaView, TouchableOpacity, Alert, ScrollView } from "react-native";
 import { TextInput } from "react-native-paper";
 import { connect } from "react-redux";
 import { Formik } from "formik";
 import * as yup from "yup";
-import { CredentialContext } from "../components/context/credential";
 
 import { loginUser, emptyAuth, autoLogin } from "../store/actions/authActions";
 import styles from "../components/common/styles";
@@ -22,9 +21,6 @@ const validationSchema = yup.object().shape({
 const GetStarted = (props) => {
     const { loggedIn, err, loginUser, navigation, emptyAuth, autoLogin, user } = props;
 
-    // context
-    const { storedCredentials, setStoredCredentials } = useContext(CredentialContext);
-
     const [loading, setLoading] = useState(false);
     const [hidden, setHidden] = useState(true);
 
@@ -35,8 +31,6 @@ const GetStarted = (props) => {
             await loginUser({ ...values });
             const data = await getAuthStorage();
             if (data) {
-                console.log(data);
-                persistLogin(data);
                 if (storedCredentials) {
                     navigation.navigate("bottomTab", { screen: "Home" });
                 }
@@ -90,10 +84,6 @@ const GetStarted = (props) => {
 
         checkLoginStatus();
     }, [loggedIn]);
-
-    const persistLogin = async (userData) => {
-        setStoredCredentials(userData);
-    };
 
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>

@@ -13,6 +13,7 @@ import { congratulations, encouragement } from "../constants/text";
 import { getAllChallenges } from "../API/challenges";
 import { longDate } from "../components/date/date";
 import EmptyData from "../components/empty";
+import { useFocusEffect } from "@react-navigation/native";
 
 const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 
@@ -42,7 +43,7 @@ const ShimmerItem = () => {
     );
 };
 
-const ChallengeItem = (item) => {
+const ChallengeItem = (item, onChallengeItemPress) => {
     const generateQuote = (progress) => {
         if (progress === 1) {
             const indexRandom = Math.floor(Math.random() * congratulations.length);
@@ -143,9 +144,11 @@ const Challenge = (props) => {
         navigation.navigate("UpdateChallenge", { challengeItem: data });
     };
 
-    useEffect(() => {
-        fetchData();
-    }, []);
+    useFocusEffect(
+        React.useCallback(() => {
+            fetchData();
+        }, [])
+    );
 
     return (
         <SafeAreaView style={styles.container}>
@@ -190,7 +193,7 @@ const Challenge = (props) => {
                         scrollEnabled={true}
                         data={data}
                         keyExtractor={(item, index) => index.toString()}
-                        renderItem={({ item }) => ChallengeItem(item)}
+                        renderItem={({ item }) => ChallengeItem(item, onChallengeItemPress)}
                         ListEmptyComponent={!data.length && !loading && <EmptyData header="No challenges found!" message="Create a new challenge to get started." />}
                     />
                 </View>
